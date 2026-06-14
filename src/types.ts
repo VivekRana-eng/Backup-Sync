@@ -14,6 +14,10 @@ export interface Member {
 
 export interface CloudFile {
   id: string;
+  sourceUploadId?: string;
+  previewUrl?: string;
+  mimeType?: string;
+  sourceFile?: File;
   name: string;
   extension: string;
   category: FileCategory;
@@ -39,6 +43,7 @@ export interface UploadingFile {
   status: 'uploading' | 'completed' | 'cancelled';
   category: FileCategory;
   extension: string;
+  sourceFile?: File;
 }
 
 export interface StorageStats {

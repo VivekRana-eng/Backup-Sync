@@ -66,6 +66,12 @@ export function formatUploadSize(bytes: number) {
   return '0 KB';
 }
 
+export function formatLocalTimestamp(date = new Date()) {
+  const pad = (value: number) => String(value).padStart(2, '0');
+
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
 export function getFolderDestination(category: FileCategory) {
   return CATEGORY_FOLDERS[category] ?? CATEGORY_FOLDERS.other;
 }
@@ -92,9 +98,14 @@ export function createUploadedFile(
   user: User,
 ): CloudFile {
   const folderDestination = getFolderDestination(upload.category);
+  const previewUrl = upload.sourceFile ? URL.createObjectURL(upload.sourceFile) : undefined;
 
   return {
     id: `file-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+    sourceUploadId: upload.id,
+    previewUrl,
+    mimeType: upload.sourceFile?.type,
+    sourceFile: upload.sourceFile,
     name: upload.name.substring(0, upload.name.lastIndexOf('.')) || upload.name,
     extension: upload.extension,
     category: upload.category,
@@ -104,12 +115,18 @@ export function createUploadedFile(
     folderChain: folderDestination.chain,
     owner: user,
     members: [],
-    lastModified: new Date().toISOString().replace('T', ' ').substring(0, 16),
+    lastModified: formatLocalTimestamp(),
     isStarred: false,
     isArchived: false,
     isShared: false,
     downloadCount: 0,
   };
+}
+
+export function revokeFilePreviewUrl(file: CloudFile) {
+  if (file.previewUrl) {
+    URL.revokeObjectURL(file.previewUrl);
+  }
 }
 
 export function createFolderPlaceholder(category: string, folderName: string, user: User): CloudFile {
@@ -124,7 +141,7 @@ export function createFolderPlaceholder(category: string, folderName: string, us
     folderChain: [category, folderName],
     owner: user,
     members: [],
-    lastModified: new Date().toISOString().replace('T', ' ').substring(0, 16),
+    lastModified: formatLocalTimestamp(),
     isStarred: false,
     isArchived: false,
     isShared: false,
@@ -146,6 +163,7 @@ export function buildUploadQueue(files: FileList | File[]) {
       sizeBytes: file.size || 1_500_000,
       progress: 0,
       status: 'uploading' as const,
+      sourceFile: file,
     };
   });
 }

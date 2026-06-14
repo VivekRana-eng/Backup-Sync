@@ -11,8 +11,10 @@ import StorageCards from './components/StorageCards';
 import FileUploader from './components/FileUploader';
 import UploadingPanel from './components/UploadingPanel';
 import FilesTable from './components/FilesTable';
+import FilePreviewModal from './components/FilePreviewModal';
 
 export default function App() {
+  const [selectedFile, setSelectedFile] = React.useState(null);
   const {
     activeTab,
     setActiveTab,
@@ -53,6 +55,11 @@ export default function App() {
     clearActivityLog,
   } = useWorkspace();
   const storageUsageLabel = formatStorageSize(totalStorageUsedGB * 1024 * 1024 * 1024);
+  const handleOpenPreview = (file) => setSelectedFile(file);
+  const handleDeleteAndClosePreview = (id) => {
+    setSelectedFile((current) => (current?.id === id ? null : current));
+    handleDeleteFile(id);
+  };
 
   return (
     <div className="relative flex h-screen w-screen overflow-hidden bg-[#f4f1ea] font-sans text-slate-600 antialiased">
@@ -199,9 +206,10 @@ export default function App() {
                   files={files.filter((f) => !f.isArchived)}
                   onToggleStar={handleToggleStar}
                   onToggleArchive={handleToggleArchive}
-                  onDeleteFile={handleDeleteFile}
+                  onDeleteFile={handleDeleteAndClosePreview}
                   onRenameFile={handleRenameFile}
                   onTriggerDownload={handleTriggerDownload}
+                  onFileSelect={handleOpenPreview}
                   fileTypeFilter={fileTypeFilter}
                   setFileTypeFilter={setFileTypeFilter}
                 />
@@ -216,9 +224,10 @@ export default function App() {
                 files={files.filter((f) => !f.isArchived)}
                 onToggleStar={handleToggleStar}
                 onToggleArchive={handleToggleArchive}
-                onDeleteFile={handleDeleteFile}
+                onDeleteFile={handleDeleteAndClosePreview}
                 onRenameFile={handleRenameFile}
                 onTriggerDownload={handleTriggerDownload}
+                onFileSelect={handleOpenPreview}
                 fileTypeFilter={fileTypeFilter}
                 setFileTypeFilter={setFileTypeFilter}
               />
@@ -240,9 +249,10 @@ export default function App() {
                 files={files.filter((f) => f.isShared && !f.isArchived)}
                 onToggleStar={handleToggleStar}
                 onToggleArchive={handleToggleArchive}
-                onDeleteFile={handleDeleteFile}
+                onDeleteFile={handleDeleteAndClosePreview}
                 onRenameFile={handleRenameFile}
                 onTriggerDownload={handleTriggerDownload}
+                onFileSelect={handleOpenPreview}
                 fileTypeFilter={fileTypeFilter}
                 setFileTypeFilter={setFileTypeFilter}
               />
@@ -268,9 +278,10 @@ export default function App() {
                 })}
                 onToggleStar={handleToggleStar}
                 onToggleArchive={handleToggleArchive}
-                onDeleteFile={handleDeleteFile}
+                onDeleteFile={handleDeleteAndClosePreview}
                 onRenameFile={handleRenameFile}
                 onTriggerDownload={handleTriggerDownload}
+                onFileSelect={handleOpenPreview}
                 fileTypeFilter={fileTypeFilter}
                 setFileTypeFilter={setFileTypeFilter}
               />
@@ -297,9 +308,10 @@ export default function App() {
                 files={files.filter((f) => f.isStarred && !f.isArchived)}
                 onToggleStar={handleToggleStar}
                 onToggleArchive={handleToggleArchive}
-                onDeleteFile={handleDeleteFile}
+                onDeleteFile={handleDeleteAndClosePreview}
                 onRenameFile={handleRenameFile}
                 onTriggerDownload={handleTriggerDownload}
+                onFileSelect={handleOpenPreview}
                 fileTypeFilter={fileTypeFilter}
                 setFileTypeFilter={setFileTypeFilter}
               />
@@ -321,9 +333,10 @@ export default function App() {
                 files={files.filter((f) => f.isArchived)}
                 onToggleStar={handleToggleStar}
                 onToggleArchive={handleToggleArchive}
-                onDeleteFile={handleDeleteFile}
+                onDeleteFile={handleDeleteAndClosePreview}
                 onRenameFile={handleRenameFile}
                 onTriggerDownload={handleTriggerDownload}
+                onFileSelect={handleOpenPreview}
                 fileTypeFilter={fileTypeFilter}
                 setFileTypeFilter={setFileTypeFilter}
               />
@@ -587,6 +600,16 @@ export default function App() {
               </div>
             </motion.div>
           </div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {selectedFile && (
+          <FilePreviewModal
+            file={selectedFile}
+            onClose={() => setSelectedFile(null)}
+            onDownload={handleTriggerDownload}
+          />
         )}
       </AnimatePresence>
 

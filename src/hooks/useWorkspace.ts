@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Activity, CloudFile, FileCategory, SidebarTab, UploadingFile } from '../types';
 import {
   buildUploadQueue,
@@ -8,6 +8,7 @@ import {
   createFolderPlaceholder,
   createToastId,
   createUploadedFile,
+  revokeFilePreviewUrl,
   type ToastMessage,
 } from '../lib/workspace';
 import {
@@ -30,6 +31,7 @@ export function useWorkspace() {
   const [newFolderName, setNewFolderName] = useState('');
   const [newFolderCategory, setNewFolderCategory] = useState('Docs');
   const [toast, setToast] = useState<ToastMessage | null>(null);
+  const completedUploadIdsRef = useRef(new Set<string>());
 
   const triggerToast = (message: string, type: ToastMessage['type'] = 'success') => {
     setToast({
@@ -63,10 +65,20 @@ export function useWorkspace() {
           const nextStatus = nextProgress === 100 ? 'completed' : 'uploading';
 
           if (nextStatus === 'completed') {
-            const uploadedFile = createUploadedFile(file, CURRENT_USER);
-
             window.setTimeout(() => {
-              setFiles((currentFiles) => [uploadedFile, ...currentFiles]);
+              if (completedUploadIdsRef.current.has(file.id)) {
+                return;
+              }
+
+              completedUploadIdsRef.current.add(file.id);
+              const uploadedFile = createUploadedFile(file, CURRENT_USER);
+              setFiles((currentFiles) => {
+                if (currentFiles.some((currentFile) => currentFile.sourceUploadId === file.id)) {
+                  return currentFiles;
+                }
+
+                return [uploadedFile, ...currentFiles];
+              });
               setActivities((currentActivities) => [
                 createActivity(CURRENT_USER, 'uploaded standard asset', file.name, 'upload'),
                 ...currentActivities,
@@ -151,6 +163,7 @@ export function useWorkspace() {
     if (!fileToDelete) return;
 
     if (window.confirm(`Are you sure you want to permanently delete "${fileToDelete.name}.${fileToDelete.extension}"?`)) {
+      revokeFilePreviewUrl(fileToDelete);
       setFiles((currentFiles) => currentFiles.filter((file) => file.id !== id));
       triggerToast(`Successfully deleted ${fileToDelete.name}.${fileToDelete.extension}`, 'error');
       setActivities((currentActivities) => [

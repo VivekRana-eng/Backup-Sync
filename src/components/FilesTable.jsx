@@ -9,6 +9,7 @@ export default function FilesTable({
   onDeleteFile,
   onRenameFile,
   onTriggerDownload,
+  onFileSelect,
   fileTypeFilter,
   setFileTypeFilter
 }) {
@@ -157,6 +158,11 @@ export default function FilesTable({
         ))}
       </div>
     );
+  };
+
+  const openFilePreview = (file) => {
+    setOpenDropdownId(null);
+    if (onFileSelect) onFileSelect(file);
   };
 
   return (
@@ -348,12 +354,32 @@ export default function FilesTable({
                       </button>
 
                       {/* File Icon */}
-                      <div className={`p-2.5 border rounded-lg shrink-0 ${colorClasses}`}>
+                      <button
+                        type="button"
+                        onClick={() => openFilePreview(file)}
+                        className={`p-2.5 border rounded-lg shrink-0 cursor-pointer ${colorClasses}`}
+                        title="Open file preview"
+                      >
                         <Icon name={iconName} className="w-4 h-4" />
-                      </div>
+                      </button>
 
                       {/* Editable name label */}
-                      <div className="min-w-0 flex-1">
+                      <div
+                        className="min-w-0 flex-1 cursor-pointer"
+                        onClick={isRenaming ? undefined : () => openFilePreview(file)}
+                        role="button"
+                        tabIndex={isRenaming ? -1 : 0}
+                        onKeyDown={
+                          isRenaming
+                            ? undefined
+                            : (e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                  e.preventDefault();
+                                  openFilePreview(file);
+                                }
+                              }
+                        }
+                      >
                         {isRenaming ? (
                           <div className="flex items-center gap-1">
                             <input
@@ -365,13 +391,17 @@ export default function FilesTable({
                               autoFocus
                             />
                             <button
+                              type="button"
                               onClick={() => saveRename(file.id)}
+                              onMouseDown={(e) => e.stopPropagation()}
                               className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-[10px] py-1 px-2 rounded-lg cursor-pointer"
                             >
                               Save
                             </button>
                             <button
+                              type="button"
                               onClick={() => setRenamingId(null)}
+                              onMouseDown={(e) => e.stopPropagation()}
                               className="bg-slate-100 hover:bg-slate-200 text-slate-500 text-[10px] py-1 px-2 rounded-lg cursor-pointer"
                             >
                               Cancel
@@ -543,9 +573,14 @@ export default function FilesTable({
                 {/* Ribbon top card bar */}
                 <div className="flex items-start justify-between">
                   {/* Category icon */}
-                  <div className={`p-3 rounded-xl border shrink-0 ${colorClasses}`}>
+                  <button
+                    type="button"
+                    onClick={() => openFilePreview(file)}
+                    className={`p-3 rounded-xl border shrink-0 cursor-pointer ${colorClasses}`}
+                    title="Open file preview"
+                  >
                     <Icon name={iconName} className="w-4.5 h-4.5" />
-                  </div>
+                  </button>
 
                   {/* Actions buttons */}
                   <div className="flex items-center gap-1 relative" ref={isDropdownOpen ? dropdownRef : undefined}>
@@ -643,13 +678,15 @@ export default function FilesTable({
                     </div>
                   ) : (
                     <div>
-                      <h3
+                      <button
+                        type="button"
+                        onClick={() => openFilePreview(file)}
                         onDoubleClick={() => startRename(file)}
-                        className="font-bold text-slate-700 text-xs sm:text-sm truncate block group-hover:text-blue-600 transition-colors"
+                        className="font-bold text-slate-700 text-xs sm:text-sm truncate block group-hover:text-blue-600 transition-colors text-left cursor-pointer"
                         title={file.name}
                       >
                         {file.name}.{file.extension}
-                      </h3>
+                      </button>
                       {renderBreadcrumbs(file.folder)}
                     </div>
                   )}
