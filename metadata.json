@@ -1,0 +1,6 @@
+{
+  "name": "Backup & Sync",
+  "description": "A modern and fully responsive cloud file storage dashboard UI built with React and Tailwind CSS.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

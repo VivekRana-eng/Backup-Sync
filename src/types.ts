@@ -1,0 +1,72 @@
+export type FileCategory = 'document' | 'image' | 'video' | 'audio' | 'other';
+
+export interface User {
+  name: string;
+  email: string;
+  avatar: string;
+  status: 'online' | 'offline' | 'away';
+}
+
+export interface Member {
+  name: string;
+  avatar: string;
+}
+
+export interface CloudFile {
+  id: string;
+  name: string;
+  extension: string;
+  category: FileCategory;
+  size: string; // human readable E.g., "1.2 MB"
+  sizeBytes: number;
+  folder: string; // breadcrumb display string, e.g. "Work > Finance"
+  folderChain: string[]; // e.g. ["Work", "Finance"]
+  owner: User;
+  members: Member[];
+  lastModified: string;
+  isStarred: boolean;
+  isArchived: boolean;
+  isShared: boolean;
+  downloadCount: number;
+}
+
+export interface UploadingFile {
+  id: string;
+  name: string;
+  size: string;
+  sizeBytes: number;
+  progress: number; // 0 to 100
+  status: 'uploading' | 'completed' | 'cancelled';
+  category: FileCategory;
+  extension: string;
+}
+
+export interface StorageStats {
+  category: FileCategory;
+  name: string;
+  count: number;
+  usedGB: number;
+  totalGB: number;
+  color: string; // e.g., 'bg-yellow-500'
+  textColor: string;
+  icon: string;
+}
+
+export interface Activity {
+  id: string;
+  user: User;
+  action: string;
+  target: string;
+  time: string;
+  timestamp: string; // Date ISO or standard string
+  type: 'upload' | 'delete' | 'share' | 'download' | 'rename' | 'star' | 'archive';
+}
+
+export type SidebarTab =
+  | 'Dashboard'
+  | 'My Files'
+  | 'Shared'
+  | 'Recents'
+  | 'Starred'
+  | 'Archived'
+  | 'Activity Log';
