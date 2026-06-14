@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { UploadCloud, File, AlertCircle } from 'lucide-react';
+import Icon from './Icon';
 export default function FileUploader({ onFilesSelected }) {
   const [isDragActive, setIsDragActive] = useState(false);
   const fileInputRef = useRef(null);
@@ -64,7 +64,7 @@ export default function FileUploader({ onFilesSelected }) {
       <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors mb-4 ${
         isDragActive ? 'bg-blue-100 text-blue-600' : 'bg-slate-50 text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-500'
       }`}>
-        <UploadCloud className={`w-8 h-8 transition-transform group-hover:scale-110 ${
+        <Icon name="CloudUpload" className={`w-8 h-8 transition-transform group-hover:scale-110 ${
           isDragActive ? 'animate-bounce' : ''
         }`} />
       </div>

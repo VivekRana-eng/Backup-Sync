@@ -24,7 +24,6 @@ export function useWorkspace() {
   const [activities, setActivities] = useState<Activity[]>(INITIAL_ACTIVITIES);
   const [searchQuery, setSearchQuery] = useState('');
   const [fileTypeFilter, setFileTypeFilter] = useState<FileCategory | 'all'>('all');
-  const [totalStorageMaxGB, setTotalStorageMaxGB] = useState(500);
   const [isSidebarMobileOpen, setIsSidebarMobileOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
@@ -89,10 +88,7 @@ export function useWorkspace() {
   }, []);
 
   const computedStats = useMemo(() => computeStats(files), [files]);
-  const totalStorageUsedGB = useMemo(
-    () => computeTotalStorageUsedGB(files, totalStorageMaxGB),
-    [files, totalStorageMaxGB],
-  );
+  const totalStorageUsedGB = useMemo(() => computeTotalStorageUsedGB(files), [files]);
 
   const starredFilesCount = files.filter((file) => file.isStarred && !file.isArchived).length;
   const archivedFilesCount = files.filter((file) => file.isArchived).length;
@@ -260,8 +256,6 @@ export function useWorkspace() {
     setSearchQuery,
     fileTypeFilter,
     setFileTypeFilter,
-    totalStorageMaxGB,
-    setTotalStorageMaxGB,
     isSidebarMobileOpen,
     setIsSidebarMobileOpen,
     isSettingsOpen,

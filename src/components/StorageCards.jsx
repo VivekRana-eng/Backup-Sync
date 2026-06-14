@@ -1,53 +1,13 @@
 import React from 'react';
-import {
-  FileText,
-  Image,
-  Video,
-  Music,
-  FolderMinus,
-  RefreshCcw,
-  ArrowUpRight
-} from 'lucide-react';
+import Icon from './Icon';
 
 export default function StorageCards({
   filesStats,
   activeFilter,
   setActiveFilter
 }) {
-  // We'll define allocation limits for our cards:
-  // Documents: 50GB max, Images: 100GB, Videos: 250GB, Audio: 20GB, Others: 30GB
-  const limits = {
-    document: 50,
-    image: 100,
-    video: 250,
-    audio: 20,
-    other: 30
-  };
-
-  // Convert bytes from our calculated stats to GB for UI display
-  // 1 GB = 1024 * 1024 * 1024 bytes (1,073,741,824)
-  // Let's add a small base simulation size to each so it looks realistic, e.g. base file storage + current files sum
-  const getGBUsage = (category, currentBytes) => {
-    const baseGB = {
-      document: 0,
-      image: 0,
-      video: 0,
-      audio: 0,
-      other: 0
-    };
-    const addedGB = currentBytes / (1024 * 1024 * 1024);
-    return Math.min(baseGB[category] + addedGB, limits[category] - 0.1);
-  };
-
   const getFilesCount = (category, currentCount) => {
-    const baseCount = {
-      document: 0,
-      image: 0,
-      video: 0,
-      audio: 0,
-      other: 0
-    };
-    return baseCount[category] + currentCount;
+    return currentCount;
   };
 
   const formatBytes = (bytes) => {
@@ -63,56 +23,41 @@ export default function StorageCards({
       category: 'document',
       name: 'Documents',
       count: getFilesCount('document', filesStats.document.count),
-      usedGB: getGBUsage('document', filesStats.document.totalSizeBytes),
-      totalGB: limits.document,
-      colorClass: 'bg-yellow-500',
+      usedBytes: filesStats.document.totalSizeBytes,
       bgColorClass: 'bg-yellow-50 text-yellow-600',
-      textColorClass: 'text-yellow-600',
-      icon: FileText
+      icon: 'FileText'
     },
     {
       category: 'image',
       name: 'Images',
       count: getFilesCount('image', filesStats.image.count),
-      usedGB: getGBUsage('image', filesStats.image.totalSizeBytes),
-      totalGB: limits.image,
-      colorClass: 'bg-blue-500',
+      usedBytes: filesStats.image.totalSizeBytes,
       bgColorClass: 'bg-blue-50 text-blue-600',
-      textColorClass: 'text-blue-600',
-      icon: Image
+      icon: 'FileImage'
     },
     {
       category: 'video',
       name: 'Videos',
       count: getFilesCount('video', filesStats.video.count),
-      usedGB: getGBUsage('video', filesStats.video.totalSizeBytes),
-      totalGB: limits.video,
-      colorClass: 'bg-red-500',
+      usedBytes: filesStats.video.totalSizeBytes,
       bgColorClass: 'bg-red-50 text-red-600',
-      textColorClass: 'text-red-500',
-      icon: Video
+      icon: 'FileVideo'
     },
     {
       category: 'audio',
       name: 'Audio',
       count: getFilesCount('audio', filesStats.audio.count),
-      usedGB: getGBUsage('audio', filesStats.audio.totalSizeBytes),
-      totalGB: limits.audio,
-      colorClass: 'bg-emerald-500',
+      usedBytes: filesStats.audio.totalSizeBytes,
       bgColorClass: 'bg-emerald-50 text-emerald-600',
-      textColorClass: 'text-emerald-600',
-      icon: Music
+      icon: 'FileAudio'
     },
     {
       category: 'other',
       name: 'Others',
       count: getFilesCount('other', filesStats.other.count),
-      usedGB: getGBUsage('other', filesStats.other.totalSizeBytes),
-      totalGB: limits.other,
-      colorClass: 'bg-slate-400',
+      usedBytes: filesStats.other.totalSizeBytes,
       bgColorClass: 'bg-slate-100 text-slate-600',
-      textColorClass: 'text-slate-500',
-      icon: FolderMinus
+      icon: 'FolderMinus'
     }
   ];
 
@@ -127,8 +72,6 @@ export default function StorageCards({
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
       {cardsData.map((card) => {
-        const IconComponent = card.icon;
-        const widthPercent = (card.usedGB / card.totalGB) * 100;
         const isSelected = activeFilter === card.category;
 
         return (
@@ -150,12 +93,12 @@ export default function StorageCards({
             <div className="flex items-start justify-between">
               {/* Category Icon Cylinder */}
               <div className={`p-3 rounded-xl ${card.bgColorClass}`}>
-                <IconComponent className="w-5 h-5" />
+                <Icon name={card.icon} className="w-5 h-5" />
               </div>
 
               {/* Little stats overlay */}
               <span className="text-[10px] bg-slate-50/80 px-2 py-0.5 rounded-md font-semibold text-slate-550 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                Filter <ArrowUpRight className="w-2.5 h-2.5" />
+                Filter <Icon name="ArrowUpRight" className="w-2.5 h-2.5" />
               </span>
             </div>
 
@@ -169,18 +112,11 @@ export default function StorageCards({
               </p>
             </div>
 
-            {/* Storage Progress Area */}
+            {/* Storage Usage Area */}
             <div className="mt-4 pt-1">
-              <div className="flex items-end justify-between text-xs font-semibold mb-1.5 text-slate-500">
-                <span>{formatBytes(filesStats[card.category].totalSizeBytes)}</span>
-                <span className="text-slate-400 font-light">{card.totalGB} GB limit</span>
-              </div>
-              
-              <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                <div
-                  className={`h-full rounded-full transition-all duration-500 ${card.colorClass}`}
-                  style={{ width: `${widthPercent}%` }}
-                />
+              <div className="flex items-center justify-between text-xs font-semibold text-slate-500">
+                <span>Storage used</span>
+                <span>{formatBytes(card.usedBytes)}</span>
               </div>
             </div>
           </div>

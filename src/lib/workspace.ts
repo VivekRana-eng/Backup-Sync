@@ -167,8 +167,7 @@ export function computeStats(files: CloudFile[]) {
   return stats;
 }
 
-export function computeTotalStorageUsedGB(files: CloudFile[], maxGB: number) {
+export function computeTotalStorageUsedGB(files: CloudFile[]) {
   const totalBytes = files.reduce((sum, file) => sum + file.sizeBytes, 0);
-  const totalGB = totalBytes / (1024 * 1024 * 1024);
-  return Math.min(totalGB, maxGB - 0.1);
+  return totalBytes / (1024 * 1024 * 1024);
 }

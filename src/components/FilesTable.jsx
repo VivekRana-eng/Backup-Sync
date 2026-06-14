@@ -1,27 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import {
-  MoreHorizontal,
-  Download,
-  Edit3,
-  Star,
-  Archive,
-  Trash2,
-  List,
-  LayoutGrid,
-  ChevronDown,
-  Calendar,
-  Filter,
-  FileSpreadsheet,
-  FileVideo,
-  FileImage,
-  FileText,
-  FileAudio,
-  FileArchive,
-  FileCode,
-  ExternalLink,
-  ChevronRight,
-  UserPlus
-} from 'lucide-react';
+import Icon from './Icon';
 import { CURRENT_USER } from '../data/mockFiles';
 
 export default function FilesTable({
@@ -64,27 +42,27 @@ export default function FilesTable({
   const getFileIcon = (extension) => {
     const ext = extension.toLowerCase();
     if (ext === 'xlsx' || ext === 'csv' || ext === 'xls') {
-      return { icon: FileSpreadsheet, color: 'text-emerald-600 bg-emerald-50 border-emerald-100' };
+      return { icon: 'FileSpreadsheet', color: 'text-emerald-600 bg-emerald-50 border-emerald-100' };
     }
     if (ext === 'mp4' || ext === 'mkv' || ext === 'mov' || ext === 'avi') {
-      return { icon: FileVideo, color: 'text-red-500 bg-red-50 border-red-100' };
+      return { icon: 'FileVideo', color: 'text-red-500 bg-red-50 border-red-100' };
     }
     if (ext === 'png' || ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'webp' || ext === 'svg') {
-      return { icon: FileImage, color: 'text-blue-500 bg-blue-50 border-blue-100' };
+      return { icon: 'FileImage', color: 'text-blue-500 bg-blue-50 border-blue-100' };
     }
     if (ext === 'pdf') {
-      return { icon: FileText, color: 'text-orange-500 bg-orange-50 border-orange-100' };
+      return { icon: 'FileText', color: 'text-orange-500 bg-orange-50 border-orange-100' };
     }
     if (ext === 'doc' || ext === 'docx' || ext === 'txt') {
-      return { icon: FileText, color: 'text-blue-600 bg-blue-50 border-blue-100' };
+      return { icon: 'FileText', color: 'text-blue-600 bg-blue-50 border-blue-100' };
     }
     if (ext === 'mp3' || ext === 'wav' || ext === 'ogg' || ext === 'aac') {
-      return { icon: FileAudio, color: 'text-violet-500 bg-violet-50 border-violet-100' };
+      return { icon: 'FileAudio', color: 'text-violet-500 bg-violet-50 border-violet-100' };
     }
     if (ext === 'zip' || ext === 'rar' || ext === 'tar' || ext === 'gz') {
-      return { icon: FileArchive, color: 'text-amber-500 bg-amber-50 border-amber-100' };
+      return { icon: 'FileArchive', color: 'text-amber-500 bg-amber-50 border-amber-100' };
     }
-    return { icon: FileCode, color: 'text-slate-550 bg-slate-100 border-slate-200' };
+    return { icon: 'FileCode', color: 'text-slate-550 bg-slate-100 border-slate-200' };
   };
 
   // Handle renaming triggers
@@ -168,7 +146,7 @@ export default function FilesTable({
       <div className="flex items-center gap-1 text-[11px] font-semibold text-blue-600/90 tracking-tight">
         {segments.map((seg, idx) => (
           <React.Fragment key={idx}>
-            {idx > 0 && <ChevronRight className="w-2.5 h-2.5 text-slate-350" />}
+            {idx > 0 && <Icon name="ChevronRight" className="w-2.5 h-2.5 text-slate-350" />}
             <button
               onClick={() => setSelectedFolder(seg)}
               className="hover:underline hover:text-blue-700 cursor-pointer text-left"
@@ -210,7 +188,7 @@ export default function FilesTable({
         </div>
 
         {/* Toolbar controls group */}
-        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
           {/* Quick inline search */}
           <div className="relative">
             <input
@@ -261,7 +239,7 @@ export default function FilesTable({
               }`}
               title="List layout view"
             >
-              <List className="w-3.5 h-3.5" />
+              <Icon name="List" className="w-3.5 h-3.5" />
             </button>
             <button
               id="grid-view-toggle-btn"
@@ -271,7 +249,7 @@ export default function FilesTable({
               }`}
               title="Grid layout view"
             >
-              <LayoutGrid className="w-3.5 h-3.5" />
+              <Icon name="LayoutGrid" className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
@@ -280,7 +258,7 @@ export default function FilesTable({
       {/* Main Layout Area */}
       {filteredFiles.length === 0 ? (
         <div className="py-16 text-center text-slate-400 flex flex-col items-center justify-center gap-2">
-          <Filter className="w-10 h-10 text-slate-300" />
+          <Icon name="Filter" className="w-10 h-10 text-slate-300" />
           <p className="font-bold text-sm">No files found</p>
           <p className="text-xs text-slate-350 max-w-xs mt-0.5">
             Try a different search or clear the current filters.
@@ -344,7 +322,7 @@ export default function FilesTable({
             </thead>
             <tbody className="divide-y divide-slate-100">
               {filteredFiles.map((file) => {
-                const { icon: IconComponent, color: colorClasses } = getFileIcon(file.extension, file.category);
+                const { icon: iconName, color: colorClasses } = getFileIcon(file.extension, file.category);
                 const isDropdownOpen = openDropdownId === file.id;
                 const isRenaming = renamingId === file.id;
 
@@ -366,12 +344,12 @@ export default function FilesTable({
                         }`}
                         title="Toggle Favorite"
                       >
-                        <Star className="w-3.5 h-3.5 fill-current" />
+                        <Icon name="Star" className="w-3.5 h-3.5 fill-current" />
                       </button>
 
                       {/* File Icon */}
                       <div className={`p-2.5 border rounded-lg shrink-0 ${colorClasses}`}>
-                        <IconComponent className="w-4 h-4" />
+                        <Icon name={iconName} className="w-4 h-4" />
                       </div>
 
                       {/* Editable name label */}
@@ -475,7 +453,7 @@ export default function FilesTable({
                         onClick={() => setOpenDropdownId(isDropdownOpen ? null : file.id)}
                         className="p-1 px-1.5 text-slate-400 hover:text-slate-800 rounded-lg hover:bg-slate-100/50 transition-all cursor-pointer"
                       >
-                        <MoreHorizontal className="w-5 h-5" />
+                        <Icon name="MoreHorizontal" className="w-5 h-5" />
                       </button>
 
                       {isDropdownOpen && (
@@ -490,7 +468,7 @@ export default function FilesTable({
                             }}
                             className="w-full text-left px-4 py-2 hover:bg-slate-50 text-xs font-semibold text-slate-650 flex items-center gap-2 cursor-pointer"
                           >
-                            <Download className="w-3.5 h-3.5 text-slate-400" />
+                            <Icon name="Download" className="w-3.5 h-3.5 text-slate-400" />
                             <span>Download File</span>
                           </button>
                           
@@ -498,7 +476,7 @@ export default function FilesTable({
                             onClick={() => startRename(file)}
                             className="w-full text-left px-4 py-2 hover:bg-slate-50 text-xs font-semibold text-slate-650 flex items-center gap-2 cursor-pointer"
                           >
-                            <Edit3 className="w-3.5 h-3.5 text-slate-400" />
+                            <Icon name="Edit3" className="w-3.5 h-3.5 text-slate-400" />
                             <span>Rename File</span>
                           </button>
 
@@ -509,7 +487,7 @@ export default function FilesTable({
                             }}
                             className="w-full text-left px-4 py-2 hover:bg-slate-50 text-xs font-semibold text-slate-650 flex items-center gap-2 cursor-pointer"
                           >
-                            <Star className="w-3.5 h-3.5 text-slate-400" />
+                            <Icon name="Star" className="w-3.5 h-3.5 text-slate-400" />
                             <span>{file.isStarred ? 'Unstar File' : 'Star File'}</span>
                           </button>
 
@@ -520,7 +498,7 @@ export default function FilesTable({
                             }}
                             className="w-full text-left px-4 py-2 hover:bg-slate-50 text-xs font-semibold text-slate-650 flex items-center gap-2 cursor-pointer"
                           >
-                            <Archive className="w-3.5 h-3.5 text-slate-400" />
+                            <Icon name="Archive" className="w-3.5 h-3.5 text-slate-400" />
                             <span>{file.isArchived ? 'Move to active' : 'Archive Asset'}</span>
                           </button>
 
@@ -534,7 +512,7 @@ export default function FilesTable({
                             }}
                             className="w-full text-left px-4 py-2 hover:bg-rose-50 text-xs font-bold text-rose-500 flex items-center gap-2 cursor-pointer"
                           >
-                            <Trash2 className="w-3.5 h-3.5" />
+                            <Icon name="Trash2" className="w-3.5 h-3.5" />
                             <span>Delete Asset</span>
                           </button>
                         </div>
@@ -550,7 +528,7 @@ export default function FilesTable({
         /* --- GRID MODE LAYOUT --- */
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {filteredFiles.map((file) => {
-            const { icon: IconComponent, color: colorClasses } = getFileIcon(file.extension, file.category);
+            const { icon: iconName, color: colorClasses } = getFileIcon(file.extension, file.category);
             const isDropdownOpen = openDropdownId === file.id;
             const isRenaming = renamingId === file.id;
 
@@ -566,7 +544,7 @@ export default function FilesTable({
                 <div className="flex items-start justify-between">
                   {/* Category icon */}
                   <div className={`p-3 rounded-xl border shrink-0 ${colorClasses}`}>
-                    <IconComponent className="w-4.5 h-4.5" />
+                    <Icon name={iconName} className="w-4.5 h-4.5" />
                   </div>
 
                   {/* Actions buttons */}
@@ -578,7 +556,7 @@ export default function FilesTable({
                         file.isStarred ? 'text-amber-500' : 'text-slate-300 hover:text-slate-400'
                       }`}
                     >
-                      <Star className="w-3.5 h-3.5 fill-current" />
+                      <Icon name="Star" className="w-3.5 h-3.5 fill-current" />
                     </button>
 
                     {/* Grid card vertical menu */}
@@ -586,7 +564,7 @@ export default function FilesTable({
                       onClick={() => setOpenDropdownId(isDropdownOpen ? null : file.id)}
                       className="p-1 text-slate-400 hover:text-slate-700 hover:bg-slate-50 rounded-md cursor-pointer"
                     >
-                      <MoreHorizontal className="w-4.5 h-4.5" />
+                      <Icon name="MoreHorizontal" className="w-4.5 h-4.5" />
                     </button>
 
                     {isDropdownOpen && (
@@ -600,14 +578,14 @@ export default function FilesTable({
                           }}
                           className="w-full text-left px-3 py-1.5 hover:bg-slate-50 text-[11px] font-semibold text-slate-650 flex items-center gap-2 cursor-pointer"
                         >
-                          <Download className="w-3 h-3 text-slate-400" />
+                          <Icon name="Download" className="w-3 h-3 text-slate-400" />
                           <span>Download</span>
                         </button>
                         <button
                           onClick={() => startRename(file)}
                           className="w-full text-left px-3 py-1.5 hover:bg-slate-50 text-[11px] font-semibold text-slate-650 flex items-center gap-2 cursor-pointer"
                         >
-                          <Edit3 className="w-3 h-3 text-slate-400" />
+                          <Icon name="Edit3" className="w-3 h-3 text-slate-400" />
                           <span>Rename</span>
                         </button>
                         <button
@@ -617,7 +595,7 @@ export default function FilesTable({
                           }}
                           className="w-full text-left px-3 py-1.5 hover:bg-slate-50 text-[11px] font-semibold text-slate-650 flex items-center gap-3 cursor-pointer"
                         >
-                          <Archive className="w-3 h-3 text-slate-400" />
+                          <Icon name="Archive" className="w-3 h-3 text-slate-400" />
                           <span>{file.isArchived ? 'Activate' : 'Archive'}</span>
                         </button>
                         <div className="border-t border-slate-50 my-1" />
@@ -628,7 +606,7 @@ export default function FilesTable({
                           }}
                           className="w-full text-left px-3 py-1.5 hover:bg-rose-50 text-[11px] font-bold text-rose-500 flex items-center gap-2 cursor-pointer"
                         >
-                          <Trash2 className="w-3 h-3" />
+                          <Icon name="Trash2" className="w-3 h-3" />
                           <span>Delete</span>
                         </button>
                       </div>

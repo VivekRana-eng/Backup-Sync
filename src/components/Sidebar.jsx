@@ -1,17 +1,5 @@
 import React from 'react';
-import {
-  Cloud,
-  LayoutDashboard,
-  FolderOpen,
-  Users,
-  Clock,
-  Star,
-  Archive,
-  Activity,
-  Sparkles,
-  X,
-  Plus
-} from 'lucide-react';
+import Icon from './Icon';
 
 export default function Sidebar({
   activeTab,
@@ -24,13 +12,13 @@ export default function Sidebar({
   onNewFolderClick
 }) {
   const navItems = [
-    { id: 'Dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'My Files', label: 'My Files', icon: FolderOpen },
-    { id: 'Shared', label: 'Shared', icon: Users, badge: sharedCount > 0 ? sharedCount : undefined },
-    { id: 'Recents', label: 'Recents', icon: Clock },
-    { id: 'Starred', label: 'Starred', icon: Star, badge: starredCount > 0 ? starredCount : undefined, badgeColor: 'bg-amber-100 text-amber-700 font-semibold' },
-    { id: 'Archived', label: 'Archived', icon: Archive, badge: archivedCount > 0 ? archivedCount : undefined, badgeColor: 'bg-gray-100 text-gray-700' },
-    { id: 'Activity Log', label: 'Activity Log', icon: Activity },
+    { id: 'Dashboard', label: 'Dashboard', icon: 'LayoutDashboard' },
+    { id: 'My Files', label: 'My Files', icon: 'FileCode' },
+    { id: 'Shared', label: 'Shared', icon: 'Users', badge: sharedCount > 0 ? sharedCount : undefined },
+    { id: 'Recents', label: 'Recents', icon: 'Clock' },
+    { id: 'Starred', label: 'Starred', icon: 'Star', badge: starredCount > 0 ? starredCount : undefined, badgeColor: 'bg-amber-100 text-amber-700 font-semibold' },
+    { id: 'Archived', label: 'Archived', icon: 'Archive', badge: archivedCount > 0 ? archivedCount : undefined, badgeColor: 'bg-gray-100 text-gray-700' },
+    { id: 'Activity Log', label: 'Activity Log', icon: 'Activity' },
   ];
 
   const handleNavClick = (tabId) => {
@@ -60,7 +48,7 @@ export default function Sidebar({
         <div className="h-16 flex items-center justify-between px-6 border-b border-slate-50">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
-              <Cloud className="w-5 h-5 animate-pulse" />
+              <Icon name="Cloud" className="w-5 h-5 animate-pulse" />
             </div>
             <div>
               <span className="font-bold text-lg text-slate-800 tracking-tight">Backup & Sync</span>
@@ -72,7 +60,7 @@ export default function Sidebar({
             className="p-1 px-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-50 lg:hidden"
             onClick={() => setIsMobileOpen(false)}
           >
-            <X className="w-5 h-5" />
+            <Icon name="X" className="w-5 h-5" />
           </button>
         </div>
 
@@ -83,7 +71,7 @@ export default function Sidebar({
             onClick={onNewFolderClick}
             className="w-full h-11 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-xl transition-all shadow-md shadow-blue-500/10 cursor-pointer active:scale-[0.98]"
           >
-            <Plus className="w-4 h-4" />
+            <Icon name="Plus" className="w-4 h-4" />
             <span>New folder</span>
           </button>
         </div>
@@ -91,7 +79,6 @@ export default function Sidebar({
         {/* Navigation Items */}
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
-            const IconComponent = item.icon;
             const isActive = activeTab === item.id;
             return (
               <button
@@ -105,7 +92,8 @@ export default function Sidebar({
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <IconComponent
+                  <Icon
+                    name={item.icon}
                     className={`w-4 h-4 transition-transform group-hover:scale-105 ${
                       isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600'
                     }`}

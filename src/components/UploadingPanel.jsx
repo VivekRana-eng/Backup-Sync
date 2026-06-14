@@ -1,16 +1,5 @@
 import React from 'react';
-import {
-  X,
-  FileSpreadsheet,
-  FileVideo,
-  FileImage,
-  FileText,
-  FileAudio,
-  FileArchive,
-  FileCode,
-  CheckCircle2,
-  Trash2
-} from 'lucide-react';
+import Icon from './Icon';
 export default function UploadingPanel({
   uploadingFiles,
   onCancelUpload,
@@ -20,27 +9,27 @@ export default function UploadingPanel({
   const getFileIcon = (extension) => {
     const ext = extension.toLowerCase();
     if (ext === 'xlsx' || ext === 'csv' || ext === 'xls') {
-      return { icon: FileSpreadsheet, color: 'text-emerald-500 bg-emerald-50 border-emerald-100' };
+      return { icon: 'FileSpreadsheet', color: 'text-emerald-500 bg-emerald-50 border-emerald-100' };
     }
     if (ext === 'mp4' || ext === 'mkv' || ext === 'mov' || ext === 'avi') {
-      return { icon: FileVideo, color: 'text-red-500 bg-red-50 border-red-100' };
+      return { icon: 'FileVideo', color: 'text-red-500 bg-red-50 border-red-100' };
     }
     if (ext === 'png' || ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'webp' || ext === 'svg') {
-      return { icon: FileImage, color: 'text-blue-500 bg-blue-50 border-blue-100' };
+      return { icon: 'FileImage', color: 'text-blue-500 bg-blue-50 border-blue-100' };
     }
     if (ext === 'pdf') {
-      return { icon: FileText, color: 'text-orange-500 bg-orange-50 border-orange-100' };
+      return { icon: 'FileText', color: 'text-orange-500 bg-orange-50 border-orange-100' };
     }
     if (ext === 'doc' || ext === 'docx' || ext === 'txt') {
-      return { icon: FileText, color: 'text-blue-500 bg-blue-50 border-blue-100' };
+      return { icon: 'FileText', color: 'text-blue-500 bg-blue-50 border-blue-100' };
     }
     if (ext === 'mp3' || ext === 'wav' || ext === 'ogg' || ext === 'aac') {
-      return { icon: FileAudio, color: 'text-violet-500 bg-violet-50 border-violet-100' };
+      return { icon: 'FileAudio', color: 'text-violet-500 bg-violet-50 border-violet-100' };
     }
     if (ext === 'zip' || ext === 'rar' || ext === 'tar' || ext === 'gz') {
-      return { icon: FileArchive, color: 'text-amber-500 bg-amber-50 border-amber-100' };
+      return { icon: 'FileArchive', color: 'text-amber-500 bg-amber-50 border-amber-100' };
     }
-    return { icon: FileCode, color: 'text-slate-500 bg-slate-50 border-slate-100' };
+    return { icon: 'FileCode', color: 'text-slate-500 bg-slate-50 border-slate-100' };
   };
 
   const completedCount = uploadingFiles.filter(f => f.status === 'completed').length;
@@ -74,7 +63,7 @@ export default function UploadingPanel({
       <div className="flex-1 overflow-y-auto space-y-3 pr-1">
         {uploadingFiles.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center p-4 text-center">
-            <CheckCircle2 className="w-9 h-9 text-slate-300 mb-1" />
+            <Icon name="CheckCircle2" className="w-9 h-9 text-slate-300 mb-1" />
             <p className="text-slate-400 text-xs font-semibold">No active file transfers</p>
             <p className="text-[10px] text-slate-350 mt-0.5 leading-normal">
               Add a file above to start the queue.
@@ -82,14 +71,14 @@ export default function UploadingPanel({
           </div>
         ) : (
           uploadingFiles.map((file) => {
-            const { icon: IconComponent, color: colorClasses } = getFileIcon(file.extension, file.category);
+            const { icon: iconName, color: colorClasses } = getFileIcon(file.extension, file.category);
             const isCompleted = file.status === 'completed';
             const isCancelled = file.status === 'cancelled';
 
             return (
-              <div
-                key={file.id}
-                id={`upload-item-${file.id}`}
+            <div
+              key={file.id}
+              id={`upload-item-${file.id}`}
                 className={`group border rounded-xl p-3 flex gap-3 items-center transition-all relative overflow-hidden ${
                   isCancelled 
                     ? 'border-rose-100 bg-rose-50/20' 
@@ -100,7 +89,7 @@ export default function UploadingPanel({
               >
                 {/* File Category Icon Container */}
                 <div className={`p-2 rounded-xl border shrink-0 ${colorClasses}`}>
-                  <IconComponent className="w-4 h-4" />
+                  <Icon name={iconName} className="w-4 h-4" />
                 </div>
 
                 {/* Name, size, upload progress details */}
@@ -155,7 +144,7 @@ export default function UploadingPanel({
                     className="p-1 text-slate-400 hover:text-slate-700 hover:bg-slate-50 border border-slate-100 rounded-lg cursor-pointer"
                     title="Cancel upload"
                   >
-                    <X className="w-3.5 h-3.5" />
+                    <Icon name="X" className="w-3.5 h-3.5" />
                   </button>
                 )}
 
@@ -165,7 +154,7 @@ export default function UploadingPanel({
                     className="p-1 text-slate-300 hover:text-rose-500 rounded-lg hover:bg-rose-50 cursor-pointer"
                     title="Remove from history"
                   >
-                    <X className="w-3.5 h-3.5" />
+                    <Icon name="X" className="w-3.5 h-3.5" />
                   </button>
                 )}
               </div>

@@ -1,25 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import {
-  X,
-  Plus,
-  Cloud,
-  CheckCircle,
-  Database,
-  Info,
-  Calendar,
-  Layers,
-  Sparkles,
-  ArrowRight,
-  HardDrive,
-  Users,
-  Star,
-  Trash2,
-  Clock,
-  Activity as ActivityIcon,
-  ChevronRight,
-  Share2
-} from 'lucide-react';
+import Icon from './components/Icon';
 import { CURRENT_USER } from './data/mockFiles';
 import { formatStorageSize } from './lib/workspace';
 import { useWorkspace } from './hooks/useWorkspace';
@@ -42,8 +23,6 @@ export default function App() {
     setSearchQuery,
     fileTypeFilter,
     setFileTypeFilter,
-    totalStorageMaxGB,
-    setTotalStorageMaxGB,
     isSidebarMobileOpen,
     setIsSidebarMobileOpen,
     isSettingsOpen,
@@ -105,7 +84,6 @@ export default function App() {
           onSettingsClick={() => setIsSettingsOpen(true)}
           openSideMenu={() => setIsSidebarMobileOpen(true)}
           totalStorageUsedGB={totalStorageUsedGB}
-          totalStorageMaxGB={totalStorageMaxGB}
         />
 
         {/* Inner Scrollable Workspace Box */}
@@ -123,17 +101,17 @@ export default function App() {
               >
                 {toast.type === 'success' && (
                   <div className="p-1 rounded-md bg-emerald-50 text-emerald-600 border border-emerald-100">
-                    <CheckCircle className="w-4.5 h-4.5 fill-current text-white bg-emerald-600 rounded-full" />
+                    <Icon name="CheckCircle" className="w-4.5 h-4.5 fill-current text-white bg-emerald-600 rounded-full" />
                   </div>
                 )}
                 {toast.type === 'info' && (
                   <div className="p-1 rounded-md bg-blue-50 text-blue-600 border border-blue-100">
-                    <Info className="w-4.5 h-4.5 fill-current text-white bg-blue-600 rounded-full" />
+                    <Icon name="Info" className="w-4.5 h-4.5 fill-current text-white bg-blue-600 rounded-full" />
                   </div>
                 )}
                 {toast.type === 'error' && (
                   <div className="p-1 rounded-md bg-rose-50 text-rose-500 border border-rose-100">
-                    <Trash2 className="w-4.5 h-4.5 text-rose-600" />
+                    <Icon name="Trash2" className="w-4.5 h-4.5 text-rose-600" />
                   </div>
                 )}
                 <p className="text-slate-700 font-bold leading-normal flex-1">{toast.message}</p>
@@ -154,7 +132,7 @@ export default function App() {
               <div className="relative z-10 bg-white/90 backdrop-blur rounded-3xl p-6 border border-slate-200/80 shadow-[0_18px_50px_rgba(15,23,42,0.06)] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div>
                   <h2 className="text-sm font-bold text-slate-800 tracking-tight flex items-center gap-2">
-                    <HardDrive className="w-4.5 h-4.5 text-blue-600" /> Storage overview
+                    <Icon name="HardDrive" className="w-4.5 h-4.5 text-blue-600" /> Storage overview
                   </h2>
                   <p className="text-[11px] text-slate-400 mt-0.5">
                     {files.length} items are currently in the workspace.
@@ -163,17 +141,14 @@ export default function App() {
                 <div className="flex items-center gap-4">
                   <div className="text-right">
                     <span className="text-xs text-slate-400 block font-medium">Used Space</span>
-                    <span className="text-sm font-extrabold text-blue-600">
-                      {storageUsageLabel}{' '}
-                      <span className="text-slate-400 font-light text-xs">/ {totalStorageMaxGB} GB</span>
-                    </span>
+                    <span className="text-sm font-extrabold text-blue-600">{storageUsageLabel}</span>
                   </div>
                   <div className="h-9 w-px bg-slate-100 hidden sm:block" />
                   <button
                     onClick={() => setIsSettingsOpen(true)}
                     className="px-3.5 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-100 font-semibold rounded-xl text-xs text-slate-650 transition-all flex items-center gap-1.5 cursor-pointer active:scale-[0.98]"
                   >
-                    Storage settings
+                    Workspace settings
                   </button>
                 </div>
               </div>
@@ -314,7 +289,7 @@ export default function App() {
                   </p>
                 </div>
                 <div className="p-4 bg-amber-50 border border-amber-100 rounded-2xl hidden sm:block">
-                  <Star className="w-8 h-8 text-amber-500 fill-current" />
+                  <Icon name="Star" className="w-8 h-8 text-amber-500 fill-current" />
                 </div>
               </div>
 
@@ -374,7 +349,7 @@ export default function App() {
               <div className="space-y-4">
                 {activities.length === 0 ? (
                   <div className="bg-white border rounded-2xl p-12 text-center text-slate-400">
-                    <ActivityIcon className="w-12 h-12 text-slate-200 mx-auto mb-2" />
+                    <Icon name="Activity" className="w-12 h-12 text-slate-200 mx-auto mb-2" />
                     <p className="font-bold">No activity yet</p>
                     <p className="text-xs text-slate-350 max-w-sm mx-auto mt-1">Actions taken on file states or metadata will automatically be recorded here.</p>
                   </div>
@@ -451,7 +426,7 @@ export default function App() {
               {/* Header */}
               <div className="px-6 py-4.5 border-b border-slate-50 bg-slate-50/50 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Database className="w-5 h-5 text-blue-600" />
+                  <Icon name="Database" className="w-5 h-5 text-blue-600" />
                   <span className="font-extrabold text-sm text-slate-800 tracking-tight">Storage settings</span>
                 </div>
                 <button
@@ -464,35 +439,6 @@ export default function App() {
 
               {/* Body */}
               <div className="p-6 space-y-6">
-                <div>
-                  <h3 className="font-bold text-xs text-slate-450 uppercase tracking-wider mb-2 text-slate-500">Set storage limit</h3>
-                  <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4.5 space-y-3">
-                    <div className="flex items-center justify-between text-xs font-bold text-slate-700">
-                      <span>Maximum Capacity Pool</span>
-                      <span className="text-blue-600 font-extrabold text-sm">{totalStorageMaxGB} GB</span>
-                    </div>
-                    {/* Range slider */}
-                    <input
-                      aria-label="Adjust storage limit slider"
-                      type="range"
-                      min="200"
-                      max="1000"
-                      step="50"
-                      value={totalStorageMaxGB}
-                      onChange={(e) => setTotalStorageMaxGB(parseInt(e.target.value))}
-                      className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600 py-1"
-                    />
-                    <div className="flex items-center justify-between text-[10px] text-slate-400 font-semibold pt-1">
-                      <span>200 GB (Core)</span>
-                      <span>500 GB (Team)</span>
-                      <span>1,000 GB</span>
-                    </div>
-                  </div>
-                  <p className="text-[10px] text-slate-400 mt-2 font-medium leading-relaxed">
-                    Changing this value updates the overview cards right away.
-                  </p>
-                </div>
-
                 {/* Team Collaboration Toggles */}
                 <div>
                   <h3 className="font-bold text-xs text-slate-450 uppercase tracking-wider mb-2 text-slate-500">Workspace settings</h3>
@@ -540,7 +486,7 @@ export default function App() {
                 <button
                   onClick={() => {
                     setIsSettingsOpen(false);
-                    triggerToast(`Saved storage limit: ${totalStorageMaxGB} GB`, 'success');
+                    triggerToast('Workspace settings saved', 'success');
                   }}
                   className="px-4 py-2 text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-md cursor-pointer"
                 >
