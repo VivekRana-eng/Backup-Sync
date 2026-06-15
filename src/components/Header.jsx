@@ -72,10 +72,12 @@ export default function Header({
   };
 
   return (
-    <header id="app-header" className="h-16 border-b border-slate-100 bg-white px-6 flex items-center justify-between sticky top-0 z-30 shadow-xs">
-      
-      {/* Page Title & Hamburger section */}
-      <div className="flex items-center gap-3">
+    <header
+      id="app-header"
+      className="sticky top-0 z-30 border-b border-slate-100 bg-white px-4 py-3 shadow-xs md:px-6 md:py-0 md:h-16 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
+    >
+      {/* Top Row: Page Title & Hamburger section */}
+      <div className="flex items-center justify-between gap-3 md:justify-start">
         <button
           id="toggle-mobile-sidebar"
           onClick={openSideMenu}
@@ -102,8 +104,8 @@ export default function Header({
         </div>
       </div>
 
-      {/* Center Search Input */}
-      <div className="flex-1 max-w-md mx-6 md:mx-12">
+      {/* Search Input */}
+      <div className="w-full md:flex-1 md:max-w-md md:mx-12">
         <div className="relative">
           <Icon name="Search" className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-slate-400 pointer-events-none" />
           <input
@@ -126,16 +128,16 @@ export default function Header({
       </div>
 
       {/* Right Controls Area */}
-      <div className="flex items-center gap-2 md:gap-3">
-        <div className="hidden lg:flex items-center gap-2 bg-slate-50 border border-slate-100 rounded-xl px-2.5 py-1.5">
+      <div className="flex w-full items-center justify-end gap-2 md:gap-3">
+        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-slate-100 bg-slate-50 px-2.5 py-1.5">
           <Icon name="Filter" className="w-4 h-4 text-slate-400" />
-          <div className="flex flex-col leading-none">
+          <div className="flex min-w-0 flex-1 flex-col leading-none">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Client shift</span>
             <select
               id="client-shift-select"
               value={clientShiftFilter}
               onChange={(e) => setClientShiftFilter(e.target.value)}
-              className="bg-transparent text-xs font-bold text-slate-700 outline-none cursor-pointer max-w-[180px]"
+              className="w-full min-w-0 bg-transparent text-xs font-bold text-slate-700 outline-none cursor-pointer sm:w-auto sm:max-w-[180px]"
             >
               <option value={DEFAULT_RAILWAY_CLIENT}>{DEFAULT_RAILWAY_CLIENT}</option>
               {RAILWAY_CLIENTS.filter((client) => client !== DEFAULT_RAILWAY_CLIENT).map((client) => (
