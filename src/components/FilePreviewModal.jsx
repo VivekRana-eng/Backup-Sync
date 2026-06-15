@@ -97,7 +97,7 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
     ['txt', 'md', 'csv', 'json', 'js', 'ts', 'jsx', 'tsx', 'css', 'html', 'xml'].includes(file.extension.toLowerCase());
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[60] flex items-start justify-center overflow-y-auto px-3 py-4 sm:items-center sm:px-4">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -111,32 +111,32 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 18 }}
         transition={{ type: 'spring', stiffness: 320, damping: 28 }}
-        className="relative z-10 w-full max-w-6xl overflow-hidden rounded-[28px] bg-[#f4f1ea] shadow-[0_30px_100px_rgba(15,23,42,0.35)] border border-white/60"
+        className="relative z-10 flex h-[100dvh] w-[calc(100vw-1.5rem)] max-w-6xl overflow-y-auto overflow-x-hidden bg-[#f4f1ea] shadow-[0_30px_100px_rgba(15,23,42,0.35)] border border-white/60 rounded-2xl sm:h-[calc(100dvh-2rem)] sm:w-[calc(100vw-2rem)] sm:rounded-3xl lg:h-auto lg:w-full lg:max-h-[calc(100dvh-2rem)] lg:overflow-hidden lg:rounded-[28px]"
       >
-        <div className="grid gap-0 lg:grid-cols-[minmax(0,1fr)_360px]">
-          <div className="bg-[#171923] p-5 sm:p-7 text-white">
+        <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px]">
+          <div className="flex min-h-0 flex-1 flex-col bg-[#171923] p-4 text-white sm:p-7">
             <div className="mb-5 flex items-start justify-between gap-4">
               <div className="min-w-0">
-                <h2 className="truncate text-2xl font-extrabold tracking-tight text-white">
+                <h2 className="truncate text-xl font-extrabold tracking-tight text-white sm:text-2xl">
                   {file.name}.{file.extension}
                 </h2>
-                <p className="mt-1 text-sm font-medium text-white/65">{file.folder}</p>
+                <p className="mt-1 text-xs font-medium text-white/65 sm:text-sm">{file.folder}</p>
               </div>
               <button
                 onClick={onClose}
-                className="rounded-full p-2 text-white/60 transition hover:bg-white/10 hover:text-white"
+                className="hidden rounded-full p-2 text-white/60 transition hover:bg-white/10 hover:text-white lg:inline-flex"
                 aria-label="Close preview"
               >
                 <Icon name="X" className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="flex min-h-[520px] items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-black/40 p-3 sm:p-4">
+            <div className="flex h-[38dvh] min-h-[220px] items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-black/40 p-3 sm:min-h-[520px] sm:p-4 lg:flex-1 lg:h-auto">
               {isImage && file.previewUrl ? (
                 <img
                   src={file.previewUrl}
                   alt={file.name}
-                  className="max-h-[72vh] w-full rounded-2xl object-contain"
+                  className="h-full w-full rounded-2xl object-contain"
                 />
               ) : isVideo && file.previewUrl ? (
                 <video
@@ -144,7 +144,7 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
                   controls
                   autoPlay
                   playsInline
-                  className="max-h-[72vh] w-full rounded-2xl bg-black object-contain"
+                  className="h-full w-full rounded-2xl bg-black object-contain"
                 />
               ) : isAudio && file.previewUrl ? (
                 <div className="flex w-full max-w-xl flex-col items-center gap-5 rounded-3xl bg-white/5 p-8 text-center">
@@ -161,15 +161,15 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
                 <iframe
                   title={`${file.name}.${file.extension}`}
                   src={file.previewUrl}
-                  className="h-[72vh] w-full rounded-2xl bg-white"
+                  className="h-full w-full rounded-2xl bg-white"
                 />
               ) : isDocx ? (
-                <div className="h-[72vh] w-full overflow-auto rounded-2xl bg-[#f8f5ee] p-6 text-left text-slate-900 shadow-inner">
+                <div className="h-full w-full overflow-auto rounded-2xl bg-[#f8f5ee] p-4 sm:p-6 text-left text-slate-900 shadow-inner">
                   {isLoadingDocx ? (
                     <div className="text-sm font-medium text-slate-500">Loading DOCX preview...</div>
                   ) : (
                     <article
-                      className="mx-auto max-w-3xl rounded-2xl bg-white p-8 shadow-sm ring-1 ring-slate-200"
+                      className="mx-auto max-w-3xl rounded-2xl bg-white p-5 sm:p-8 shadow-sm ring-1 ring-slate-200"
                       style={{ fontFamily: 'Georgia, Times New Roman, serif' }}
                     >
                       <div
@@ -180,17 +180,17 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
                   )}
                 </div>
               ) : isText ? (
-                <div className="h-[72vh] w-full overflow-auto rounded-2xl bg-[#0b1020] p-5 text-left">
+                <div className="h-full w-full overflow-auto rounded-2xl bg-[#0b1020] p-4 sm:p-5 text-left">
                   {isLoadingText ? (
                     <div className="text-sm text-white/60">Loading preview...</div>
                   ) : (
-                    <pre className="whitespace-pre-wrap break-words text-sm leading-6 text-slate-100">
+                    <pre className="whitespace-pre-wrap break-words text-xs sm:text-sm leading-6 text-slate-100">
                       {textContent || 'No text preview available.'}
                     </pre>
                   )}
                 </div>
               ) : (
-                <div className="flex w-full max-w-xl flex-col items-center gap-4 rounded-3xl bg-white/5 p-10 text-center">
+                <div className="flex w-full max-w-xl flex-col items-center gap-4 rounded-3xl bg-white/5 p-6 sm:p-10 text-center">
                   <div className="rounded-3xl bg-white/10 p-5 text-white">
                     <Icon name="FileCode" className="h-14 w-14" />
                   </div>
@@ -206,10 +206,11 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
                 </div>
               )}
             </div>
+
           </div>
 
-          <aside className="bg-[#f7f5f1] p-5 sm:p-7">
-            <div className="flex h-full flex-col justify-between gap-6">
+          <aside className="bg-white p-4 sm:p-7">
+            <div className="flex h-full min-h-0 flex-col justify-between gap-6 overflow-y-auto">
               <div>
                 <div className="mb-6 flex items-center justify-between">
                   <div>
@@ -218,7 +219,7 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
                   </div>
                   <button
                     onClick={onClose}
-                    className="rounded-full p-2 text-slate-400 transition hover:bg-white hover:text-slate-700 lg:hidden"
+                    className="rounded-full p-2 text-slate-400 transition hover:bg-white hover:text-slate-700"
                     aria-label="Close preview"
                   >
                     <Icon name="X" className="h-5 w-5" />
@@ -266,7 +267,7 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex flex-col gap-3 pb-2 sm:flex-row sm:items-center sm:gap-3 sm:pb-0">
                 <button
                   onClick={() => onDownload(file)}
                   className="flex-1 rounded-2xl bg-blue-600 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition hover:bg-blue-700"

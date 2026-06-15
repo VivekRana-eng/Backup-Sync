@@ -32,7 +32,7 @@ export function createToastId() {
 export function getFileCategory(extension: string): FileCategory {
   const normalizedExtension = extension.toLowerCase();
 
-  if (['xlsx', 'xls', 'csv', 'doc', 'docx', 'pdf', 'ppt', 'pptx'].includes(normalizedExtension)) {
+  if (['xlsx', 'xls', 'csv', 'doc', 'docx', 'pdf', 'ppt', 'pptx', 'txt', 'md'].includes(normalizedExtension)) {
     return 'document';
   }
 
