@@ -1,4 +1,9 @@
 export type FileCategory = 'document' | 'image' | 'video' | 'audio' | 'other';
+export type RailwayClient =
+  | 'Northern Railway'
+  | 'Eastern Railway'
+  | 'Central Railway'
+  | 'Western Railway';
 
 export interface User {
   name: string;
@@ -21,6 +26,7 @@ export interface CloudFile {
   name: string;
   extension: string;
   category: FileCategory;
+  clientShift: RailwayClient;
   size: string; // human readable E.g., "1.2 MB"
   sizeBytes: number;
   folder: string; // breadcrumb display string, e.g. "Work > Finance"
@@ -43,6 +49,7 @@ export interface UploadingFile {
   status: 'uploading' | 'completed' | 'cancelled';
   category: FileCategory;
   extension: string;
+  clientShift: RailwayClient;
   sourceFile?: File;
 }
 

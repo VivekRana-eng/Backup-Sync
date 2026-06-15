@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Icon from './Icon';
-import { formatStorageSize } from '../lib/workspace';
+import { DEFAULT_RAILWAY_CLIENT, formatStorageSize, RAILWAY_CLIENTS } from '../lib/workspace';
 
 export default function Header({
   activeTab,
   currentUser,
   searchQuery,
   setSearchQuery,
+  clientShiftFilter,
+  setClientShiftFilter,
   onSettingsClick,
   openSideMenu,
   totalStorageUsedGB,
@@ -124,8 +126,27 @@ export default function Header({
       </div>
 
       {/* Right Controls Area */}
-      <div className="flex items-center gap-1.5 md:gap-3">
-        
+      <div className="flex items-center gap-2 md:gap-3">
+        <div className="hidden lg:flex items-center gap-2 bg-slate-50 border border-slate-100 rounded-xl px-2.5 py-1.5">
+          <Icon name="Filter" className="w-4 h-4 text-slate-400" />
+          <div className="flex flex-col leading-none">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Client shift</span>
+            <select
+              id="client-shift-select"
+              value={clientShiftFilter}
+              onChange={(e) => setClientShiftFilter(e.target.value)}
+              className="bg-transparent text-xs font-bold text-slate-700 outline-none cursor-pointer max-w-[180px]"
+            >
+              <option value={DEFAULT_RAILWAY_CLIENT}>{DEFAULT_RAILWAY_CLIENT}</option>
+              {RAILWAY_CLIENTS.filter((client) => client !== DEFAULT_RAILWAY_CLIENT).map((client) => (
+                <option key={client} value={client}>
+                  {client}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
         {/* Settings button */}
         <button
           id="theme-settings-toggle-btn"

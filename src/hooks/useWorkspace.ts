@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { Activity, CloudFile, FileCategory, SidebarTab, UploadingFile } from '../types';
+import type { Activity, CloudFile, FileCategory, RailwayClient, SidebarTab, UploadingFile } from '../types';
 import {
   buildUploadQueue,
   computeStats,
@@ -8,6 +8,7 @@ import {
   createFolderPlaceholder,
   createToastId,
   createUploadedFile,
+  DEFAULT_RAILWAY_CLIENT,
   revokeFilePreviewUrl,
   type ToastMessage,
 } from '../lib/workspace';
@@ -25,6 +26,7 @@ export function useWorkspace() {
   const [activities, setActivities] = useState<Activity[]>(INITIAL_ACTIVITIES);
   const [searchQuery, setSearchQuery] = useState('');
   const [fileTypeFilter, setFileTypeFilter] = useState<FileCategory | 'all'>('all');
+  const [clientShiftFilter, setClientShiftFilter] = useState<RailwayClient>(DEFAULT_RAILWAY_CLIENT);
   const [isSidebarMobileOpen, setIsSidebarMobileOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
@@ -50,6 +52,16 @@ export function useWorkspace() {
 
     return () => window.clearTimeout(timer);
   }, [toast]);
+
+  const visibleFiles = useMemo(
+    () => files.filter((file) => file.clientShift === clientShiftFilter),
+    [files, clientShiftFilter],
+  );
+
+  const visibleUploadingFiles = useMemo(
+    () => uploadingFiles.filter((file) => file.clientShift === clientShiftFilter),
+    [uploadingFiles, clientShiftFilter],
+  );
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -99,12 +111,12 @@ export function useWorkspace() {
     return () => window.clearInterval(interval);
   }, []);
 
-  const computedStats = useMemo(() => computeStats(files), [files]);
-  const totalStorageUsedGB = useMemo(() => computeTotalStorageUsedGB(files), [files]);
+  const computedStats = useMemo(() => computeStats(visibleFiles), [visibleFiles]);
+  const totalStorageUsedGB = useMemo(() => computeTotalStorageUsedGB(visibleFiles), [visibleFiles]);
 
-  const starredFilesCount = files.filter((file) => file.isStarred && !file.isArchived).length;
-  const archivedFilesCount = files.filter((file) => file.isArchived).length;
-  const sharedFilesCount = files.filter((file) => file.isShared && !file.isArchived).length;
+  const starredFilesCount = visibleFiles.filter((file) => file.isStarred && !file.isArchived).length;
+  const archivedFilesCount = visibleFiles.filter((file) => file.isArchived).length;
+  const sharedFilesCount = visibleFiles.filter((file) => file.isShared && !file.isArchived).length;
 
   const handleToggleStar = (id: string) => {
     setFiles((currentFiles) =>
@@ -215,7 +227,7 @@ export function useWorkspace() {
   };
 
   const handleFilesSelected = (selectedFiles: FileList | File[]) => {
-    const tempUploads = buildUploadQueue(selectedFiles);
+    const tempUploads = buildUploadQueue(selectedFiles, clientShiftFilter);
     setUploadingFiles((currentUploads) => [...tempUploads, ...currentUploads]);
     triggerToast(`Added ${selectedFiles.length} file(s) to transfer queue`, 'info');
   };
@@ -238,7 +250,12 @@ export function useWorkspace() {
 
     triggerToast(`Created folder directory: "${newFolderCategory} > ${trimmedFolderName}"`, 'success');
 
-    const placeholderFile = createFolderPlaceholder(newFolderCategory, trimmedFolderName, CURRENT_USER);
+    const placeholderFile = createFolderPlaceholder(
+      newFolderCategory,
+      trimmedFolderName,
+      CURRENT_USER,
+      clientShiftFilter,
+    );
     setFiles((currentFiles) => [placeholderFile, ...currentFiles]);
     setActivities((currentActivities) => [
       createActivity(
@@ -264,11 +281,14 @@ export function useWorkspace() {
     setActiveTab,
     files,
     uploadingFiles,
+    visibleUploadingFiles,
     activities,
     searchQuery,
     setSearchQuery,
     fileTypeFilter,
     setFileTypeFilter,
+    clientShiftFilter,
+    setClientShiftFilter,
     isSidebarMobileOpen,
     setIsSidebarMobileOpen,
     isSettingsOpen,
@@ -284,6 +304,7 @@ export function useWorkspace() {
     triggerToast,
     computedStats,
     totalStorageUsedGB,
+    visibleFiles,
     starredFilesCount,
     archivedFilesCount,
     sharedFilesCount,

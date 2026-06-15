@@ -1,4 +1,4 @@
-import type { Activity, CloudFile, FileCategory, UploadingFile, User } from '../types';
+import type { Activity, CloudFile, FileCategory, RailwayClient, UploadingFile, User } from '../types';
 
 export type ToastType = 'success' | 'info' | 'error';
 
@@ -15,6 +15,15 @@ const CATEGORY_FOLDERS: Record<FileCategory, { folder: string; chain: string[] }
   audio: { folder: 'Audio > Uploads', chain: ['Audio', 'Uploads'] },
   other: { folder: 'Others > Uploads', chain: ['Others', 'Uploads'] },
 };
+
+export const RAILWAY_CLIENTS: RailwayClient[] = [
+  'Northern Railway',
+  'Eastern Railway',
+  'Central Railway',
+  'Western Railway',
+];
+
+export const DEFAULT_RAILWAY_CLIENT: RailwayClient = 'Northern Railway';
 
 export function createToastId() {
   return Date.now().toString();
@@ -109,6 +118,7 @@ export function createUploadedFile(
     name: upload.name.substring(0, upload.name.lastIndexOf('.')) || upload.name,
     extension: upload.extension,
     category: upload.category,
+    clientShift: upload.clientShift,
     size: upload.size,
     sizeBytes: upload.sizeBytes,
     folder: folderDestination.folder,
@@ -129,12 +139,18 @@ export function revokeFilePreviewUrl(file: CloudFile) {
   }
 }
 
-export function createFolderPlaceholder(category: string, folderName: string, user: User): CloudFile {
+export function createFolderPlaceholder(
+  category: string,
+  folderName: string,
+  user: User,
+  clientShift: RailwayClient,
+): CloudFile {
   return {
     id: `folder-ph-${Date.now()}`,
     name: 'get_started_guide',
     extension: 'pdf',
     category: 'document',
+    clientShift,
     size: '1.2 MB',
     sizeBytes: 1_258_291,
     folder: `${category} > ${folderName}`,
@@ -149,7 +165,7 @@ export function createFolderPlaceholder(category: string, folderName: string, us
   };
 }
 
-export function buildUploadQueue(files: FileList | File[]) {
+export function buildUploadQueue(files: FileList | File[], clientShift: RailwayClient) {
   return Array.from(files).map((file, index) => {
     const extension = file.name.split('.').pop() || 'dat';
     const category = getFileCategory(extension);
@@ -159,6 +175,7 @@ export function buildUploadQueue(files: FileList | File[]) {
       name: file.name,
       extension,
       category,
+      clientShift,
       size: formatUploadSize(file.size),
       sizeBytes: file.size || 1_500_000,
       progress: 0,

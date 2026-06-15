@@ -15,7 +15,7 @@ export default function FilesTable({
 }) {
   const [viewMode, setViewMode] = useState('list');
   const [searchTableQuery, setSearchTableQuery] = useState('');
-  const [timeFilter, setTimeFilter] = useState('all');
+  const [dateFilter, setDateFilter] = useState('');
   const [selectedFolder, setSelectedFolder] = useState(null);
   
   // Sorting state
@@ -119,11 +119,8 @@ export default function FilesTable({
 
       // 4. Time Interval Filters
       let matchesTime = true;
-      if (timeFilter === 'month') {
-        matchesTime = file.lastModified.startsWith('2026-06');
-      } else if (timeFilter === 'week') {
-        const day = parseInt(file.lastModified.substring(8, 10));
-        matchesTime = file.lastModified.startsWith('2026-06') && day >= 6; // simulate first 10 days
+      if (dateFilter) {
+        matchesTime = file.lastModified.startsWith(dateFilter);
       }
 
       return matchesSearch && matchesCategory && matchesFolder && matchesTime;
@@ -224,15 +221,28 @@ export default function FilesTable({
 
           {/* Time Filter Calendar Selector */}
           <div className="relative">
-            <select
-              value={timeFilter}
-              onChange={(e) => setTimeFilter(e.target.value)}
-              className="bg-slate-50 hover:bg-slate-100 border border-slate-100 rounded-lg text-xs font-semibold text-slate-600 px-3 py-1.5 outline-none cursor-pointer"
-            >
-              <option value="all">Date: all time</option>
-              <option value="month">This month</option>
-              <option value="week">Past week</option>
-            </select>
+            <div className="flex items-center gap-2 bg-slate-50 hover:bg-slate-100 border border-slate-100 rounded-lg px-3 py-1.5">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 whitespace-nowrap">
+                Date
+              </span>
+              <input
+                type="date"
+                value={dateFilter}
+                onChange={(e) => setDateFilter(e.target.value)}
+                className="bg-transparent text-xs font-semibold text-slate-600 outline-none cursor-pointer [color-scheme:light] w-[132px]"
+                title="Filter files by specific date"
+              />
+              {dateFilter && (
+                <button
+                  type="button"
+                  onClick={() => setDateFilter('')}
+                  className="text-[10px] font-bold text-slate-400 hover:text-slate-600 cursor-pointer"
+                  title="Clear date filter"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
           </div>
 
           {/* List vs Grid Layout switcher */}
@@ -273,7 +283,7 @@ export default function FilesTable({
             onClick={() => {
               setSearchTableQuery('');
               setFileTypeFilter('all');
-              setTimeFilter('all');
+              setDateFilter('');
               setSelectedFolder(null);
             }}
             className="mt-3 text-xs text-blue-600 hover:text-blue-700 font-bold hover:underline"

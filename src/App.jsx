@@ -18,13 +18,15 @@ export default function App() {
   const {
     activeTab,
     setActiveTab,
-    files,
-    uploadingFiles,
+    visibleFiles,
+    visibleUploadingFiles,
     activities,
     searchQuery,
     setSearchQuery,
     fileTypeFilter,
     setFileTypeFilter,
+    clientShiftFilter,
+    setClientShiftFilter,
     isSidebarMobileOpen,
     setIsSidebarMobileOpen,
     isSettingsOpen,
@@ -88,6 +90,8 @@ export default function App() {
           currentUser={CURRENT_USER}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
+          clientShiftFilter={clientShiftFilter}
+          setClientShiftFilter={setClientShiftFilter}
           onSettingsClick={() => setIsSettingsOpen(true)}
           openSideMenu={() => setIsSidebarMobileOpen(true)}
           totalStorageUsedGB={totalStorageUsedGB}
@@ -142,7 +146,7 @@ export default function App() {
                     <Icon name="HardDrive" className="w-4.5 h-4.5 text-blue-600" /> Storage overview
                   </h2>
                   <p className="text-[11px] text-slate-400 mt-0.5">
-                    {files.length} items are currently in the workspace.
+                    {visibleFiles.length} items are currently shown for this client shift.
                   </p>
                 </div>
                 <div className="flex items-center gap-4">
@@ -182,7 +186,7 @@ export default function App() {
                     <span className="text-[10px] text-slate-400 font-semibold text-slate-500">Live progress</span>
                   </div>
                   <UploadingPanel
-                    uploadingFiles={uploadingFiles}
+                    uploadingFiles={visibleUploadingFiles}
                     onCancelUpload={handleCancelUpload}
                     onClearAllCompleted={handleClearAllCompleted}
                   />
@@ -203,7 +207,7 @@ export default function App() {
                   )}
                 </div>
                 <FilesTable
-                  files={files.filter((f) => !f.isArchived)}
+                  files={visibleFiles.filter((f) => !f.isArchived)}
                   onToggleStar={handleToggleStar}
                   onToggleArchive={handleToggleArchive}
                   onDeleteFile={handleDeleteAndClosePreview}
@@ -221,7 +225,7 @@ export default function App() {
           {activeTab === 'My Files' && (
             <div className="space-y-4 motion-preset-fade duration-300">
               <FilesTable
-                files={files.filter((f) => !f.isArchived)}
+                files={visibleFiles.filter((f) => !f.isArchived)}
                 onToggleStar={handleToggleStar}
                 onToggleArchive={handleToggleArchive}
                 onDeleteFile={handleDeleteAndClosePreview}
@@ -246,7 +250,7 @@ export default function App() {
               </div>
 
               <FilesTable
-                files={files.filter((f) => f.isShared && !f.isArchived)}
+                files={visibleFiles.filter((f) => f.isShared && !f.isArchived)}
                 onToggleStar={handleToggleStar}
                 onToggleArchive={handleToggleArchive}
                 onDeleteFile={handleDeleteAndClosePreview}
@@ -271,7 +275,7 @@ export default function App() {
               </div>
 
               <FilesTable
-                files={files.filter((f) => {
+                files={visibleFiles.filter((f) => {
                   // Filter out files modified on or of June 6th, 2026 or later
                   const day = parseInt(f.lastModified.substring(8, 10));
                   return f.lastModified.startsWith('2026-06') && day >= 6 && !f.isArchived;
@@ -305,7 +309,7 @@ export default function App() {
               </div>
 
               <FilesTable
-                files={files.filter((f) => f.isStarred && !f.isArchived)}
+                files={visibleFiles.filter((f) => f.isStarred && !f.isArchived)}
                 onToggleStar={handleToggleStar}
                 onToggleArchive={handleToggleArchive}
                 onDeleteFile={handleDeleteAndClosePreview}
@@ -330,7 +334,7 @@ export default function App() {
               </div>
 
               <FilesTable
-                files={files.filter((f) => f.isArchived)}
+                files={visibleFiles.filter((f) => f.isArchived)}
                 onToggleStar={handleToggleStar}
                 onToggleArchive={handleToggleArchive}
                 onDeleteFile={handleDeleteAndClosePreview}
