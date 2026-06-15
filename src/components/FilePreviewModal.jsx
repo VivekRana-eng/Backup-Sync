@@ -96,6 +96,84 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
     file.mimeType?.startsWith('text/') ||
     ['txt', 'md', 'csv', 'json', 'js', 'ts', 'jsx', 'tsx', 'css', 'html', 'xml'].includes(file.extension.toLowerCase());
 
+  const renderPreview = (previewClassName = 'flex aspect-video w-full min-w-0 items-center justify-center overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-black/40 p-2 sm:p-4 md:aspect-auto md:h-full md:flex-1') => (
+    <div className={previewClassName}>
+      {isImage && file.previewUrl ? (
+        <img
+          src={file.previewUrl}
+          alt={file.name}
+          className="block h-full w-full max-w-full rounded-2xl object-contain"
+        />
+      ) : isVideo && file.previewUrl ? (
+        <video
+          src={file.previewUrl}
+          controls
+          autoPlay
+          playsInline
+          className="block h-full w-full max-w-full rounded-2xl bg-black object-contain"
+        />
+      ) : isAudio && file.previewUrl ? (
+        <div className="flex w-full max-w-xl flex-col items-center gap-5 rounded-3xl bg-white/5 p-8 text-center">
+          <div className="rounded-3xl bg-blue-600/15 p-5 text-blue-200">
+            <Icon name="FileAudio" className="h-12 w-12" />
+          </div>
+          <div>
+            <p className="text-lg font-bold text-white">{file.name}.{file.extension}</p>
+            <p className="mt-1 text-sm text-white/60">Audio preview ready below</p>
+          </div>
+          <audio src={file.previewUrl} controls className="w-full" />
+        </div>
+      ) : isPdf && file.previewUrl ? (
+        <iframe
+          title={`${file.name}.${file.extension}`}
+          src={file.previewUrl}
+          className="block h-full w-full max-w-full rounded-2xl bg-white"
+        />
+      ) : isDocx ? (
+        <div className="h-full w-full overflow-auto rounded-2xl bg-[#f8f5ee] p-4 sm:p-6 text-left text-slate-900 shadow-inner">
+          {isLoadingDocx ? (
+            <div className="text-sm font-medium text-slate-500">Loading DOCX preview...</div>
+          ) : (
+            <article
+              className="mx-auto max-w-3xl rounded-2xl bg-white p-5 sm:p-8 shadow-sm ring-1 ring-slate-200"
+              style={{ fontFamily: 'Georgia, Times New Roman, serif' }}
+            >
+              <div
+                className="docx-preview prose prose-slate max-w-none prose-p:my-3 prose-headings:tracking-tight prose-ul:my-3 prose-ol:my-3"
+                dangerouslySetInnerHTML={{ __html: docxHtml || '<p>No readable DOCX content found.</p>' }}
+              />
+            </article>
+          )}
+        </div>
+      ) : isText ? (
+        <div className="h-full w-full overflow-auto rounded-2xl bg-[#0b1020] p-4 sm:p-5 text-left">
+          {isLoadingText ? (
+            <div className="text-sm text-white/60">Loading preview...</div>
+          ) : (
+            <pre className="whitespace-pre-wrap break-words text-xs leading-6 text-slate-100 sm:text-sm">
+              {textContent || 'No text preview available.'}
+            </pre>
+          )}
+        </div>
+      ) : (
+        <div className="flex w-full max-w-xl flex-col items-center gap-4 rounded-3xl bg-white/5 p-6 text-center sm:p-10">
+          <div className="rounded-3xl bg-white/10 p-5 text-white">
+            <Icon name="FileCode" className="h-14 w-14" />
+          </div>
+          <div>
+            <p className="text-lg font-bold text-white">{typeLabel}</p>
+            <p className="mt-1 text-sm text-white/60">
+              This file type is saved, but no inline preview is available yet.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/75">
+            Upload an image, video, audio, PDF, or text file to preview it here.
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div className="fixed inset-0 z-[60] flex items-start justify-center overflow-y-auto px-3 py-4 sm:items-center sm:px-4">
       <motion.div
@@ -111,10 +189,10 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 18 }}
         transition={{ type: 'spring', stiffness: 320, damping: 28 }}
-        className="relative z-10 flex h-[100dvh] w-[calc(100vw-1.5rem)] max-w-6xl overflow-y-auto overflow-x-hidden bg-[#f4f1ea] shadow-[0_30px_100px_rgba(15,23,42,0.35)] border border-white/60 rounded-2xl sm:h-[calc(100dvh-2rem)] sm:w-[calc(100vw-2rem)] sm:rounded-3xl lg:h-auto lg:w-full lg:max-h-[calc(100dvh-2rem)] lg:overflow-hidden lg:rounded-[28px]"
+        className="relative z-10 flex flex-col md:flex-row w-[calc(100vw-1rem)] sm:w-[calc(100vw-2rem)] lg:w-full max-w-6xl h-auto max-h-[calc(100dvh-1rem)] sm:max-h-[calc(100dvh-2rem)] md:h-[calc(100dvh-2rem)] lg:h-auto lg:max-h-[calc(100dvh-2rem)] overflow-y-auto md:overflow-hidden bg-[#f4f1ea] shadow-[0_30px_100px_rgba(15,23,42,0.35)] border border-white/60 rounded-2xl sm:rounded-3xl lg:rounded-[28px]"
       >
-        <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px]">
-          <div className="flex min-h-0 flex-1 flex-col bg-[#171923] p-4 text-white sm:p-7">
+        <div className="grid min-w-0 grid-cols-1 md:grid-cols-[1fr_300px] lg:grid-cols-[1fr_360px] md:min-h-0 md:flex-1">
+          <div className="flex min-w-0 flex-col bg-[#171923] p-4 sm:p-7 rounded-t-2xl sm:rounded-t-3xl md:rounded-none md:min-h-0 md:flex-1 md:h-full">
             <div className="mb-5 flex items-start justify-between gap-4">
               <div className="min-w-0">
                 <h2 className="truncate text-xl font-extrabold tracking-tight text-white sm:text-2xl">
@@ -131,86 +209,11 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
               </button>
             </div>
 
-            <div className="flex h-[38dvh] min-h-[220px] items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-black/40 p-3 sm:min-h-[520px] sm:p-4 lg:flex-1 lg:h-auto">
-              {isImage && file.previewUrl ? (
-                <img
-                  src={file.previewUrl}
-                  alt={file.name}
-                  className="h-full w-full rounded-2xl object-contain"
-                />
-              ) : isVideo && file.previewUrl ? (
-                <video
-                  src={file.previewUrl}
-                  controls
-                  autoPlay
-                  playsInline
-                  className="h-full w-full rounded-2xl bg-black object-contain"
-                />
-              ) : isAudio && file.previewUrl ? (
-                <div className="flex w-full max-w-xl flex-col items-center gap-5 rounded-3xl bg-white/5 p-8 text-center">
-                  <div className="rounded-3xl bg-blue-600/15 p-5 text-blue-200">
-                    <Icon name="FileAudio" className="h-12 w-12" />
-                  </div>
-                  <div>
-                    <p className="text-lg font-bold text-white">{file.name}.{file.extension}</p>
-                    <p className="mt-1 text-sm text-white/60">Audio preview ready below</p>
-                  </div>
-                  <audio src={file.previewUrl} controls className="w-full" />
-                </div>
-              ) : isPdf && file.previewUrl ? (
-                <iframe
-                  title={`${file.name}.${file.extension}`}
-                  src={file.previewUrl}
-                  className="h-full w-full rounded-2xl bg-white"
-                />
-              ) : isDocx ? (
-                <div className="h-full w-full overflow-auto rounded-2xl bg-[#f8f5ee] p-4 sm:p-6 text-left text-slate-900 shadow-inner">
-                  {isLoadingDocx ? (
-                    <div className="text-sm font-medium text-slate-500">Loading DOCX preview...</div>
-                  ) : (
-                    <article
-                      className="mx-auto max-w-3xl rounded-2xl bg-white p-5 sm:p-8 shadow-sm ring-1 ring-slate-200"
-                      style={{ fontFamily: 'Georgia, Times New Roman, serif' }}
-                    >
-                      <div
-                        className="docx-preview prose prose-slate max-w-none prose-p:my-3 prose-headings:tracking-tight prose-ul:my-3 prose-ol:my-3"
-                        dangerouslySetInnerHTML={{ __html: docxHtml || '<p>No readable DOCX content found.</p>' }}
-                      />
-                    </article>
-                  )}
-                </div>
-              ) : isText ? (
-                <div className="h-full w-full overflow-auto rounded-2xl bg-[#0b1020] p-4 sm:p-5 text-left">
-                  {isLoadingText ? (
-                    <div className="text-sm text-white/60">Loading preview...</div>
-                  ) : (
-                    <pre className="whitespace-pre-wrap break-words text-xs sm:text-sm leading-6 text-slate-100">
-                      {textContent || 'No text preview available.'}
-                    </pre>
-                  )}
-                </div>
-              ) : (
-                <div className="flex w-full max-w-xl flex-col items-center gap-4 rounded-3xl bg-white/5 p-6 sm:p-10 text-center">
-                  <div className="rounded-3xl bg-white/10 p-5 text-white">
-                    <Icon name="FileCode" className="h-14 w-14" />
-                  </div>
-                  <div>
-                    <p className="text-lg font-bold text-white">{typeLabel}</p>
-                    <p className="mt-1 text-sm text-white/60">
-                      This file type is saved, but no inline preview is available yet.
-                    </p>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/75">
-                    Upload an image, video, audio, PDF, or text file to preview it here.
-                  </div>
-                </div>
-              )}
-            </div>
-
+            {renderPreview()}
           </div>
 
-          <aside className="bg-white p-4 sm:p-7">
-            <div className="flex h-full min-h-0 flex-col justify-between gap-6 overflow-y-auto">
+          <aside className="min-w-0 bg-white p-4 sm:p-7 rounded-b-2xl sm:rounded-b-3xl md:rounded-none h-auto md:h-full">
+            <div className="flex flex-col justify-between gap-6 h-auto md:h-full md:min-h-0 md:overflow-y-auto">
               <div>
                 <div className="mb-6 flex items-center justify-between">
                   <div>
