@@ -9,20 +9,48 @@ export default function Sidebar({
   sharedCount,
   isMobileOpen,
   setIsMobileOpen,
-  onNewFolderClick
+  onNewFolderClick,
+  userRole,
+  onLogoutClick
 }) {
-  const navItems = [
-    { id: 'Dashboard', label: 'Dashboard', icon: 'LayoutDashboard' },
-    { id: 'My Files', label: 'My Files', icon: 'FileCode' },
-    { id: 'Shared', label: 'Shared', icon: 'Users', badge: sharedCount > 0 ? sharedCount : undefined },
-    { id: 'Recents', label: 'Recents', icon: 'Clock' },
-    { id: 'Starred', label: 'Starred', icon: 'Star', badge: starredCount > 0 ? starredCount : undefined, badgeColor: 'bg-amber-100 text-amber-700 font-semibold' },
-    { id: 'Archived', label: 'Archived', icon: 'Archive', badge: archivedCount > 0 ? archivedCount : undefined, badgeColor: 'bg-gray-100 text-gray-700' },
-    { id: 'Activity Log', label: 'Activity Log', icon: 'Activity' },
-  ];
+  const getNavItems = () => {
+    if (userRole === 'admin') {
+      return [
+        { id: 'Dashboard', label: 'Dashboard', icon: 'LayoutDashboard' },
+        { id: 'All Files', label: 'All Files', icon: 'FileCode' },
+        { id: 'Users', label: 'Users', icon: 'Users' },
+        { id: 'Settings', label: 'Settings', icon: 'Settings' },
+        { id: 'Logout', label: 'Logout', icon: 'LogOut' }
+      ];
+    }
+    if (userRole === 'viewer') {
+      return [
+        { id: 'Browse Files', label: 'Browse Files', icon: 'LayoutDashboard' },
+        { id: 'Downloads', label: 'Downloads', icon: 'Download' },
+        { id: 'Logout', label: 'Logout', icon: 'LogOut' }
+      ];
+    }
+    if (userRole === 'uploader') {
+      return [
+        { id: 'Upload Files', label: 'Upload Files', icon: 'CloudUpload' },
+        { id: 'My Uploads', label: 'My Uploads', icon: 'CheckCircle' },
+        { id: 'Logout', label: 'Logout', icon: 'LogOut' }
+      ];
+    }
+    return [
+      { id: 'Dashboard', label: 'Dashboard', icon: 'LayoutDashboard' },
+      { id: 'Logout', label: 'Logout', icon: 'LogOut' }
+    ];
+  };
+
+  const navItems = getNavItems();
 
   const handleNavClick = (tabId) => {
-    setActiveTab(tabId);
+    if (tabId === 'Logout') {
+      if (onLogoutClick) onLogoutClick();
+    } else {
+      setActiveTab(tabId);
+    }
     setIsMobileOpen(false);
   };
 
@@ -65,16 +93,18 @@ export default function Sidebar({
         </div>
 
         {/* Action Button: Create / Add File */}
-        <div className="px-5 pt-5 pb-2">
-          <button
-            id="create-new-folder-btn"
-            onClick={onNewFolderClick}
-            className="w-full h-11 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-xl transition-all shadow-md shadow-blue-500/10 cursor-pointer active:scale-[0.98]"
-          >
-            <Icon name="Plus" className="w-4 h-4" />
-            <span>New folder</span>
-          </button>
-        </div>
+        {userRole === 'admin' && (
+          <div className="px-5 pt-5 pb-2">
+            <button
+              id="create-new-folder-btn"
+              onClick={onNewFolderClick}
+              className="w-full h-11 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-xl transition-all shadow-md shadow-blue-500/10 cursor-pointer active:scale-[0.98]"
+            >
+              <Icon name="Plus" className="w-4 h-4" />
+              <span>New folder</span>
+            </button>
+          </div>
+        )}
 
         {/* Navigation Items */}
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">

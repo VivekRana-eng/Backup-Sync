@@ -81,4 +81,12 @@ export type SidebarTab =
   | 'Recents'
   | 'Starred'
   | 'Archived'
-  | 'Activity Log';
+  | 'Activity Log'
+  | 'Browse Files'
+  | 'Downloads'
+  | 'Upload Files'
+  | 'My Uploads'
+  | 'Users'
+  | 'Settings'
+  | 'Logout';
+
