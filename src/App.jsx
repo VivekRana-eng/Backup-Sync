@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import Icon from './components/Icon';
-import { CURRENT_USER } from './data/mockFiles';
 import { formatStorageSize } from './lib/workspace';
 import { useWorkspace } from './hooks/useWorkspace';
 
@@ -13,8 +12,23 @@ import UploadingPanel from './components/UploadingPanel';
 import FilesTable from './components/FilesTable';
 import FilePreviewModal from './components/FilePreviewModal';
 
+const USERS = {
+  'admin@example.com':  { password: 'admin',    role: 'admin',    name: 'Admin User', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop' },
+  'viewer@example.com': { password: 'viewer',   role: 'viewer',   name: 'Viewer User', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=150&auto=format&fit=crop' },
+  'uploader@gmail.com': { password: 'uploader', role: 'uploader', name: 'Uploader User', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop' },
+};
+
 export default function App() {
+  const [currentUser, setCurrentUser] = React.useState(() => {
+    const saved = localStorage.getItem('backup_sync_user');
+    return saved ? JSON.parse(saved) : null;
+  });
+  const [currentPath, setCurrentPath] = React.useState(window.location.pathname);
+  const [emailValue, setEmailValue] = React.useState('');
+  const [passwordValue, setPasswordValue] = React.useState('');
+  const [passwordError, setPasswordError] = React.useState('');
   const [selectedFile, setSelectedFile] = React.useState(null);
+
   const {
     activeTab,
     setActiveTab,
@@ -55,13 +69,199 @@ export default function App() {
     handleClearAllCompleted,
     handleCreateNewFolder,
     clearActivityLog,
-  } = useWorkspace();
+  } = useWorkspace(currentUser || undefined);
+
+  const navigate = (path) => {
+    window.history.pushState({}, '', path);
+    setCurrentPath(path);
+  };
+
+  React.useEffect(() => {
+    const handlePopState = () => {
+      setCurrentPath(window.location.pathname);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  React.useEffect(() => {
+    if (currentPath === '/') {
+      if (currentUser) {
+        if (currentUser.role === 'admin') navigate('/dashboard/admin');
+        else if (currentUser.role === 'viewer') navigate('/dashboard/view');
+        else if (currentUser.role === 'uploader') navigate('/dashboard/upload');
+      }
+    } else {
+      if (!currentUser) {
+        navigate('/');
+      } else {
+        if (currentPath === '/dashboard/admin' && currentUser.role !== 'admin') {
+          navigate('/');
+        } else if (currentPath === '/dashboard/view' && currentUser.role !== 'viewer') {
+          navigate('/');
+        } else if (currentPath === '/dashboard/upload' && currentUser.role !== 'uploader') {
+          navigate('/');
+        } else if (
+          currentPath !== '/dashboard/admin' &&
+          currentPath !== '/dashboard/view' &&
+          currentPath !== '/dashboard/upload'
+        ) {
+          if (currentUser.role === 'admin') navigate('/dashboard/admin');
+          else if (currentUser.role === 'viewer') navigate('/dashboard/view');
+          else if (currentUser.role === 'uploader') navigate('/dashboard/upload');
+          else navigate('/');
+        }
+      }
+    }
+  }, [currentPath, currentUser]);
+
+  React.useEffect(() => {
+    if (currentUser) {
+      if (currentUser.role === 'admin' && activeTab !== 'Dashboard' && activeTab !== 'All Files' && activeTab !== 'Users' && activeTab !== 'Settings') {
+        setActiveTab('Dashboard');
+      } else if (currentUser.role === 'viewer' && activeTab !== 'Browse Files' && activeTab !== 'Downloads') {
+        setActiveTab('Browse Files');
+      } else if (currentUser.role === 'uploader' && activeTab !== 'Upload Files' && activeTab !== 'My Uploads') {
+        setActiveTab('Upload Files');
+      }
+    }
+  }, [currentUser, activeTab]);
+
+  const handleLoginSubmit = (e) => {
+    if (e) e.preventDefault();
+    setPasswordError('');
+
+    const trimmedEmail = emailValue.trim().toLowerCase();
+    const userRecord = USERS[trimmedEmail];
+
+    if (userRecord && userRecord.password === passwordValue) {
+      const loggedUser = {
+        email: trimmedEmail,
+        role: userRecord.role,
+        name: userRecord.name,
+        avatar: userRecord.avatar,
+        status: 'online'
+      };
+      localStorage.setItem('backup_sync_user', JSON.stringify(loggedUser));
+      setCurrentUser(loggedUser);
+    } else {
+      setPasswordError('Incorrect email or password. Please try again.');
+    }
+  };
+
+  const handleLogOut = () => {
+    localStorage.removeItem('backup_sync_user');
+    setCurrentUser(null);
+    setEmailValue('');
+    setPasswordValue('');
+    setPasswordError('');
+    navigate('/');
+  };
+
   const storageUsageLabel = formatStorageSize(totalStorageUsedGB * 1024 * 1024 * 1024);
   const handleOpenPreview = (file) => setSelectedFile(file);
   const handleDeleteAndClosePreview = (id) => {
     setSelectedFile((current) => (current?.id === id ? null : current));
     handleDeleteFile(id);
   };
+
+  if (!currentUser || currentPath === '/') {
+    return (
+      <div className="relative flex min-h-screen w-screen flex-col items-center justify-center bg-slate-50 font-sans text-slate-800 antialiased p-4 select-none">
+        <div className="bg-white border border-slate-150 rounded-3xl p-8 max-w-md w-full shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),0_10px_15px_-3px_rgba(0,0,0,0.1),0_20px_25px_-5px_rgba(0,0,0,0.05),0_30px_50px_-20px_rgba(0,0,0,0.15)] relative z-10">
+          {/* Logo header */}
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center text-white shadow-md shadow-black/20 shrink-0">
+              <Icon name="Cloud" className="w-5.5 h-5.5 text-white" />
+            </div>
+            <div>
+              <h1 className="font-bold text-lg text-black tracking-tight leading-none">Backup & Sync</h1>
+              <span className="text-[10px] block font-extrabold text-slate-400 uppercase tracking-widest mt-1">Personal Plan</span>
+            </div>
+          </div>
+
+          {/* Divider line */}
+          <div className="border-t border-slate-100 my-5" />
+
+          {/* Heading */}
+          <div className="space-y-1 mb-6">
+            <h2 className="text-xl font-bold text-black tracking-tight">Sign in</h2>
+            <p className="text-xs text-slate-400 font-medium">to access your workspace files and transfers.</p>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleLoginSubmit} className="space-y-4">
+            {passwordError && (
+              <div id="login-error-msg" className="text-xs font-bold text-rose-500 bg-rose-50 border border-rose-100 rounded-xl p-3 flex items-center gap-2">
+                <Icon name="Trash2" className="w-4 h-4 text-rose-600" />
+                <span>{passwordError}</span>
+              </div>
+            )}
+
+            {/* Email input */}
+            <div className="space-y-1">
+              <label className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400" htmlFor="login-email-input">
+                Email Address
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                  <Icon name="Mail" className="w-4.5 h-4.5" />
+                </div>
+                <input
+                  type="email"
+                  id="login-email-input"
+                  value={emailValue}
+                  onChange={(e) => setEmailValue(e.target.value)}
+                  placeholder="admin@example.com"
+                  className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 placeholder-slate-400 outline-none shadow-[inset_0_1.5px_3px_rgba(0,0,0,0.05)] focus:border-black focus:ring-1 focus:ring-black transition-all"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Password input */}
+            <div className="space-y-1">
+              <label className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400" htmlFor="login-password-input">
+                Password
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                  <Icon name="Lock" className="w-4.5 h-4.5" />
+                </div>
+                <input
+                  type="password"
+                  id="login-password-input"
+                  value={passwordValue}
+                  onChange={(e) => setPasswordValue(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 placeholder-slate-400 outline-none shadow-[inset_0_1.5px_3px_rgba(0,0,0,0.05)] focus:border-black focus:ring-1 focus:ring-black transition-all"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Submit button */}
+            <button
+              type="submit"
+              id="login-continue-btn"
+              className="w-full py-3 mt-2 bg-black hover:bg-neutral-900 text-white font-bold text-xs rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.15)] flex items-center justify-center gap-2 cursor-pointer transition-all hover:-translate-y-0.5 active:translate-y-0"
+            >
+              <span>Continue</span>
+              <span>→</span>
+            </button>
+          </form>
+
+          {/* Footer */}
+          <div className="text-center mt-6">
+            <span className="text-[10px] text-slate-400 font-bold flex items-center justify-center gap-1">
+              Protected by Backup & Sync 🛡️
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
 
   return (
     <div className="relative flex h-screen w-screen overflow-hidden bg-[#f4f1ea] font-sans text-slate-600 antialiased">
@@ -79,6 +279,8 @@ export default function App() {
         isMobileOpen={isSidebarMobileOpen}
         setIsMobileOpen={setIsSidebarMobileOpen}
         onNewFolderClick={() => setIsFolderModalOpen(true)}
+        userRole={currentUser?.role}
+        onLogoutClick={handleLogOut}
       />
 
       {/* 2. Main Content Container Area */}
@@ -87,7 +289,7 @@ export default function App() {
         {/* Top Header Controls bar */}
         <Header
           activeTab={activeTab}
-          currentUser={CURRENT_USER}
+          currentUser={currentUser}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           clientShiftFilter={clientShiftFilter}
@@ -95,6 +297,8 @@ export default function App() {
           onSettingsClick={() => setIsSettingsOpen(true)}
           openSideMenu={() => setIsSidebarMobileOpen(true)}
           totalStorageUsedGB={totalStorageUsedGB}
+          userRole={currentUser?.role}
+          onLogOut={handleLogOut}
         />
 
         {/* Inner Scrollable Workspace Box */}
@@ -136,8 +340,8 @@ export default function App() {
             )}
           </AnimatePresence>
 
-          {/* TAB 1: DASHBOARD VIEW (Default core) */}
-          {activeTab === 'Dashboard' && (
+          {/* --- ADMIN ROLE VIEW TABS --- */}
+          {currentUser?.role === 'admin' && activeTab === 'Dashboard' && (
             <div className="space-y-6 motion-preset-fade duration-300">
               {/* Storage Overview Header with limit slider reference */}
               <div className="relative z-10 bg-white/90 backdrop-blur rounded-3xl p-6 border border-slate-200/80 shadow-[0_18px_50px_rgba(15,23,42,0.06)] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -216,14 +420,18 @@ export default function App() {
                   onFileSelect={handleOpenPreview}
                   fileTypeFilter={fileTypeFilter}
                   setFileTypeFilter={setFileTypeFilter}
+                  userRole={currentUser?.role}
                 />
               </div>
             </div>
           )}
 
-          {/* TAB 2: MY FILES FULL VIEW */}
-          {activeTab === 'My Files' && (
+          {currentUser?.role === 'admin' && activeTab === 'All Files' && (
             <div className="space-y-4 motion-preset-fade duration-300">
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+                <h2 className="text-sm font-bold text-slate-800 tracking-tight">All Files</h2>
+                <p className="text-[11px] text-slate-400 mt-0.5">Explore all active assets across this storage partition.</p>
+              </div>
               <FilesTable
                 files={visibleFiles.filter((f) => !f.isArchived)}
                 onToggleStar={handleToggleStar}
@@ -234,186 +442,166 @@ export default function App() {
                 onFileSelect={handleOpenPreview}
                 fileTypeFilter={fileTypeFilter}
                 setFileTypeFilter={setFileTypeFilter}
+                userRole={currentUser?.role}
               />
             </div>
           )}
 
-          {/* TAB 3: SHARED WORKSPACE */}
-          {activeTab === 'Shared' && (
-            <div className="space-y-4 motion-preset-fade duration-300">
-              <div className="bg-white border border-slate-100 rounded-2xl p-6">
-                <span className="text-xs font-bold uppercase tracking-wider text-blue-600 px-2.5 py-1 bg-blue-50 rounded-lg">Shared Workspace</span>
-                <h2 className="text-lg font-bold text-slate-800 mt-4">Shared files</h2>
-                <p className="text-xs text-slate-400 mt-1 max-w-xl">
-                  These are the items you've marked for team access.
-                </p>
+          {currentUser?.role === 'admin' && activeTab === 'Users' && (
+            <div className="space-y-6 motion-preset-fade duration-300">
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+                <h2 className="text-sm font-bold text-slate-800 tracking-tight">Authorized Users</h2>
+                <p className="text-[11px] text-slate-400 mt-0.5">Manage user access control lists and credentials.</p>
               </div>
-
-              <FilesTable
-                files={visibleFiles.filter((f) => f.isShared && !f.isArchived)}
-                onToggleStar={handleToggleStar}
-                onToggleArchive={handleToggleArchive}
-                onDeleteFile={handleDeleteAndClosePreview}
-                onRenameFile={handleRenameFile}
-                onTriggerDownload={handleTriggerDownload}
-                onFileSelect={handleOpenPreview}
-                fileTypeFilter={fileTypeFilter}
-                setFileTypeFilter={setFileTypeFilter}
-              />
-            </div>
-          )}
-
-          {/* TAB 4: RECENTS */}
-          {activeTab === 'Recents' && (
-            <div className="space-y-4 motion-preset-fade duration-300">
-              <div className="bg-gradient-to-r from-blue-50/50 to-indigo-50/20 border border-slate-100 rounded-2xl p-6">
-                <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 px-2.5 py-1 bg-indigo-50 rounded-lg">Recent Modifications</span>
-                <h2 className="text-lg font-bold text-slate-800 mt-4">Files modified within past week</h2>
-                <p className="text-xs text-slate-400 mt-1 max-w-xl font-medium">
-                  Automatically tracking changes made since June 6th, 2026. Sort by last modified date down below.
-                </p>
-              </div>
-
-              <FilesTable
-                files={visibleFiles.filter((f) => {
-                  // Filter out files modified on or of June 6th, 2026 or later
-                  const day = parseInt(f.lastModified.substring(8, 10));
-                  return f.lastModified.startsWith('2026-06') && day >= 6 && !f.isArchived;
-                })}
-                onToggleStar={handleToggleStar}
-                onToggleArchive={handleToggleArchive}
-                onDeleteFile={handleDeleteAndClosePreview}
-                onRenameFile={handleRenameFile}
-                onTriggerDownload={handleTriggerDownload}
-                onFileSelect={handleOpenPreview}
-                fileTypeFilter={fileTypeFilter}
-                setFileTypeFilter={setFileTypeFilter}
-              />
-            </div>
-          )}
-
-          {/* TAB 5: STARRED */}
-          {activeTab === 'Starred' && (
-            <div className="space-y-4 motion-preset-fade duration-300">
-              <div className="bg-gradient-to-r from-amber-500/5 to-transparent border border-amber-100 rounded-2xl p-6 flex items-center justify-between gap-4">
-                <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-amber-600 px-2.5 py-1 bg-amber-100/70 rounded-full">Core Favorites</span>
-                  <h2 className="text-lg font-bold text-slate-800 mt-3">Starred Assets</h2>
-                    <p className="text-xs text-slate-400 mt-1 max-w-xl">
-                    Keep the files you reach for most in one place.
-                  </p>
-                </div>
-                <div className="p-4 bg-amber-50 border border-amber-100 rounded-2xl hidden sm:block">
-                  <Icon name="Star" className="w-8 h-8 text-amber-500 fill-current" />
-                </div>
-              </div>
-
-              <FilesTable
-                files={visibleFiles.filter((f) => f.isStarred && !f.isArchived)}
-                onToggleStar={handleToggleStar}
-                onToggleArchive={handleToggleArchive}
-                onDeleteFile={handleDeleteAndClosePreview}
-                onRenameFile={handleRenameFile}
-                onTriggerDownload={handleTriggerDownload}
-                onFileSelect={handleOpenPreview}
-                fileTypeFilter={fileTypeFilter}
-                setFileTypeFilter={setFileTypeFilter}
-              />
-            </div>
-          )}
-
-          {/* TAB 6: ARCHIVED */}
-          {activeTab === 'Archived' && (
-            <div className="space-y-4 motion-preset-fade duration-300">
-              <div className="bg-slate-50 border border-slate-100 rounded-2xl p-6">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 px-2.5 py-1 bg-slate-200/50 rounded-full">Secure Cold Storage</span>
-                <h2 className="text-lg font-bold text-slate-800 mt-3">Archived Records</h2>
-                <p className="text-xs text-slate-400 mt-1 max-w-xl">
-                  These records are excluded from standard search listings and storage dashboard grids to preserve margin negative space. Restore them on-demand via the row menu.
-                </p>
-              </div>
-
-              <FilesTable
-                files={visibleFiles.filter((f) => f.isArchived)}
-                onToggleStar={handleToggleStar}
-                onToggleArchive={handleToggleArchive}
-                onDeleteFile={handleDeleteAndClosePreview}
-                onRenameFile={handleRenameFile}
-                onTriggerDownload={handleTriggerDownload}
-                onFileSelect={handleOpenPreview}
-                fileTypeFilter={fileTypeFilter}
-                setFileTypeFilter={setFileTypeFilter}
-              />
-            </div>
-          )}
-
-          {/* TAB 7: ACTIVITY LOG FEED */}
-          {activeTab === 'Activity Log' && (
-            <div className="max-w-4xl mx-auto space-y-6 motion-preset-fade duration-300">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-                <div>
-                  <h2 className="text-lg font-extrabold text-slate-800">Recent activity</h2>
-                  <p className="text-xs text-slate-400 mt-0.5 font-medium">A quick look at what changed recently.</p>
-                </div>
-                <button
-                  onClick={clearActivityLog}
-                  className="px-3 py-1.5 rounded-lg border border-slate-100 bg-white text-xs font-bold text-rose-500 hover:bg-rose-50 cursor-pointer"
-                >
-                  Clear Logs
-                </button>
-              </div>
-
-              <div className="space-y-4">
-                {activities.length === 0 ? (
-                  <div className="bg-white border rounded-2xl p-12 text-center text-slate-400">
-                    <Icon name="Activity" className="w-12 h-12 text-slate-200 mx-auto mb-2" />
-                    <p className="font-bold">No activity yet</p>
-                    <p className="text-xs text-slate-350 max-w-sm mx-auto mt-1">Actions taken on file states or metadata will automatically be recorded here.</p>
-                  </div>
-                ) : (
-                  activities.map((act) => (
-                    <div
-                      key={act.id}
-                      className="bg-white border border-slate-100 rounded-2xl p-4.5 flex gap-4 hover:border-slate-200 transition-all shadow-xs"
-                    >
-                      <img
-                        src={act.user.avatar}
-                        alt={act.user.name}
-                        className="w-10 h-10 rounded-xl object-cover ring-2 ring-slate-100 shrink-0"
-                        referrerPolicy="no-referrer"
-                      />
-                      <div className="min-w-0 flex-1">
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-                          <span className="text-xs font-bold text-slate-800">
-                            {act.user.name === CURRENT_USER.name ? 'You' : act.user.name}
-                          </span>
-                          <span className="text-[10px] text-slate-400 font-semibold">{act.time}</span>
-                        </div>
-                        <p className="text-slate-600 text-xs mt-1 leading-normal font-medium">
-                          <span className="text-slate-400">{act.action}</span>{' '}
-                          <span className="font-bold text-slate-750">{act.target}</span>
-                        </p>
-                        
-                        {/* Status Type Badge */}
-                        <div className="mt-2.5 flex items-center gap-1.5">
-                          <span className={`text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md ${
-                            act.type === 'upload' 
-                              ? 'bg-blue-50 text-blue-600 border border-blue-100'
-                              : act.type === 'delete'
-                              ? 'bg-rose-50 text-rose-600 border border-rose-100'
-                              : act.type === 'share'
-                              ? 'bg-purple-50 text-purple-600 border border-purple-100'
-                              : 'bg-slate-50 text-slate-600 border border-slate-100'
+              <div className="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm">
+                <table className="min-w-full divide-y divide-slate-100">
+                  <thead className="bg-slate-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-wider">User</th>
+                      <th className="px-6 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-wider">Email</th>
+                      <th className="px-6 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-wider">Role</th>
+                      <th className="px-6 py-3 text-left text-[10px] font-bold text-slate-400 uppercase tracking-wider">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {Object.values(USERS).map((user) => (
+                      <tr key={user.email} className="hover:bg-slate-50/50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center gap-3">
+                            <img src={user.avatar} className="w-8 h-8 rounded-lg object-cover" />
+                            <span className="text-xs font-bold text-slate-800">{user.name}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-xs font-semibold text-slate-650">{user.email}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-2 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider ${
+                            user.role === 'admin' ? 'bg-blue-50 text-blue-600 border border-blue-100' :
+                            user.role === 'viewer' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' :
+                            'bg-amber-50 text-amber-600 border border-amber-100'
                           }`}>
-                            {act.type}
+                            {user.role === 'viewer' ? 'View Only' : user.role}
                           </span>
-                          <span className="text-[10px] text-slate-350 font-light">Logged automatically</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="inline-flex items-center gap-1.5 text-xs text-slate-500 font-semibold">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                            Online
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
+            </div>
+          )}
+
+          {currentUser?.role === 'admin' && activeTab === 'Settings' && (
+            <div className="space-y-6 motion-preset-fade duration-300">
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+                <h2 className="text-sm font-bold text-slate-800 tracking-tight">Workspace Settings</h2>
+                <p className="text-[11px] text-slate-400 mt-0.5">Configure system defaults, replication factors, and storage rules.</p>
+              </div>
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 space-y-6 shadow-sm">
+                <div className="space-y-4">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Storage Preferences</h3>
+                  <div className="divide-y divide-slate-100 border border-slate-100 rounded-2xl">
+                    <div className="flex items-center justify-between p-4">
+                      <div>
+                        <span className="block text-xs font-bold text-slate-700">Faster Upload Transfers</span>
+                        <span className="block text-[10px] text-slate-400 mt-0.5">Allow concurrent chunked uploads to speed up transfer rates.</span>
+                      </div>
+                      <input type="checkbox" defaultChecked className="w-4.5 h-4.5 text-blue-600 border-slate-300 rounded focus:ring-blue-500 cursor-pointer" />
+                    </div>
+                    <div className="flex items-center justify-between p-4">
+                      <div>
+                        <span className="block text-xs font-bold text-slate-700">Automatic Cleanup</span>
+                        <span className="block text-[10px] text-slate-400 mt-0.5">Automatically move deleted files to the secure cold vault after 30 days.</span>
+                      </div>
+                      <input type="checkbox" className="w-4.5 h-4.5 text-blue-600 border-slate-300 rounded focus:ring-blue-500 cursor-pointer" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* --- VIEWER ROLE VIEW TABS --- */}
+          {currentUser?.role === 'viewer' && activeTab === 'Browse Files' && (
+            <div className="space-y-4 motion-preset-fade duration-300">
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+                <h2 className="text-sm font-bold text-slate-800 tracking-tight">Browse Files</h2>
+                <p className="text-[11px] text-slate-400 mt-0.5">View and download synced files from this backup volume.</p>
+              </div>
+              <FilesTable
+                files={visibleFiles.filter((f) => !f.isArchived)}
+                onToggleStar={handleToggleStar}
+                onToggleArchive={handleToggleArchive}
+                onDeleteFile={handleDeleteAndClosePreview}
+                onRenameFile={handleRenameFile}
+                onTriggerDownload={handleTriggerDownload}
+                onFileSelect={handleOpenPreview}
+                fileTypeFilter={fileTypeFilter}
+                setFileTypeFilter={setFileTypeFilter}
+                userRole={currentUser?.role}
+              />
+            </div>
+          )}
+
+          {currentUser?.role === 'viewer' && activeTab === 'Downloads' && (
+            <div className="space-y-6 motion-preset-fade duration-300">
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+                <h2 className="text-sm font-bold text-slate-800 tracking-tight">Downloads</h2>
+                <p className="text-[11px] text-slate-400 mt-0.5">View and fetch files available for offline usage.</p>
+              </div>
+              <div className="bg-white border border-slate-200 rounded-3xl p-8 text-center text-slate-450 shadow-sm">
+                <Icon name="Download" className="w-12 h-12 text-slate-200 mx-auto mb-2" />
+                <p className="font-bold text-slate-800 text-sm">Download History</p>
+                <p className="text-xs text-slate-400 max-w-sm mx-auto mt-1">Select and download any file from Browse Files. Synced files will be logged here.</p>
+              </div>
+            </div>
+          )}
+
+          {/* --- UPLOADER ROLE VIEW TABS --- */}
+          {currentUser?.role === 'uploader' && activeTab === 'Upload Files' && (
+            <div className="space-y-6 motion-preset-fade duration-300">
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+                <h2 className="text-sm font-bold text-slate-800 tracking-tight">Upload Files</h2>
+                <p className="text-[11px] text-slate-400 mt-0.5">Drag and drop files to securely add them to Backup & Sync.</p>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2 space-y-2">
+                  <FileUploader onFilesSelected={handleFilesSelected} />
+                </div>
+                <div className="space-y-2">
+                  <UploadingPanel
+                    uploadingFiles={visibleUploadingFiles}
+                    onCancelUpload={handleCancelUpload}
+                    onClearAllCompleted={handleClearAllCompleted}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {currentUser?.role === 'uploader' && activeTab === 'My Uploads' && (
+            <div className="space-y-4 motion-preset-fade duration-300">
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+                <h2 className="text-sm font-bold text-slate-800 tracking-tight">My Uploads</h2>
+                <p className="text-[11px] text-slate-400 mt-0.5">List of files uploaded during this session, with confirmation marks.</p>
+              </div>
+              <FilesTable
+                files={visibleFiles.filter((f) => !f.isArchived && (f.owner.email === 'uploader@gmail.com' || f.owner.email === currentUser?.email))}
+                onToggleStar={handleToggleStar}
+                onToggleArchive={handleToggleArchive}
+                onDeleteFile={handleDeleteAndClosePreview}
+                onRenameFile={handleRenameFile}
+                onTriggerDownload={handleTriggerDownload}
+                onFileSelect={handleOpenPreview}
+                fileTypeFilter={fileTypeFilter}
+                setFileTypeFilter={setFileTypeFilter}
+                userRole={currentUser?.role}
+              />
             </div>
           )}
 

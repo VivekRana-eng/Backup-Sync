@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { Activity, CloudFile, FileCategory, RailwayClient, SidebarTab, UploadingFile } from '../types';
+import type { Activity, CloudFile, FileCategory, RailwayClient, SidebarTab, UploadingFile, User } from '../types';
 import {
   buildUploadQueue,
   computeStats,
@@ -19,7 +19,7 @@ import {
   INITIAL_UPLOADS,
 } from '../data/mockFiles';
 
-export function useWorkspace() {
+export function useWorkspace(currentUser?: User) {
   const [activeTab, setActiveTab] = useState<SidebarTab>('Dashboard');
   const [files, setFiles] = useState<CloudFile[]>(INITIAL_FILES);
   const [uploadingFiles, setUploadingFiles] = useState<UploadingFile[]>(INITIAL_UPLOADS);
@@ -83,7 +83,8 @@ export function useWorkspace() {
               }
 
               completedUploadIdsRef.current.add(file.id);
-              const uploadedFile = createUploadedFile(file, CURRENT_USER);
+              const activeUser = currentUser || CURRENT_USER;
+              const uploadedFile = createUploadedFile(file, activeUser);
               setFiles((currentFiles) => {
                 if (currentFiles.some((currentFile) => currentFile.sourceUploadId === file.id)) {
                   return currentFiles;
@@ -92,7 +93,7 @@ export function useWorkspace() {
                 return [uploadedFile, ...currentFiles];
               });
               setActivities((currentActivities) => [
-                createActivity(CURRENT_USER, 'uploaded standard asset', file.name, 'upload'),
+                createActivity(activeUser, 'uploaded standard asset', file.name, 'upload'),
                 ...currentActivities,
               ]);
               triggerToast(`Successfully uploaded ${file.name}! Added to ${uploadedFile.folder}`, 'success');
@@ -128,9 +129,10 @@ export function useWorkspace() {
           nextState ? `Starred "${file.name}.${file.extension}"` : `Removed star from "${file.name}.${file.extension}"`,
           'info',
         );
+        const activeUser = currentUser || CURRENT_USER;
         setActivities((currentActivities) => [
           createActivity(
-            CURRENT_USER,
+            activeUser,
             nextState ? 'starred the file' : 'unstarred the file',
             `${file.name}.${file.extension}`,
             'star',
@@ -155,9 +157,10 @@ export function useWorkspace() {
             : `Restored "${file.name}.${file.extension}" to Dashboard.`,
           'success',
         );
+        const activeUser = currentUser || CURRENT_USER;
         setActivities((currentActivities) => [
           createActivity(
-            CURRENT_USER,
+            activeUser,
             nextState ? 'archived file item' : 'restored file item',
             `${file.name}.${file.extension}`,
             'archive',
@@ -178,9 +181,10 @@ export function useWorkspace() {
       revokeFilePreviewUrl(fileToDelete);
       setFiles((currentFiles) => currentFiles.filter((file) => file.id !== id));
       triggerToast(`Successfully deleted ${fileToDelete.name}.${fileToDelete.extension}`, 'error');
+      const activeUser = currentUser || CURRENT_USER;
       setActivities((currentActivities) => [
         createActivity(
-          CURRENT_USER,
+          activeUser,
           'deleted file from server',
           `${fileToDelete.name}.${fileToDelete.extension}`,
           'delete',
@@ -196,9 +200,10 @@ export function useWorkspace() {
         if (file.id !== id) return file;
 
         triggerToast(`Renamed to "${newName}.${file.extension}"`, 'info');
+        const activeUser = currentUser || CURRENT_USER;
         setActivities((currentActivities) => [
           createActivity(
-            CURRENT_USER,
+            activeUser,
             `renamed file from "${file.name}" to`,
             `${newName}.${file.extension}`,
             'rename',
@@ -220,8 +225,9 @@ export function useWorkspace() {
           : currentFile,
       ),
     );
+    const activeUser = currentUser || CURRENT_USER;
     setActivities((currentActivities) => [
-      createActivity(CURRENT_USER, 'downloaded cloud asset', `${file.name}.${file.extension}`, 'download'),
+      createActivity(activeUser, 'downloaded cloud asset', `${file.name}.${file.extension}`, 'download'),
       ...currentActivities,
     ]);
   };
@@ -250,16 +256,17 @@ export function useWorkspace() {
 
     triggerToast(`Created folder directory: "${newFolderCategory} > ${trimmedFolderName}"`, 'success');
 
+    const activeUser = currentUser || CURRENT_USER;
     const placeholderFile = createFolderPlaceholder(
       newFolderCategory,
       trimmedFolderName,
-      CURRENT_USER,
+      activeUser,
       clientShiftFilter,
     );
     setFiles((currentFiles) => [placeholderFile, ...currentFiles]);
     setActivities((currentActivities) => [
       createActivity(
-        CURRENT_USER,
+        activeUser,
         'created empty directory structure',
         `${newFolderCategory} > ${trimmedFolderName}`,
         'rename',

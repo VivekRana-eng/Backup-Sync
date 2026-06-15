@@ -395,6 +395,33 @@ function LogOutIcon(props) {
   );
 }
 
+function LockIcon(props) {
+  return (
+    <LineIcon {...props}>
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" {...strokeProps} />
+      <path d="M7 11V7a5 5 0 0 1 10 0v4" {...strokeProps} />
+    </LineIcon>
+  );
+}
+
+function EyeIcon(props) {
+  return (
+    <LineIcon {...props}>
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" {...strokeProps} />
+      <circle cx="12" cy="12" r="3" {...strokeProps} />
+    </LineIcon>
+  );
+}
+
+function MailIcon(props) {
+  return (
+    <LineIcon {...props}>
+      <rect x="2" y="4" width="20" height="16" rx="2" ry="2" {...strokeProps} />
+      <path d="M22 4l-10 7L2 4" {...strokeProps} />
+    </LineIcon>
+  );
+}
+
 function UserPlusIcon(props) {
   return (
     <LineIcon {...props}>
@@ -533,6 +560,9 @@ const ICONS = {
   CreditCard: CreditCardIcon,
   Shield: ShieldIcon,
   LogOut: LogOutIcon,
+  Lock: LockIcon,
+  Eye: EyeIcon,
+  Mail: MailIcon,
   UserPlus: UserPlusIcon,
   ExternalLink: ExternalLinkIcon,
   LayoutDashboard: LayoutDashboardIcon,
