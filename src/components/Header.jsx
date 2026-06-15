@@ -76,8 +76,8 @@ export default function Header({
       id="app-header"
       className="sticky top-0 z-30 border-b border-slate-100 bg-white px-4 py-3 shadow-xs md:px-6 md:py-0 md:h-16 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
     >
-      {/* Top Row: Page Title & Hamburger section */}
-      <div className="flex items-center justify-between gap-3 md:justify-start">
+      {/* Top Row: Mobile menu + search */}
+      <div className="flex items-center gap-2 w-full md:w-auto md:justify-start">
         <button
           id="toggle-mobile-sidebar"
           onClick={openSideMenu}
@@ -86,7 +86,7 @@ export default function Header({
           <Icon name="Menu" className="w-5.5 h-5.5" />
         </button>
 
-        <div className="hidden sm:block">
+        <div className="hidden sm:block md:hidden">
           {activeTab === 'Dashboard' ? (
             <div>
               <h1 className="text-lg font-bold text-slate-800 tracking-tight leading-none">
@@ -102,10 +102,32 @@ export default function Header({
             </h1>
           )}
         </div>
+
+        <div className="flex-1 md:hidden">
+          <div className="relative">
+            <Icon name="Search" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+            <input
+              id="global-search-input-mobile"
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search..."
+              className="w-full text-xs bg-slate-50/85 hover:bg-slate-100/75 focus:bg-white text-slate-700 placeholder-slate-400 border border-transparent focus:border-blue-400/80 outline-none rounded-xl py-2 pl-9 pr-3 transition-all"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 hover:text-slate-600 font-medium"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Search Input */}
-      <div className="w-full md:flex-1 md:max-w-md md:mx-12">
+      <div className="hidden md:block md:flex-1 md:max-w-md md:mx-12">
         <div className="relative">
           <Icon name="Search" className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-slate-400 pointer-events-none" />
           <input
@@ -127,17 +149,17 @@ export default function Header({
         </div>
       </div>
 
-      {/* Right Controls Area */}
-      <div className="flex w-full items-center justify-end gap-2 md:gap-3">
-        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-slate-100 bg-slate-50 px-2.5 py-1.5">
+      {/* Desktop Controls */}
+      <div className="hidden md:flex items-center gap-3">
+        <div className="flex items-center gap-2 bg-slate-50 border border-slate-100 rounded-xl px-2.5 py-1.5">
           <Icon name="Filter" className="w-4 h-4 text-slate-400" />
-          <div className="flex min-w-0 flex-1 flex-col leading-none">
+          <div className="flex flex-col leading-none">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Client shift</span>
             <select
               id="client-shift-select"
               value={clientShiftFilter}
               onChange={(e) => setClientShiftFilter(e.target.value)}
-              className="w-full min-w-0 bg-transparent text-xs font-bold text-slate-700 outline-none cursor-pointer sm:w-auto sm:max-w-[180px]"
+              className="bg-transparent text-xs font-bold text-slate-700 outline-none cursor-pointer max-w-[180px]"
             >
               <option value={DEFAULT_RAILWAY_CLIENT}>{DEFAULT_RAILWAY_CLIENT}</option>
               {RAILWAY_CLIENTS.filter((client) => client !== DEFAULT_RAILWAY_CLIENT).map((client) => (
@@ -149,7 +171,6 @@ export default function Header({
           </div>
         </div>
 
-        {/* Settings button */}
         <button
           id="theme-settings-toggle-btn"
           onClick={onSettingsClick}
@@ -159,7 +180,6 @@ export default function Header({
           <Icon name="Settings" className="w-5.5 h-5.5" />
         </button>
 
-        {/* Notifications Bell */}
         <div className="relative" ref={bellRef}>
           <button
             id="notifications-bell-btn"
@@ -172,7 +192,6 @@ export default function Header({
             )}
           </button>
 
-          {/* Notifications Dropdown */}
           {bellOpen && (
             <div
               id="notifications-dropdown"
@@ -250,7 +269,6 @@ export default function Header({
           )}
         </div>
 
-        {/* User Profile Trigger */}
         <div className="relative" ref={profileRef}>
           <button
             id="profile-dropdown-trigger"
@@ -277,13 +295,11 @@ export default function Header({
             <Icon name="ChevronDown" className="w-4 h-4 text-slate-400 hidden sm:block" />
           </button>
 
-          {/* Profile Dropdown */}
           {profileOpen && (
             <div
               id="profile-dropdown-card"
               className="absolute right-0 mt-3 w-72 bg-white border border-slate-100 rounded-2xl shadow-xl z-50 overflow-hidden py-1 transform origin-top-right transition-all duration-200"
             >
-              {/* Profile Card Header */}
               <div className="p-4 bg-slate-50/50 border-b border-slate-50">
                 <div className="flex gap-3">
                   <img
@@ -302,7 +318,6 @@ export default function Header({
                   </div>
                 </div>
 
-                {/* Storage Quick Info */}
                 <div className="mt-3.5 bg-white border border-slate-100 rounded-xl p-2.5">
                   <div className="flex items-center justify-between text-[11px]">
                     <span className="font-semibold text-slate-500">Your Storage</span>
@@ -311,7 +326,6 @@ export default function Header({
                 </div>
               </div>
 
-              {/* Items */}
               <div className="p-1 space-y-0.5">
                 <button
                   onClick={() => {
@@ -339,7 +353,6 @@ export default function Header({
                 </button>
               </div>
 
-              {/* Logout Action */}
               <div className="p-1 border-t border-slate-50">
                 <button
                   id="sign-out-btn"
@@ -352,6 +365,69 @@ export default function Header({
               </div>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Mobile Controls */}
+      <div className="flex items-center justify-end gap-2 md:hidden">
+        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-slate-100 bg-slate-50 px-2.5 py-1.5">
+          <Icon name="Filter" className="w-4 h-4 text-slate-400 shrink-0" />
+          <div className="flex min-w-0 flex-1 flex-col leading-none">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Client shift</span>
+            <select
+              id="client-shift-select"
+              value={clientShiftFilter}
+              onChange={(e) => setClientShiftFilter(e.target.value)}
+              className="w-full min-w-0 bg-transparent text-xs font-bold text-slate-700 outline-none cursor-pointer"
+            >
+              <option value={DEFAULT_RAILWAY_CLIENT}>{DEFAULT_RAILWAY_CLIENT}</option>
+              {RAILWAY_CLIENTS.filter((client) => client !== DEFAULT_RAILWAY_CLIENT).map((client) => (
+                <option key={client} value={client}>
+                  {client}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <button
+          id="theme-settings-toggle-btn-mobile"
+          onClick={onSettingsClick}
+          className="p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer relative shrink-0"
+          title="Settings"
+        >
+          <Icon name="Settings" className="w-5.5 h-5.5" />
+        </button>
+
+        <div className="relative shrink-0" ref={bellRef}>
+          <button
+            id="notifications-bell-btn-mobile"
+            onClick={() => setBellOpen(!bellOpen)}
+            className="p-2 text-slate-400 hover:text-slate-800 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer relative"
+          >
+            <Icon name="Bell" className="w-5.5 h-5.5" />
+            {unreadCount > 0 && (
+              <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full ring-2 ring-white animate-bounce" />
+            )}
+          </button>
+        </div>
+
+        <div className="relative shrink-0" ref={profileRef}>
+          <button
+            id="profile-dropdown-trigger-mobile"
+            onClick={() => setProfileOpen(!profileOpen)}
+            className="flex items-center gap-2 p-1 pl-1.5 pr-2 hover:bg-slate-50 rounded-xl transition-all border border-slate-50 cursor-pointer"
+          >
+            <div className="relative">
+              <img
+                src={currentUser.avatar}
+                alt={currentUser.name}
+                className="w-8 h-8 rounded-lg object-cover ring-2 ring-blue-50"
+                referrerPolicy="no-referrer"
+              />
+              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white" />
+            </div>
+          </button>
         </div>
       </div>
     </header>
