@@ -47,7 +47,7 @@ export default function FileUploader({ onFilesSelected }) {
       className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center p-6 text-center transition-all cursor-pointer group select-none ${
         isDragActive
         ? 'border-slate-900 bg-slate-50 shadow-inner'
-        : 'border-slate-200 bg-white hover:border-slate-900 hover:bg-slate-50/40'
+        : 'border-slate-200 bg-white hover:border-red-900 hover:bg-slate-50/40'
       }`}
     >
       {/* Hidden file input */}
@@ -62,7 +62,7 @@ export default function FileUploader({ onFilesSelected }) {
 
       {/* Decorative concentric circle backdrop */}
       <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors mb-4 ${
-        isDragActive ? 'bg-slate-200 text-slate-900' : 'bg-slate-50 text-slate-400 group-hover:bg-slate-100 group-hover:text-slate-700'
+        isDragActive ? 'bg-slate-200 text-slate-900' : 'bg-slate-50 text-slate-400 group-hover:bg-slate-100 group-hover:text-red-700'
       }`}>
         <Icon name="CloudUpload" className={`w-8 h-8 transition-transform group-hover:scale-110 ${
           isDragActive ? 'animate-bounce' : ''
@@ -71,7 +71,7 @@ export default function FileUploader({ onFilesSelected }) {
 
       <div className="max-w-md mx-auto">
         <p className="text-sm font-bold text-slate-700 tracking-tight">
-          Drop files here or <span className="text-slate-900 hover:text-black group-hover:underline font-semibold leading-relaxed">click to browse</span>
+          Drop files here or <span className="text-slate-900 hover:text-red-900 group-hover:underline font-semibold leading-relaxed">click to browse</span>
         </p>
         <p className="text-[11px] text-slate-400 font-medium mt-1.5 leading-normal">
           Supports PDFs, spreadsheets, images, videos, zip files, presentations, and audio up to 2GB.

@@ -252,7 +252,7 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
               <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-[0_18px_50px_rgba(15,23,42,0.06)] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div>
                   <h2 className="text-sm font-bold text-slate-800 tracking-tight flex items-center gap-2">
-                    <Icon name="Cloud" className="w-4.5 h-4.5 text-slate-900" />
+                    <Icon name="Cloud" className="w-4.5 h-4.5 text-red-900" />
                     Storage overview
                   </h2>
                   <p className="text-[11px] text-slate-400 mt-0.5">
@@ -270,9 +270,9 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
               <StorageCards filesStats={computedStats} activeFilter={fileTypeFilter} setActiveFilter={setFileTypeFilter} />
 
               {userRole === 'admin' && (
-                <div className="bg-white rounded-2xl border border-slate-200 p-4 flex items-center justify-between gap-4">
+                <div className="bg-red-50 rounded-2xl border border-red-200 p-4 flex items-center justify-between gap-4">
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">Admin access</p>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-red-900">Admin access</p>
                     <p className="mt-1 text-sm font-semibold text-slate-900">Manage team members from this dashboard.</p>
                   </div>
                   <button

@@ -167,7 +167,7 @@ export default function Header({
           >
             <Icon name="Bell" className="w-5.5 h-5.5" />
             {unreadCount > 0 && (
-            <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-slate-900 rounded-full ring-2 ring-white animate-bounce" />
+            <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-900 rounded-full ring-2 ring-white animate-bounce" />
             )}
           </button>
 
@@ -181,7 +181,7 @@ export default function Header({
                 {unreadCount > 0 && (
                   <button
                     onClick={markAllAsRead}
-                    className="text-xs font-semibold tracking-tight text-slate-900 hover:text-black cursor-pointer"
+                    className="text-xs font-semibold tracking-tight text-red-900 hover:text-black cursor-pointer"
                   >
                     Mark all read
                   </button>
@@ -203,13 +203,13 @@ export default function Header({
                       }`}
                     >
                       {notif.type === 'success' && (
-                        <Icon name="CheckCircle2" className="w-5 h-5 text-slate-900 shrink-0 mt-0.5" />
+                        <Icon name="CheckCircle2" className="w-5 h-5 text-red-900 shrink-0 mt-0.5" />
                       )}
                       {notif.type === 'info' && (
-                        <Icon name="CheckCircle2" className="w-5 h-5 text-slate-900 shrink-0 mt-0.5" />
+                        <Icon name="CheckCircle2" className="w-5 h-5 text-red-900 shrink-0 mt-0.5" />
                       )}
                       {notif.type === 'warning' && (
-                        <Icon name="AlertCircle" className="w-5 h-5 text-slate-900 shrink-0 mt-0.5" />
+                        <Icon name="AlertCircle" className="w-5 h-5 text-red-900 shrink-0 mt-0.5" />
                       )}
 
                       <div className="flex-1 min-w-0">

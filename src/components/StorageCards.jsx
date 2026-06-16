@@ -81,12 +81,12 @@ export default function StorageCards({
             onClick={() => handleCardClick(card.category)}
             className={`bg-white rounded-2xl p-5 border cursor-pointer hover:shadow-lg transition-all relative overflow-hidden group ${
               isSelected
-                ? 'border-slate-900 ring-2 ring-slate-900/5 shadow-md shadow-black/5 scale-[1.02]'
+                ? 'border-red-900 ring-2 ring-red-900/5 shadow-md shadow-black/5 scale-[1.02]'
                 : 'border-slate-100 hover:border-slate-200'
             }`}
           >
             {/* Quick Filter Selection Indicator Glow */}
-            {isSelected && <div className="absolute top-0 left-0 w-full h-1 bg-slate-900" />}
+            {isSelected && <div className="absolute top-0 left-0 w-full h-1 bg-red-900" />}
 
             <div className="flex items-start justify-between">
               {/* Category Icon Cylinder */}

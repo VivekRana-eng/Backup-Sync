@@ -63,7 +63,7 @@ export default function Sidebar({
       >
         <div className="h-16 flex items-center justify-between px-6 border-b border-slate-50">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center text-white shadow-md shadow-black/20">
+            <div className="w-9 h-9 rounded-xl bg-red-900 flex items-center justify-center text-white shadow-md shadow-black/20">
               <Icon name="Cloud" className="w-5 h-5 animate-pulse" />
             </div>
             <div>
@@ -85,7 +85,7 @@ export default function Sidebar({
             <button
               id="add-client-btn"
               onClick={onAddClientClick}
-              className="group relative w-full h-11 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-slate-900 text-sm font-semibold text-white shadow-[0_18px_35px_rgba(0,0,0,0.18)] transition-all hover:bg-black hover:shadow-[0_22px_40px_rgba(0,0,0,0.22)] active:scale-[0.98]"
+              className="group relative w-full h-11 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-red-900 text-sm font-semibold text-white shadow-[0_18px_35px_rgba(0,0,0,0.18)] transition-all hover:bg-black hover:shadow-[0_22px_40px_rgba(0,0,0,0.22)] active:scale-[0.98]"
             >
               <Icon name="Plus" className="w-4 h-4" />
               <span>Add client</span>
@@ -97,7 +97,7 @@ export default function Sidebar({
           <div className="rounded-3xl border border-slate-200/80 bg-white px-4 py-4 shadow-[0_14px_30px_rgba(15,23,42,0.06)]">
             <div className="min-w-0">
               <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-slate-400">Client shifter</p>
-              <div className="mt-2 h-1.5 w-10 rounded-full bg-slate-900" />
+              <div className="mt-2 h-1.5 w-10 rounded-full bg-red-900" />
             </div>
 
             <div className="mt-3">
@@ -128,7 +128,7 @@ export default function Sidebar({
                           onClick={() => handleClientShiftSelect(client)}
                           className={`flex h-11 w-full items-center justify-between rounded-xl px-3 text-sm font-semibold tracking-tight transition-all ${
                             isActive
-                              ? 'bg-slate-900 text-white shadow-md shadow-black/15'
+                              ? 'bg-red-900 text-white shadow-md shadow-black/15'
                               : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
                           }`}
                         >
@@ -160,16 +160,16 @@ export default function Sidebar({
                 onClick={() => handleNavClick(item.id)}
                 className={`relative w-full flex items-center justify-between overflow-hidden px-4 py-3 rounded-2xl text-sm font-medium transition-all group ${
                   isActive
-                    ? 'bg-slate-100 text-slate-900 font-semibold shadow-[0_10px_22px_rgba(0,0,0,0.08)]'
+                    ? 'bg-red-50 text-red-900 font-semibold shadow-[0_10px_22px_rgba(0,0,0,0.08)]'
                     : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
                 }`}
               >
-                {isActive && <span className="absolute inset-y-0 left-0 w-1 bg-slate-900" />}
+                {isActive && <span className="absolute inset-y-0 left-0 w-1 bg-red-900" />}
                 <div className="flex items-center gap-3">
                   <Icon
                     name={item.icon}
                     className={`w-4 h-4 transition-transform group-hover:scale-105 ${
-                      isActive ? 'text-slate-900' : 'text-slate-400 group-hover:text-slate-700'
+                      isActive ? 'text-red-900' : 'text-slate-400 group-hover:text-slate-700'
                     }`}
                   />
                   <span>{item.label}</span>
