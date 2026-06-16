@@ -117,6 +117,14 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
     });
   };
 
+  const handleUpdatePendingUploadDate = (fileId, uploadDate) => {
+    setPendingUploads((currentUploads) => {
+      const nextUploads = currentUploads.map((file) => (file.id === fileId ? { ...file, uploadDate } : file));
+      pendingUploadsRef.current = nextUploads;
+      return nextUploads;
+    });
+  };
+
   const handleConfirmPendingUploads = () => {
     enqueueUploads(pendingUploadsRef.current);
     setPendingUploads([]);
@@ -435,6 +443,7 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
             onClose={handleClosePendingUploads}
             onConfirm={handleConfirmPendingUploads}
             onUpdateDestination={handleUpdatePendingUploadDestination}
+            onUpdateUploadDate={handleUpdatePendingUploadDate}
           />
         )}
       </AnimatePresence>

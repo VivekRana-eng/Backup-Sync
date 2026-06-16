@@ -218,6 +218,7 @@ export default function FilesTable({
               <option value="image">Images</option>
               <option value="video">Videos</option>
               <option value="audio">Audios</option>
+              <option value="ebook">E Books</option>
               <option value="other">Others</option>
             </select>
             <Icon name="ChevronDown" className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />

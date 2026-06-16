@@ -1,4 +1,4 @@
-export type FileCategory = 'document' | 'image' | 'video' | 'audio' | 'other';
+export type FileCategory = 'document' | 'image' | 'video' | 'audio' | 'ebook' | 'other';
 export type RailwayClient = string;
 
 export interface User {
@@ -48,6 +48,7 @@ export interface UploadingFile {
   extension: string;
   clientShift: RailwayClient;
   folderCategory?: FileCategory;
+  uploadDate?: string;
   sourceFile?: File;
 }
 

@@ -8,11 +8,17 @@ const FOLDER_OPTIONS = [
   { value: 'image', label: 'Images' },
   { value: 'video', label: 'Videos' },
   { value: 'audio', label: 'Audio' },
+  { value: 'ebook', label: 'E Books' },
   { value: 'other', label: 'Others' },
 ];
 
 function getFolderLabel(category) {
   return getFolderDestination(category).folder;
+}
+
+function getLocalDateInputValue(date = new Date()) {
+  const pad = (value) => String(value).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
 }
 
 function FilePreviewThumb({ file }) {
@@ -79,8 +85,10 @@ export default function UploadDestinationModal({
   onClose,
   onConfirm,
   onUpdateDestination,
+  onUpdateUploadDate,
 }) {
   if (!isOpen || files.length === 0) return null;
+  const today = getLocalDateInputValue();
 
   return (
     <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
@@ -196,6 +204,20 @@ export default function UploadDestinationModal({
                                 className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
                               />
                             </div>
+                          </div>
+
+                          <div>
+                            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">Upload date</p>
+                            <input
+                              type="date"
+                              value={file.uploadDate ?? today}
+                              max={today}
+                              onChange={(e) => onUpdateUploadDate(file.id, e.target.value)}
+                              className="mt-2 w-full rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold tracking-tight text-slate-900 outline-none transition hover:border-slate-400 hover:bg-slate-50 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 cursor-pointer [color-scheme:light]"
+                            />
+                            <p className="mt-1 text-[10px] font-medium text-slate-400">
+                              Select a past date only.
+                            </p>
                           </div>
                         </div>
 
