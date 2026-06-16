@@ -10,6 +10,7 @@ export interface User {
   email: string;
   avatar: string;
   status: 'online' | 'offline' | 'away';
+  role?: 'admin' | 'viewer' | 'uploader';
 }
 
 export interface Member {

@@ -17,6 +17,8 @@ export default function Sidebar({
   onNewFolderClick,
   clientShiftFilter,
   setClientShiftFilter,
+  userRole,
+  onLogoutClick,
 }) {
   const [isClientShiftOpen, setIsClientShiftOpen] = React.useState(false);
   const navItems = [
@@ -24,14 +26,21 @@ export default function Sidebar({
     { id: 'My Files', label: 'My Files', icon: 'FileCode' },
     { id: 'Archived', label: 'Archived', icon: 'Archive', badge: archivedCount > 0 ? archivedCount : undefined, badgeColor: 'bg-gray-100 text-gray-700' },
     { id: 'Activity Log', label: 'Activity Log', icon: 'Activity' },
-  ];
+  ].filter((item) => {
+    if (userRole === 'viewer') {
+      return item.id === 'Dashboard' || item.id === 'My Files';
+    }
+    return true;
+  });
+
+  React.useEffect(() => {
+    if (userRole === 'viewer' && activeTab !== 'Dashboard' && activeTab !== 'My Files') {
+      setActiveTab('Dashboard');
+    }
+  }, [activeTab, setActiveTab, userRole]);
 
   const handleNavClick = (tabId) => {
-    if (tabId === 'Logout') {
-      if (onLogoutClick) onLogoutClick();
-    } else {
-      setActiveTab(tabId);
-    }
+    setActiveTab(tabId);
     setIsMobileOpen(false);
   };
 
@@ -80,17 +89,18 @@ export default function Sidebar({
         </div>
 
         {/* Action Button: Create / Add File */}
-        <div className="px-5 pt-5 pb-3">
-          <button
-            id="create-new-folder-btn"
-            onClick={onNewFolderClick}
-            className="group relative w-full h-11 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-slate-900 text-sm font-semibold text-white shadow-[0_18px_35px_rgba(0,0,0,0.18)] transition-all hover:bg-black hover:shadow-[0_22px_40px_rgba(0,0,0,0.22)] active:scale-[0.98]"
-          >
-            <span className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),_transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            <Icon name="Plus" className="w-4 h-4" />
-            <span>New folder</span>
-          </button>
-        </div>
+        {userRole === 'admin' && (
+          <div className="px-5 pt-5 pb-3">
+            <button
+              id="create-new-folder-btn"
+              onClick={onNewFolderClick}
+              className="group relative w-full h-11 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-slate-900 text-sm font-semibold text-white shadow-[0_18px_35px_rgba(0,0,0,0.18)] transition-all hover:bg-black hover:shadow-[0_22px_40px_rgba(0,0,0,0.22)] active:scale-[0.98]"
+            >
+              <Icon name="Plus" className="w-4 h-4" />
+              <span>New folder</span>
+            </button>
+          </div>
+        )}
 
         {/* Client Shift Switcher */}
         <div className="px-5 pb-3">
@@ -186,6 +196,19 @@ export default function Sidebar({
             );
           })}
         </nav>
+
+        {onLogoutClick && (
+          <div className="p-3 border-t border-slate-50">
+            <button
+              type="button"
+              onClick={onLogoutClick}
+              className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-slate-900"
+            >
+              <Icon name="LogOut" className="w-4 h-4 text-slate-400" />
+              <span>Logout</span>
+            </button>
+          </div>
+        )}
       </aside>
     </>
   );

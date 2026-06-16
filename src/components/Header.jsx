@@ -8,6 +8,7 @@ export default function Header({
   searchQuery,
   setSearchQuery,
   onSettingsClick,
+  onProfileClick,
   openSideMenu,
   totalStorageUsedGB,
   userRole,
@@ -335,7 +336,7 @@ export default function Header({
                 <button
                   onClick={() => {
                     setProfileOpen(false);
-                    onSettingsClick();
+                    if (onProfileClick) onProfileClick();
                   }}
                   className="group w-full text-slate-700 hover:text-white flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold tracking-tight transition-all text-left cursor-pointer hover:bg-slate-900"
                 >
@@ -347,7 +348,10 @@ export default function Header({
               <div className="p-1 border-t border-slate-50">
                 <button
                   id="sign-out-btn"
-                  onClick={() => alert('Sign out is not connected yet.')}
+                  onClick={() => {
+                    setProfileOpen(false);
+                    if (onLogOut) onLogOut();
+                  }}
                   className="group w-full text-slate-900 hover:text-white flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-bold tracking-tight transition-all text-left cursor-pointer hover:bg-slate-900"
                 >
                   <Icon name="LogOut" className="w-4 h-4 transition-colors group-hover:text-white" />
@@ -361,8 +365,6 @@ export default function Header({
 
       {/* Mobile Controls */}
       <div className="flex items-center justify-end gap-2 md:hidden">
-
-
         {userRole === 'admin' && (
           <button
             id="theme-settings-toggle-btn-mobile"
@@ -386,6 +388,17 @@ export default function Header({
             )}
           </button>
         </div>
+
+        {onLogOut && (
+          <button
+            id="sign-out-btn-mobile"
+            onClick={onLogOut}
+            className="p-2 text-slate-400 hover:text-slate-900 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer shrink-0"
+            title="Logout"
+          >
+            <Icon name="LogOut" className="w-5.5 h-5.5" />
+          </button>
+        )}
 
         {/* Dynamic Mobile Badge */}
         {userRole === 'admin' && (

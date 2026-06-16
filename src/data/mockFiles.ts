@@ -8,6 +8,13 @@ export const CURRENT_USER: User = {
   status: 'online'
 };
 
+export const UPLOADER_USER: User = {
+  name: 'Uploader',
+  email: 'uploader@example.com',
+  avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?q=80&w=150&auto=format&fit=crop',
+  status: 'online'
+};
+
 export const MOCK_USERS = {
   sofia: {
     name: 'Sofia Davis',
@@ -110,7 +117,7 @@ export const INITIAL_FILES: CloudFile[] = [
     sizeBytes: 8_192,
     folder: 'Docs > Notes',
     folderChain: ['Docs', 'Notes'],
-    owner: CURRENT_USER,
+    owner: UPLOADER_USER,
     members: [],
     lastModified: '2026-06-14 18:20',
     isStarred: false,
@@ -264,7 +271,7 @@ export const INITIAL_FILES: CloudFile[] = [
     sizeBytes: 12_288,
     folder: 'Docs > Handover',
     folderChain: ['Docs', 'Handover'],
-    owner: CURRENT_USER,
+    owner: UPLOADER_USER,
     members: [],
     lastModified: '2026-06-15 10:05',
     isStarred: false,

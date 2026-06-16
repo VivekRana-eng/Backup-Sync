@@ -17,7 +17,7 @@ function getTypeLabel(file) {
   return `${file.category[0].toUpperCase()}${file.category.slice(1)} (${extension})`;
 }
 
-export default function FilePreviewModal({ file, onClose, onDownload }) {
+export default function FilePreviewModal({ file, onClose, onDownload, canDownload = true }) {
   const [textContent, setTextContent] = useState('');
   const [docxHtml, setDocxHtml] = useState('');
   const [isLoadingText, setIsLoadingText] = useState(false);
@@ -271,15 +271,17 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
               </div>
 
               <div className="flex flex-col gap-3 pb-2 sm:flex-row sm:items-center sm:gap-3 sm:pb-0">
-                <button
-                  onClick={() => onDownload(file)}
-                  className="flex-1 rounded-2xl bg-slate-900 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-black/15 transition hover:bg-black"
-                >
-                  Download
-                </button>
+                {canDownload && (
+                  <button
+                    onClick={() => onDownload(file)}
+                    className="flex-1 rounded-2xl bg-slate-900 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-black/15 transition hover:bg-black"
+                  >
+                    Download
+                  </button>
+                )}
                 <button
                   onClick={onClose}
-                  className="rounded-2xl border border-slate-200 bg-white px-5 py-3.5 text-sm font-bold text-slate-600 transition hover:bg-slate-50"
+                  className={canDownload ? 'rounded-2xl border border-slate-200 bg-white px-5 py-3.5 text-sm font-bold text-slate-600 transition hover:bg-slate-50' : 'flex-1 rounded-2xl border border-slate-200 bg-white px-5 py-3.5 text-sm font-bold text-slate-600 transition hover:bg-slate-50'}
                 >
                   Close
                 </button>
