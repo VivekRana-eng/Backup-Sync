@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import Icon from './components/Icon';
 import { CURRENT_USER } from './data/mockFiles';

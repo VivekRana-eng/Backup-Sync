@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef, useEffect } from 'react';
 import Icon from './Icon';
 import { CURRENT_USER } from '../data/mockFiles';
 
@@ -11,7 +11,8 @@ export default function FilesTable({
   onTriggerDownload,
   onFileSelect,
   fileTypeFilter,
-  setFileTypeFilter
+  setFileTypeFilter,
+  userRole
 }) {
   const [viewMode, setViewMode] = useState('list');
   const [searchTableQuery, setSearchTableQuery] = useState('');
@@ -371,7 +372,7 @@ export default function FilesTable({
                   <div className="flex items-center gap-1">
                     <span>File Name</span>
                     {sortBy === 'name' && (
-                      <span className="text-slate-900 text-[10px]">{sortOrder === 'asc' ? '▲' : '▼'}</span>
+                      <span className="text-slate-900 text-[10px]">{sortOrder === 'asc' ? 'â–²' : 'â–¼'}</span>
                     )}
                   </div>
                 </th>
@@ -382,7 +383,7 @@ export default function FilesTable({
                   <div className="flex items-center gap-1">
                     <span>Size</span>
                     {sortBy === 'size' && (
-                      <span className="text-slate-900 text-[10px]">{sortOrder === 'asc' ? '▲' : '▼'}</span>
+                      <span className="text-slate-900 text-[10px]">{sortOrder === 'asc' ? 'â–²' : 'â–¼'}</span>
                     )}
                   </div>
                 </th>
@@ -396,7 +397,7 @@ export default function FilesTable({
                   <div className="flex items-center gap-1">
                     <span>Last Modified</span>
                     {sortBy === 'modified' && (
-                      <span className="text-slate-900 text-[10px]">{sortOrder === 'asc' ? '▲' : '▼'}</span>
+                      <span className="text-slate-900 text-[10px]">{sortOrder === 'asc' ? 'â–²' : 'â–¼'}</span>
                     )}
                   </div>
                 </th>
@@ -479,6 +480,11 @@ export default function FilesTable({
                             title="Double click to rename"
                           >
                             {file.name}.{file.extension}
+                            {userRole === 'uploader' && (
+                              <span className="ml-2 px-1.5 py-0.5 text-[9px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-md">
+                                âœ“ Synced
+                              </span>
+                            )}
                           </span>
                         )}
                       </div>
@@ -543,13 +549,35 @@ export default function FilesTable({
 
                     {/* Row Context Menu dropdown */}
                     <td className="pr-5 md:pr-6 py-4 text-right whitespace-nowrap relative" ref={isDropdownOpen ? dropdownRef : undefined}>
-                      <button
-                        id={`dropdown-btn-${file.id}`}
-                        onClick={() => setOpenDropdownId(isDropdownOpen ? null : file.id)}
-                        className="p-1 px-1.5 text-slate-400 hover:text-slate-800 rounded-lg hover:bg-slate-100/50 transition-all cursor-pointer"
-                      >
-                        <Icon name="MoreHorizontal" className="w-5 h-5" />
-                      </button>
+                      {userRole === 'viewer' ? (
+                        <button
+                          onClick={() => onTriggerDownload(file)}
+                          className="px-3.5 py-1.5 bg-black hover:bg-neutral-900 text-white font-bold text-xs rounded-lg transition-all cursor-pointer inline-flex items-center gap-1 shadow-sm"
+                        >
+                          <Icon name="Download" className="w-3.5 h-3.5" />
+                          <span>Download</span>
+                        </button>
+                      ) : (
+                        <div className="flex items-center justify-end gap-1.5">
+                          {userRole === 'admin' && (
+                            <button
+                              id={`row-delete-action-direct-${file.id}`}
+                              onClick={() => onDeleteFile(file.id)}
+                              className="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-all cursor-pointer inline-flex items-center"
+                              title="Delete Asset"
+                            >
+                              <Icon name="Trash2" className="w-4 h-4" />
+                            </button>
+                          )}
+                          <button
+                            id={`dropdown-btn-${file.id}`}
+                            onClick={() => setOpenDropdownId(isDropdownOpen ? null : file.id)}
+                            className="p-1 px-1.5 text-slate-400 hover:text-slate-800 rounded-lg hover:bg-slate-100/50 transition-all cursor-pointer"
+                          >
+                            <Icon name="MoreHorizontal" className="w-5 h-5" />
+                          </button>
+                        </div>
+                      )}
 
                       {isDropdownOpen && (
                         <div
@@ -588,7 +616,7 @@ export default function FilesTable({
                             <span>{file.isArchived ? 'Move to active' : 'Archive Asset'}</span>
                           </button>
 
-                          <div className="border-t border-slate-50 my-1 font-bold" />
+                          {userRole === 'admin' && <div className="border-t border-slate-50 my-1 font-bold" />}
 
                           <button
                             id={`row-delete-action-${file.id}`}
@@ -729,6 +757,11 @@ export default function FilesTable({
                         title={file.name}
                       >
                         {file.name}.{file.extension}
+                        {userRole === 'uploader' && (
+                          <span className="block mt-1 text-[9px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 rounded-md px-1 py-0.5 w-max">
+                            âœ“ Synced
+                          </span>
+                        )}
                       </button>
                       {renderBreadcrumbs(file.folder)}
                     </div>

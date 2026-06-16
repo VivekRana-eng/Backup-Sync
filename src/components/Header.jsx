@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef, useEffect } from 'react';
 import Icon from './Icon';
 import { formatStorageSize } from '../lib/workspace';
 
@@ -10,6 +10,8 @@ export default function Header({
   onSettingsClick,
   openSideMenu,
   totalStorageUsedGB,
+  userRole,
+  onLogOut,
 }) {
   const [profileOpen, setProfileOpen] = useState(false);
   const [bellOpen, setBellOpen] = useState(false);
@@ -41,15 +43,21 @@ export default function Header({
   ]);
 
   const profileRef = useRef(null);
+  const profileMobileRef = useRef(null);
   const bellRef = useRef(null);
+  const bellMobileRef = useRef(null);
 
   // Close dropdowns on click outside
   useEffect(() => {
     function handleClickOutside(event) {
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
+      const clickedProfile = (profileRef.current && profileRef.current.contains(event.target)) ||
+                             (profileMobileRef.current && profileMobileRef.current.contains(event.target));
+      if (!clickedProfile) {
         setProfileOpen(false);
       }
-      if (bellRef.current && !bellRef.current.contains(event.target)) {
+      const clickedBell = (bellRef.current && bellRef.current.contains(event.target)) ||
+                          (bellMobileRef.current && bellMobileRef.current.contains(event.target));
+      if (!clickedBell) {
         setBellOpen(false);
       }
     }
@@ -249,6 +257,23 @@ export default function Header({
           )}
         </div>
 
+        {/* Dynamic Badge */}
+        {userRole === 'admin' && (
+          <span id="role-badge" className="px-2.5 py-1 text-xs font-bold text-white bg-blue-600 rounded-lg tracking-wider uppercase shadow-xs">
+            Admin
+          </span>
+        )}
+        {userRole === 'viewer' && (
+          <span id="role-badge" className="px-2.5 py-1 text-xs font-bold text-white bg-emerald-600 rounded-lg tracking-wider uppercase shadow-xs">
+            View Only
+          </span>
+        )}
+        {userRole === 'uploader' && (
+          <span id="role-badge" className="px-2.5 py-1 text-xs font-bold text-white bg-amber-600 rounded-lg tracking-wider uppercase shadow-xs">
+            Uploader
+          </span>
+        )}
+
         <div className="relative" ref={profileRef}>
           <button
             id="profile-dropdown-trigger"
@@ -269,7 +294,7 @@ export default function Header({
                 {currentUser.name}
               </span>
               <span className="text-[10px] text-slate-400 block truncate font-light leading-none">
-                Personal Plan
+                {userRole === 'admin' ? 'Personal Plan (Admin)' : userRole === 'viewer' ? 'Personal Plan (Viewer)' : 'Personal Plan'}
               </span>
             </div>
             <Icon name="ChevronDown" className="w-4 h-4 text-slate-400 hidden sm:block" />
@@ -338,16 +363,18 @@ export default function Header({
       <div className="flex items-center justify-end gap-2 md:hidden">
 
 
-        <button
-          id="theme-settings-toggle-btn-mobile"
-          onClick={onSettingsClick}
-          className="p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer relative shrink-0"
-          title="Settings"
-        >
-          <Icon name="Settings" className="w-5.5 h-5.5" />
-        </button>
+        {userRole === 'admin' && (
+          <button
+            id="theme-settings-toggle-btn-mobile"
+            onClick={onSettingsClick}
+            className="p-2 text-slate-400 hover:text-slate-650 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer relative shrink-0"
+            title="Settings"
+          >
+            <Icon name="Settings" className="w-5.5 h-5.5" />
+          </button>
+        )}
 
-        <div className="relative shrink-0" ref={bellRef}>
+        <div className="relative shrink-0" ref={bellMobileRef}>
           <button
             id="notifications-bell-btn-mobile"
             onClick={() => setBellOpen(!bellOpen)}
@@ -360,7 +387,24 @@ export default function Header({
           </button>
         </div>
 
-        <div className="relative shrink-0" ref={profileRef}>
+        {/* Dynamic Mobile Badge */}
+        {userRole === 'admin' && (
+          <span id="role-badge-mobile" className="px-2.5 py-1 text-[10px] font-bold text-white bg-blue-600 rounded-lg tracking-wider uppercase shadow-xs mr-1">
+            Admin
+          </span>
+        )}
+        {userRole === 'viewer' && (
+          <span id="role-badge-mobile" className="px-2.5 py-1 text-[10px] font-bold text-white bg-emerald-600 rounded-lg tracking-wider uppercase shadow-xs mr-1">
+            View Only
+          </span>
+        )}
+        {userRole === 'uploader' && (
+          <span id="role-badge-mobile" className="px-2.5 py-1 text-[10px] font-bold text-white bg-amber-600 rounded-lg tracking-wider uppercase shadow-xs mr-1">
+            Uploader
+          </span>
+        )}
+
+        <div className="relative shrink-0" ref={profileMobileRef}>
           <button
             id="profile-dropdown-trigger-mobile"
             onClick={() => setProfileOpen(!profileOpen)}

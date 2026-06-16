@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Icon from './Icon';
 
 const clientShiftOptions = [
@@ -27,7 +27,11 @@ export default function Sidebar({
   ];
 
   const handleNavClick = (tabId) => {
-    setActiveTab(tabId);
+    if (tabId === 'Logout') {
+      if (onLogoutClick) onLogoutClick();
+    } else {
+      setActiveTab(tabId);
+    }
     setIsMobileOpen(false);
   };
 

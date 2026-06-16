@@ -79,4 +79,12 @@ export type SidebarTab =
   | 'Dashboard'
   | 'My Files'
   | 'Archived'
-  | 'Activity Log';
+  | 'Activity Log'
+  | 'Browse Files'
+  | 'Downloads'
+  | 'Upload Files'
+  | 'My Uploads'
+  | 'Users'
+  | 'Settings'
+  | 'Logout';
+
