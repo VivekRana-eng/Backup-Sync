@@ -159,16 +159,6 @@ export default function Header({
       {/* Desktop Controls */}
       <div className="hidden md:flex items-center gap-3">
 
-
-        <button
-          id="theme-settings-toggle-btn"
-          onClick={onSettingsClick}
-          className="p-2 text-slate-400 hover:text-slate-900 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer relative"
-          title="Settings"
-        >
-          <Icon name="Settings" className="w-5.5 h-5.5" />
-        </button>
-
         <div className="relative" ref={bellRef}>
           <button
             id="notifications-bell-btn"

@@ -1,12 +1,5 @@
-﻿import React from 'react';
+import React from 'react';
 import Icon from './Icon';
-
-const clientShiftOptions = [
-  'Northern Railway',
-  'Eastern Railway',
-  'Central Railway',
-  'Western Railway',
-];
 
 export default function Sidebar({
   activeTab,
@@ -14,27 +7,29 @@ export default function Sidebar({
   archivedCount,
   isMobileOpen,
   setIsMobileOpen,
-  onNewFolderClick,
+  onAddClientClick,
   clientShiftFilter,
   setClientShiftFilter,
+  clientShiftOptions = [],
   userRole,
   onLogoutClick,
 }) {
   const [isClientShiftOpen, setIsClientShiftOpen] = React.useState(false);
+
   const navItems = [
     { id: 'Dashboard', label: 'Dashboard', icon: 'LayoutDashboard' },
     { id: 'My Files', label: 'My Files', icon: 'FileCode' },
     { id: 'Archived', label: 'Archived', icon: 'Archive', badge: archivedCount > 0 ? archivedCount : undefined, badgeColor: 'bg-gray-100 text-gray-700' },
     { id: 'Activity Log', label: 'Activity Log', icon: 'Activity' },
   ].filter((item) => {
-    if (userRole === 'viewer') {
+    if (userRole === 'viewer' || userRole === 'uploader') {
       return item.id === 'Dashboard' || item.id === 'My Files';
     }
     return true;
   });
 
   React.useEffect(() => {
-    if (userRole === 'viewer' && activeTab !== 'Dashboard' && activeTab !== 'My Files') {
+    if ((userRole === 'viewer' || userRole === 'uploader') && activeTab !== 'Dashboard' && activeTab !== 'My Files') {
       setActiveTab('Dashboard');
     }
   }, [activeTab, setActiveTab, userRole]);
@@ -52,7 +47,6 @@ export default function Sidebar({
 
   return (
     <>
-      {/* Mobile Drawer Overlay */}
       {isMobileOpen && (
         <div
           id="sidebar-overlay"
@@ -61,14 +55,12 @@ export default function Sidebar({
         />
       )}
 
-      {/* Sidebar Container */}
       <aside
         id="sidebar"
         className={`fixed inset-y-0 left-0 bg-white border-r border-slate-100 w-64 z-50 flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 ${
           isMobileOpen ? 'translate-x-0' : '-translate-x-full'
         } lg:static lg:h-screen`}
       >
-        {/* Sidebar Header: Logo & Title */}
         <div className="h-16 flex items-center justify-between px-6 border-b border-slate-50">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center text-white shadow-md shadow-black/20">
@@ -88,23 +80,21 @@ export default function Sidebar({
           </button>
         </div>
 
-        {/* Action Button: Create / Add File */}
         {userRole === 'admin' && (
           <div className="px-5 pt-5 pb-3">
             <button
-              id="create-new-folder-btn"
-              onClick={onNewFolderClick}
+              id="add-client-btn"
+              onClick={onAddClientClick}
               className="group relative w-full h-11 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-slate-900 text-sm font-semibold text-white shadow-[0_18px_35px_rgba(0,0,0,0.18)] transition-all hover:bg-black hover:shadow-[0_22px_40px_rgba(0,0,0,0.22)] active:scale-[0.98]"
             >
               <Icon name="Plus" className="w-4 h-4" />
-              <span>New folder</span>
+              <span>Add client</span>
             </button>
           </div>
         )}
 
-        {/* Client Shift Switcher */}
         <div className="px-5 pb-3">
-          <div className="rounded-3xl border border-slate-200/80 bg-gradient-to-b from-white to-slate-50 px-4 py-4 shadow-[0_14px_30px_rgba(15,23,42,0.06)]">
+          <div className="rounded-3xl border border-slate-200/80 bg-white px-4 py-4 shadow-[0_14px_30px_rgba(15,23,42,0.06)]">
             <div className="min-w-0">
               <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-slate-400">Client shifter</p>
               <div className="mt-2 h-1.5 w-10 rounded-full bg-slate-900" />
@@ -125,38 +115,41 @@ export default function Sidebar({
 
               {isClientShiftOpen && (
                 <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-1 shadow-[0_18px_45px_rgba(15,23,42,0.16)]">
-                  {clientShiftOptions.map((client) => {
-                    const isActive = clientShiftFilter === client;
+                  {clientShiftOptions.length === 0 ? (
+                    <div className="px-3 py-2 text-xs text-slate-400">No clients yet</div>
+                  ) : (
+                    clientShiftOptions.map((client) => {
+                      const isActive = clientShiftFilter === client;
 
-                    return (
-                      <button
-                        key={client}
-                        type="button"
-                        onClick={() => handleClientShiftSelect(client)}
-                        className={`flex h-11 w-full items-center justify-between rounded-xl px-3 text-sm font-semibold tracking-tight transition-all ${
-                          isActive
-                          ? 'bg-slate-900 text-white shadow-md shadow-black/15'
-                          : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
-                        }`}
-                      >
-                        <span>{client}</span>
-                        {isActive ? (
-                          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/15">
-                            <Icon name="Check" className="h-4 w-4" />
-                          </span>
-                        ) : (
-                          <span className="h-2 w-2 rounded-full bg-slate-300" />
-                        )}
-                      </button>
-                    );
-                  })}
+                      return (
+                        <button
+                          key={client}
+                          type="button"
+                          onClick={() => handleClientShiftSelect(client)}
+                          className={`flex h-11 w-full items-center justify-between rounded-xl px-3 text-sm font-semibold tracking-tight transition-all ${
+                            isActive
+                              ? 'bg-slate-900 text-white shadow-md shadow-black/15'
+                              : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                          }`}
+                        >
+                          <span className="truncate pr-3">{client}</span>
+                          {isActive ? (
+                            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/15">
+                              <Icon name="Check" className="h-4 w-4" />
+                            </span>
+                          ) : (
+                            <span className="h-2 w-2 rounded-full bg-slate-300" />
+                          )}
+                        </button>
+                      );
+                    })
+                  )}
                 </div>
               )}
             </div>
           </div>
         </div>
 
-        {/* Navigation Items */}
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => {
             const isActive = activeTab === item.id;
@@ -171,9 +164,7 @@ export default function Sidebar({
                     : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
                 }`}
               >
-                {isActive && (
-                  <span className="absolute inset-y-0 left-0 w-1 bg-slate-900" />
-                )}
+                {isActive && <span className="absolute inset-y-0 left-0 w-1 bg-slate-900" />}
                 <div className="flex items-center gap-3">
                   <Icon
                     name={item.icon}
@@ -184,11 +175,7 @@ export default function Sidebar({
                   <span>{item.label}</span>
                 </div>
                 {item.badge !== undefined && (
-                  <span
-                    className={`px-2 py-0.5 text-xs rounded-full ${
-                      item.badgeColor || 'bg-slate-100 text-slate-700'
-                    }`}
-                  >
+                  <span className={`px-2 py-0.5 text-xs rounded-full ${item.badgeColor || 'bg-slate-100 text-slate-700'}`}>
                     {item.badge}
                   </span>
                 )}

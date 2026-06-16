@@ -1,9 +1,5 @@
 export type FileCategory = 'document' | 'image' | 'video' | 'audio' | 'other';
-export type RailwayClient =
-  | 'Northern Railway'
-  | 'Eastern Railway'
-  | 'Central Railway'
-  | 'Western Railway';
+export type RailwayClient = string;
 
 export interface User {
   name: string;

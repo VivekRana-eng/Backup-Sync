@@ -12,6 +12,7 @@ import FilesTable from './components/FilesTable';
 import FilePreviewModal from './components/FilePreviewModal';
 import UploadDestinationModal from './components/UploadDestinationModal';
 import AddMemberModal from './components/AddMemberModal';
+import AddClientModal from './components/AddClientModal';
 import ProfileModal from './components/ProfileModal';
 
 import { CURRENT_USER } from './data/mockFiles';
@@ -39,7 +40,14 @@ const DEFAULT_USERS = {
   },
 };
 
-function WorkspaceScreen({ currentUser, onLogout }) {
+const DEFAULT_CLIENT_SHIFTS = [
+  'Northern Railway',
+  'Eastern Railway',
+  'Central Railway',
+  'Western Railway',
+];
+
+function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOptions, setClientShiftOptions }) {
   const {
     activeTab,
     setActiveTab,
@@ -83,6 +91,7 @@ function WorkspaceScreen({ currentUser, onLogout }) {
   const [pendingUploads, setPendingUploads] = useState([]);
   const [isUploadDestinationOpen, setIsUploadDestinationOpen] = useState(false);
   const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
+  const [isAddClientOpen, setIsAddClientOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const pendingUploadsRef = useRef([]);
 
@@ -126,6 +135,36 @@ function WorkspaceScreen({ currentUser, onLogout }) {
     handleDeleteFile(id);
   };
 
+  const handleCreateClient = async ({ name, org, department }) => {
+    const trimmedName = name.trim();
+    const trimmedOrg = org.trim();
+    const trimmedDepartment = department.trim();
+
+    if (!trimmedName || !trimmedOrg || !trimmedDepartment) {
+      return { ok: false, message: 'Please fill in name, ORG, and department.' };
+    }
+
+    const clientLabel = `${trimmedName} ${trimmedDepartment.toLowerCase()}`;
+    const duplicate = clientShiftOptions.some(
+      (client) => client.toLowerCase() === clientLabel.toLowerCase(),
+    );
+
+    if (duplicate) {
+      return { ok: false, message: 'That client already exists.' };
+    }
+
+    setClientShiftOptions((current) => [...current, clientLabel]);
+    setClientShiftFilter(clientLabel);
+    setActiveTab('Dashboard');
+    setToast({
+      id: Date.now().toString(),
+      message: `Added client: ${clientLabel} (${trimmedOrg})`,
+      type: 'success',
+    });
+
+    return { ok: true, clientLabel };
+  };
+
   const handleCreateMember = async ({ name, email, password, role }) => {
     const trimmedName = name.trim();
     const trimmedEmail = email.trim().toLowerCase();
@@ -164,12 +203,13 @@ function WorkspaceScreen({ currentUser, onLogout }) {
         archivedCount={archivedFilesCount}
         isMobileOpen={isSidebarMobileOpen}
         setIsMobileOpen={setIsSidebarMobileOpen}
-        onNewFolderClick={() => setIsFolderModalOpen(true)}
-        clientShiftFilter={clientShiftFilter}
-        setClientShiftFilter={setClientShiftFilter}
-        userRole={userRole}
-        onLogoutClick={onLogout}
-      />
+      onAddClientClick={() => setIsAddClientOpen(true)}
+      clientShiftFilter={clientShiftFilter}
+      setClientShiftFilter={setClientShiftFilter}
+      clientShiftOptions={clientShiftOptions}
+      userRole={userRole}
+      onLogoutClick={onLogout}
+    />
 
       <div className="flex-1 flex flex-col h-screen overflow-hidden min-w-0">
         <Header
@@ -552,6 +592,12 @@ function WorkspaceScreen({ currentUser, onLogout }) {
         )}
       </AnimatePresence>
 
+      <AddClientModal
+        isOpen={isAddClientOpen}
+        onClose={() => setIsAddClientOpen(false)}
+        onCreateClient={handleCreateClient}
+      />
+
       <AddMemberModal
         isOpen={isAddMemberOpen}
         onClose={() => setIsAddMemberOpen(false)}
@@ -571,6 +617,7 @@ function WorkspaceScreen({ currentUser, onLogout }) {
 
 export default function App() {
   const [users, setUsers] = useState(DEFAULT_USERS);
+  const [clientShiftOptions, setClientShiftOptions] = useState(DEFAULT_CLIENT_SHIFTS);
   const [currentUser, setCurrentUser] = useState(null);
   const [loginResetKey, setLoginResetKey] = useState(0);
 
@@ -592,6 +639,10 @@ export default function App() {
       key={currentUser.email}
       currentUser={currentUser}
       onLogout={handleLogout}
+      users={users}
+      setUsers={setUsers}
+      clientShiftOptions={clientShiftOptions}
+      setClientShiftOptions={setClientShiftOptions}
     />
   );
 }
