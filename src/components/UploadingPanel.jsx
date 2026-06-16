@@ -9,40 +9,40 @@ export default function UploadingPanel({
   const getFileIcon = (extension) => {
     const ext = extension.toLowerCase();
     if (ext === 'xlsx' || ext === 'csv' || ext === 'xls') {
-      return { icon: 'FileSpreadsheet', color: 'text-emerald-500 bg-emerald-50 border-emerald-100' };
+      return { icon: 'FileSpreadsheet', color: 'text-slate-900 bg-slate-100 border-slate-200' };
     }
     if (ext === 'mp4' || ext === 'mkv' || ext === 'mov' || ext === 'avi') {
-      return { icon: 'FileVideo', color: 'text-red-500 bg-red-50 border-red-100' };
+      return { icon: 'FileVideo', color: 'text-slate-900 bg-slate-100 border-slate-200' };
     }
     if (ext === 'png' || ext === 'jpg' || ext === 'jpeg' || ext === 'gif' || ext === 'webp' || ext === 'svg') {
-      return { icon: 'FileImage', color: 'text-blue-500 bg-blue-50 border-blue-100' };
+      return { icon: 'FileImage', color: 'text-slate-900 bg-slate-100 border-slate-200' };
     }
     if (ext === 'pdf') {
-      return { icon: 'FileText', color: 'text-orange-500 bg-orange-50 border-orange-100' };
+      return { icon: 'FilePdf', color: 'text-slate-900 bg-slate-100 border-slate-200' };
     }
     if (ext === 'doc' || ext === 'docx' || ext === 'txt') {
-      return { icon: 'FileText', color: 'text-blue-500 bg-blue-50 border-blue-100' };
+      return { icon: 'FileText', color: 'text-slate-900 bg-slate-100 border-slate-200' };
     }
     if (ext === 'mp3' || ext === 'wav' || ext === 'ogg' || ext === 'aac') {
-      return { icon: 'FileAudio', color: 'text-violet-500 bg-violet-50 border-violet-100' };
+      return { icon: 'FileAudio', color: 'text-slate-900 bg-slate-100 border-slate-200' };
     }
     if (ext === 'zip' || ext === 'rar' || ext === 'tar' || ext === 'gz') {
-      return { icon: 'FileArchive', color: 'text-amber-500 bg-amber-50 border-amber-100' };
+      return { icon: 'FileZip', color: 'text-slate-900 bg-slate-100 border-slate-200' };
     }
-    return { icon: 'FileCode', color: 'text-slate-500 bg-slate-50 border-slate-100' };
+    return { icon: 'Folder', color: 'text-slate-900 bg-slate-100 border-slate-200' };
   };
 
   const completedCount = uploadingFiles.filter(f => f.status === 'completed').length;
   const activeCount = uploadingFiles.filter(f => f.status === 'uploading').length;
 
   return (
-    <div id="uploading-files-panel" className="bg-white border border-slate-100 rounded-2xl p-5 shadow-xs h-64 flex flex-col">
+    <div id="uploading-files-panel" className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs h-64 flex flex-col">
       {/* Panel Header */}
       <div className="flex items-center justify-between mb-3.5 pb-2.5 border-b border-slate-50">
         <div className="flex items-center gap-2">
-          <h3 className="font-bold text-sm text-slate-800 tracking-tight">Uploading Files</h3>
+          <h3 className="font-bold text-sm text-slate-900 tracking-tight">Uploading Files</h3>
           {activeCount > 0 && (
-            <span className="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded-full ring-2 ring-blue-50 animate-pulse">
+            <span className="bg-slate-900 text-white text-[10px] font-bold px-2 py-0.5 rounded-full ring-2 ring-slate-100 animate-pulse">
               {activeCount} active
             </span>
           )}
@@ -81,10 +81,10 @@ export default function UploadingPanel({
               id={`upload-item-${file.id}`}
                 className={`group border rounded-xl p-3 flex gap-3 items-center transition-all relative overflow-hidden ${
                   isCancelled 
-                    ? 'border-rose-100 bg-rose-50/20' 
-                    : isCompleted 
-                    ? 'border-emerald-100 bg-emerald-50/10' 
-                    : 'border-slate-100 hover:border-slate-150 bg-white'
+                ? 'border-slate-200 bg-slate-50/20' 
+                : isCompleted 
+                ? 'border-slate-200 bg-slate-50/10' 
+                : 'border-slate-100 hover:border-slate-150 bg-white'
                 }`}
               >
                 {/* File Category Icon Container */}
@@ -110,28 +110,28 @@ export default function UploadingPanel({
                     <span className="text-slate-300 text-[10px]">&bull;</span>
                     <span className={`text-[9px] uppercase font-bold tracking-wider ${
                       isCancelled 
-                        ? 'text-rose-500' 
-                        : isCompleted 
-                        ? 'text-emerald-600' 
-                        : 'text-blue-600'
+                      ? 'text-slate-500' 
+                      : isCompleted 
+                      ? 'text-slate-900' 
+                      : 'text-slate-900'
                     }`}>
                       {file.status}
                     </span>
                   </div>
 
-                  {/* Transfer blue/green/red progress line */}
+                  {/* Transfer progress line */}
                   {!isCancelled && !isCompleted && (
                     <div className="w-full bg-slate-100 h-1.5 rounded-full mt-2 overflow-hidden">
                       <div
-                        className="bg-blue-600 h-full rounded-full transition-all duration-300"
+                        className="bg-slate-900 h-full rounded-full transition-all duration-300"
                         style={{ width: `${file.progress}%` }}
                       />
                     </div>
                   )}
 
                   {isCompleted && (
-                    <div className="w-full bg-emerald-100 h-1 rounded-full mt-2 overflow-hidden">
-                      <div className="bg-emerald-500 h-full w-full rounded-full" />
+                    <div className="w-full bg-slate-200 h-1 rounded-full mt-2 overflow-hidden">
+                      <div className="bg-slate-900 h-full w-full rounded-full" />
                     </div>
                   )}
                 </div>
@@ -151,7 +151,7 @@ export default function UploadingPanel({
                 {(isCompleted || isCancelled) && (
                   <button
                     onClick={() => onCancelUpload(file.id)}
-                    className="p-1 text-slate-300 hover:text-rose-500 rounded-lg hover:bg-rose-50 cursor-pointer"
+                    className="p-1 text-slate-300 hover:text-slate-900 rounded-lg hover:bg-slate-100 cursor-pointer"
                     title="Remove from history"
                   >
                     <Icon name="X" className="w-3.5 h-3.5" />

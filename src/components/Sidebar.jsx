@@ -1,22 +1,27 @@
 import React from 'react';
 import Icon from './Icon';
 
+const clientShiftOptions = [
+  'Northern Railway',
+  'Eastern Railway',
+  'Central Railway',
+  'Western Railway',
+];
+
 export default function Sidebar({
   activeTab,
   setActiveTab,
-  starredCount,
   archivedCount,
-  sharedCount,
   isMobileOpen,
   setIsMobileOpen,
-  onNewFolderClick
+  onNewFolderClick,
+  clientShiftFilter,
+  setClientShiftFilter,
 }) {
+  const [isClientShiftOpen, setIsClientShiftOpen] = React.useState(false);
   const navItems = [
     { id: 'Dashboard', label: 'Dashboard', icon: 'LayoutDashboard' },
     { id: 'My Files', label: 'My Files', icon: 'FileCode' },
-    { id: 'Shared', label: 'Shared', icon: 'Users', badge: sharedCount > 0 ? sharedCount : undefined },
-    { id: 'Recents', label: 'Recents', icon: 'Clock' },
-    { id: 'Starred', label: 'Starred', icon: 'Star', badge: starredCount > 0 ? starredCount : undefined, badgeColor: 'bg-amber-100 text-amber-700 font-semibold' },
     { id: 'Archived', label: 'Archived', icon: 'Archive', badge: archivedCount > 0 ? archivedCount : undefined, badgeColor: 'bg-gray-100 text-gray-700' },
     { id: 'Activity Log', label: 'Activity Log', icon: 'Activity' },
   ];
@@ -24,6 +29,12 @@ export default function Sidebar({
   const handleNavClick = (tabId) => {
     setActiveTab(tabId);
     setIsMobileOpen(false);
+  };
+
+  const handleClientShiftSelect = (client) => {
+    setClientShiftFilter(client);
+    setIsClientShiftOpen(false);
+    if (isMobileOpen) setIsMobileOpen(false);
   };
 
   return (
@@ -47,12 +58,12 @@ export default function Sidebar({
         {/* Sidebar Header: Logo & Title */}
         <div className="h-16 flex items-center justify-between px-6 border-b border-slate-50">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+            <div className="w-9 h-9 rounded-xl bg-slate-900 flex items-center justify-center text-white shadow-md shadow-black/20">
               <Icon name="Cloud" className="w-5 h-5 animate-pulse" />
             </div>
             <div>
               <span className="font-bold text-lg text-slate-800 tracking-tight">Backup & Sync</span>
-              <span className="text-[10px] block font-medium text-blue-600 -mt-1 tracking-wider uppercase">Personal</span>
+              <span className="text-[10px] block font-medium text-slate-500 -mt-1 tracking-wider uppercase">Personal</span>
             </div>
           </div>
           <button
@@ -65,15 +76,70 @@ export default function Sidebar({
         </div>
 
         {/* Action Button: Create / Add File */}
-        <div className="px-5 pt-5 pb-2">
+        <div className="px-5 pt-5 pb-3">
           <button
             id="create-new-folder-btn"
             onClick={onNewFolderClick}
-            className="w-full h-11 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-xl transition-all shadow-md shadow-blue-500/10 cursor-pointer active:scale-[0.98]"
+            className="group relative w-full h-11 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-slate-900 text-sm font-semibold text-white shadow-[0_18px_35px_rgba(0,0,0,0.18)] transition-all hover:bg-black hover:shadow-[0_22px_40px_rgba(0,0,0,0.22)] active:scale-[0.98]"
           >
+            <span className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.18),_transparent_55%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             <Icon name="Plus" className="w-4 h-4" />
             <span>New folder</span>
           </button>
+        </div>
+
+        {/* Client Shift Switcher */}
+        <div className="px-5 pb-3">
+          <div className="rounded-3xl border border-slate-200/80 bg-gradient-to-b from-white to-slate-50 px-4 py-4 shadow-[0_14px_30px_rgba(15,23,42,0.06)]">
+            <div className="min-w-0">
+              <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-slate-400">Client shifter</p>
+              <div className="mt-2 h-1.5 w-10 rounded-full bg-slate-900" />
+            </div>
+
+            <div className="mt-3">
+              <button
+                type="button"
+                onClick={() => setIsClientShiftOpen((open) => !open)}
+                className="flex w-full items-center justify-between gap-2 rounded-full border border-slate-300 bg-white px-3 py-2 text-slate-900 shadow-sm transition hover:border-slate-400 hover:bg-slate-50"
+              >
+                <span className="max-w-[110px] truncate text-xs font-semibold tracking-tight">{clientShiftFilter}</span>
+                <Icon
+                  name="ChevronDown"
+                  className={`h-4 w-4 transition-transform duration-200 ${isClientShiftOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
+
+              {isClientShiftOpen && (
+                <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-1 shadow-[0_18px_45px_rgba(15,23,42,0.16)]">
+                  {clientShiftOptions.map((client) => {
+                    const isActive = clientShiftFilter === client;
+
+                    return (
+                      <button
+                        key={client}
+                        type="button"
+                        onClick={() => handleClientShiftSelect(client)}
+                        className={`flex h-11 w-full items-center justify-between rounded-xl px-3 text-sm font-semibold tracking-tight transition-all ${
+                          isActive
+                          ? 'bg-slate-900 text-white shadow-md shadow-black/15'
+                          : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                        }`}
+                      >
+                        <span>{client}</span>
+                        {isActive ? (
+                          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/15">
+                            <Icon name="Check" className="h-4 w-4" />
+                          </span>
+                        ) : (
+                          <span className="h-2 w-2 rounded-full bg-slate-300" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Navigation Items */}
@@ -85,17 +151,20 @@ export default function Sidebar({
                 key={item.id}
                 id={`sidebar-tab-${item.id.replace(/\s+/g, '-').toLowerCase()}`}
                 onClick={() => handleNavClick(item.id)}
-                className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium transition-all group ${
+                className={`relative w-full flex items-center justify-between overflow-hidden px-4 py-3 rounded-2xl text-sm font-medium transition-all group ${
                   isActive
-                    ? 'bg-blue-50/85 text-blue-600 font-semibold'
-                    : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+                    ? 'bg-slate-100 text-slate-900 font-semibold shadow-[0_10px_22px_rgba(0,0,0,0.08)]'
+                    : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
                 }`}
               >
+                {isActive && (
+                  <span className="absolute inset-y-0 left-0 w-1 bg-slate-900" />
+                )}
                 <div className="flex items-center gap-3">
                   <Icon
                     name={item.icon}
                     className={`w-4 h-4 transition-transform group-hover:scale-105 ${
-                      isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600'
+                      isActive ? 'text-slate-900' : 'text-slate-400 group-hover:text-slate-700'
                     }`}
                   />
                   <span>{item.label}</span>
@@ -103,7 +172,7 @@ export default function Sidebar({
                 {item.badge !== undefined && (
                   <span
                     className={`px-2 py-0.5 text-xs rounded-full ${
-                      item.badgeColor || 'bg-blue-100/70 text-blue-700'
+                      item.badgeColor || 'bg-slate-100 text-slate-700'
                     }`}
                   >
                     {item.badge}
@@ -113,8 +182,6 @@ export default function Sidebar({
             );
           })}
         </nav>
-
-
       </aside>
     </>
   );

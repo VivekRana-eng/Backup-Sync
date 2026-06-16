@@ -232,6 +232,12 @@ export function useWorkspace() {
     triggerToast(`Added ${selectedFiles.length} file(s) to transfer queue`, 'info');
   };
 
+  const enqueueUploads = (uploads: UploadingFile[]) => {
+    if (uploads.length === 0) return;
+    setUploadingFiles((currentUploads) => [...uploads, ...currentUploads]);
+    triggerToast(`Added ${uploads.length} file(s) to transfer queue`, 'info');
+  };
+
   const handleCancelUpload = (id: string) => {
     setUploadingFiles((currentUploads) =>
       currentUploads.map((file) => (file.id === id ? { ...file, status: 'cancelled' as const } : file)),
@@ -314,6 +320,7 @@ export function useWorkspace() {
     handleRenameFile,
     handleTriggerDownload,
     handleFilesSelected,
+    enqueueUploads,
     handleCancelUpload,
     handleClearAllCompleted,
     handleCreateNewFolder,

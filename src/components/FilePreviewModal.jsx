@@ -114,7 +114,7 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
         />
       ) : isAudio && file.previewUrl ? (
         <div className="flex w-full max-w-xl flex-col items-center gap-5 rounded-3xl bg-white/5 p-8 text-center">
-          <div className="rounded-3xl bg-blue-600/15 p-5 text-blue-200">
+          <div className="rounded-3xl bg-slate-100 p-5 text-slate-900">
             <Icon name="FileAudio" className="h-12 w-12" />
           </div>
           <div>
@@ -158,7 +158,7 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
       ) : (
         <div className="flex w-full max-w-xl flex-col items-center gap-4 rounded-3xl bg-white/5 p-6 text-center sm:p-10">
           <div className="rounded-3xl bg-white/10 p-5 text-white">
-            <Icon name="FileCode" className="h-14 w-14" />
+            <Icon name="Folder" className="h-14 w-14" />
           </div>
           <div>
             <p className="text-lg font-bold text-white">{typeLabel}</p>
@@ -189,10 +189,10 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 18 }}
         transition={{ type: 'spring', stiffness: 320, damping: 28 }}
-        className="relative z-10 flex flex-col md:flex-row w-[calc(100vw-1rem)] sm:w-[calc(100vw-2rem)] lg:w-full max-w-6xl h-auto max-h-[calc(100dvh-1rem)] sm:max-h-[calc(100dvh-2rem)] md:h-[calc(100dvh-2rem)] lg:h-auto lg:max-h-[calc(100dvh-2rem)] overflow-y-auto md:overflow-hidden bg-[#f4f1ea] shadow-[0_30px_100px_rgba(15,23,42,0.35)] border border-white/60 rounded-2xl sm:rounded-3xl lg:rounded-[28px]"
+        className="relative z-10 flex flex-col md:flex-row w-[calc(100vw-1rem)] sm:w-[calc(100vw-2rem)] lg:w-full max-w-6xl h-auto max-h-[calc(100dvh-1rem)] sm:max-h-[calc(100dvh-2rem)] md:h-[calc(100dvh-2rem)] lg:h-auto lg:max-h-[calc(100dvh-2rem)] overflow-y-auto md:overflow-hidden bg-[#f8f8f7] shadow-[0_30px_100px_rgba(15,23,42,0.35)] border border-white/60 rounded-2xl sm:rounded-3xl lg:rounded-[28px]"
       >
         <div className="grid min-w-0 grid-cols-1 md:grid-cols-[1fr_300px] lg:grid-cols-[1fr_360px] md:min-h-0 md:flex-1">
-          <div className="flex min-w-0 flex-col bg-[#171923] p-4 sm:p-7 rounded-t-2xl sm:rounded-t-3xl md:rounded-none md:min-h-0 md:flex-1 md:h-full">
+          <div className="flex min-w-0 flex-col bg-[#111111] p-4 sm:p-7 rounded-t-2xl sm:rounded-t-3xl md:rounded-none md:min-h-0 md:flex-1 md:h-full">
             <div className="mb-5 flex items-start justify-between gap-4">
               <div className="min-w-0">
                 <h2 className="truncate text-xl font-extrabold tracking-tight text-white sm:text-2xl">
@@ -247,7 +247,7 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
 
                   <div>
                     <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Storage Location</p>
-                    <p className="mt-2 text-lg font-bold text-blue-600">{file.folder}</p>
+                    <p className="mt-2 text-lg font-bold text-slate-900">{file.folder}</p>
                   </div>
 
                   <div>
@@ -273,7 +273,7 @@ export default function FilePreviewModal({ file, onClose, onDownload }) {
               <div className="flex flex-col gap-3 pb-2 sm:flex-row sm:items-center sm:gap-3 sm:pb-0">
                 <button
                   onClick={() => onDownload(file)}
-                  className="flex-1 rounded-2xl bg-blue-600 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition hover:bg-blue-700"
+                  className="flex-1 rounded-2xl bg-slate-900 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-black/15 transition hover:bg-black"
                 >
                   Download
                 </button>

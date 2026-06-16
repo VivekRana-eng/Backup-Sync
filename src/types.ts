@@ -50,6 +50,7 @@ export interface UploadingFile {
   category: FileCategory;
   extension: string;
   clientShift: RailwayClient;
+  folderCategory?: FileCategory;
   sourceFile?: File;
 }
 
@@ -77,8 +78,5 @@ export interface Activity {
 export type SidebarTab =
   | 'Dashboard'
   | 'My Files'
-  | 'Shared'
-  | 'Recents'
-  | 'Starred'
   | 'Archived'
   | 'Activity Log';

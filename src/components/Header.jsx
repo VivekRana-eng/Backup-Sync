@@ -1,14 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Icon from './Icon';
-import { DEFAULT_RAILWAY_CLIENT, formatStorageSize, RAILWAY_CLIENTS } from '../lib/workspace';
+import { formatStorageSize } from '../lib/workspace';
 
 export default function Header({
   activeTab,
   currentUser,
   searchQuery,
   setSearchQuery,
-  clientShiftFilter,
-  setClientShiftFilter,
   onSettingsClick,
   openSideMenu,
   totalStorageUsedGB,
@@ -74,14 +72,14 @@ export default function Header({
   return (
     <header
       id="app-header"
-      className="sticky top-0 z-30 border-b border-slate-100 bg-white px-4 py-3 shadow-xs md:px-6 md:py-0 md:h-16 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
+      className="sticky top-0 z-30 border-b border-slate-200 bg-white px-4 py-3 shadow-xs md:px-6 md:py-0 md:h-16 flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
     >
       {/* Top Row: Mobile menu + search */}
       <div className="flex items-center gap-2 w-full md:w-auto md:justify-start">
         <button
           id="toggle-mobile-sidebar"
           onClick={openSideMenu}
-          className="lg:hidden p-2 -ml-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-xl cursor-pointer"
+          className="lg:hidden p-2 -ml-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl cursor-pointer"
         >
           <Icon name="Menu" className="w-5.5 h-5.5" />
         </button>
@@ -89,15 +87,15 @@ export default function Header({
         <div className="hidden sm:block md:hidden">
           {activeTab === 'Dashboard' ? (
             <div>
-              <h1 className="text-lg font-bold text-slate-800 tracking-tight leading-none">
+              <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-none">
                 Backup & Sync
               </h1>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-slate-500 mt-1">
                 Keep your files, uploads, and folders in one place
               </p>
             </div>
           ) : (
-            <h1 className="text-lg font-bold text-slate-800 tracking-tight">
+            <h1 className="text-lg font-bold text-slate-900 tracking-tight">
               {activeTab}
             </h1>
           )}
@@ -112,7 +110,7 @@ export default function Header({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search..."
-              className="w-full text-xs bg-slate-50/85 hover:bg-slate-100/75 focus:bg-white text-slate-700 placeholder-slate-400 border border-transparent focus:border-blue-400/80 outline-none rounded-xl py-2 pl-9 pr-3 transition-all"
+            className="w-full text-xs bg-slate-50/85 hover:bg-slate-100/75 focus:bg-white text-slate-800 placeholder-slate-400 border border-transparent focus:border-slate-300 outline-none rounded-xl py-2 pl-9 pr-3 transition-all"
             />
             {searchQuery && (
               <button
@@ -136,7 +134,7 @@ export default function Header({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search files, folders, members..."
-            className="w-full text-sm bg-slate-50/85 hover:bg-slate-100/75 focus:bg-white text-slate-700 placeholder-slate-400 border border-transparent focus:border-blue-400/80 outline-none rounded-xl py-2 pl-10 pr-4 transition-all"
+          className="w-full text-sm bg-slate-50/85 hover:bg-slate-100/75 focus:bg-white text-slate-800 placeholder-slate-400 border border-transparent focus:border-slate-300 outline-none rounded-xl py-2 pl-10 pr-4 transition-all"
           />
           {searchQuery && (
             <button
@@ -151,30 +149,12 @@ export default function Header({
 
       {/* Desktop Controls */}
       <div className="hidden md:flex items-center gap-3">
-        <div className="flex items-center gap-2 bg-slate-50 border border-slate-100 rounded-xl px-2.5 py-1.5">
-          <Icon name="Filter" className="w-4 h-4 text-slate-400" />
-          <div className="flex flex-col leading-none">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Client shift</span>
-            <select
-              id="client-shift-select"
-              value={clientShiftFilter}
-              onChange={(e) => setClientShiftFilter(e.target.value)}
-              className="bg-transparent text-xs font-bold text-slate-700 outline-none cursor-pointer max-w-[180px]"
-            >
-              <option value={DEFAULT_RAILWAY_CLIENT}>{DEFAULT_RAILWAY_CLIENT}</option>
-              {RAILWAY_CLIENTS.filter((client) => client !== DEFAULT_RAILWAY_CLIENT).map((client) => (
-                <option key={client} value={client}>
-                  {client}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+
 
         <button
           id="theme-settings-toggle-btn"
           onClick={onSettingsClick}
-          className="p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer relative"
+          className="p-2 text-slate-400 hover:text-slate-900 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer relative"
           title="Settings"
         >
           <Icon name="Settings" className="w-5.5 h-5.5" />
@@ -184,25 +164,25 @@ export default function Header({
           <button
             id="notifications-bell-btn"
             onClick={() => setBellOpen(!bellOpen)}
-            className="p-2 text-slate-400 hover:text-slate-800 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer relative"
+            className="p-2 text-slate-400 hover:text-slate-900 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer relative"
           >
             <Icon name="Bell" className="w-5.5 h-5.5" />
             {unreadCount > 0 && (
-              <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full ring-2 ring-white animate-bounce" />
+            <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-slate-900 rounded-full ring-2 ring-white animate-bounce" />
             )}
           </button>
 
           {bellOpen && (
             <div
               id="notifications-dropdown"
-              className="absolute right-0 mt-3 w-80 sm:w-96 bg-white border border-slate-100 rounded-2xl shadow-xl z-50 overflow-hidden py-1 transform origin-top-right transition-all duration-200"
+              className="absolute right-0 mt-3 w-80 sm:w-96 rounded-2xl border border-slate-200 bg-white/95 shadow-[0_18px_45px_rgba(15,23,42,0.16)] backdrop-blur-sm z-50 overflow-hidden py-1 transform origin-top-right transition-all duration-200"
             >
               <div className="flex items-center justify-between px-4 py-3 border-b border-slate-50">
-                <span className="font-bold text-sm text-slate-800">Notifications</span>
+                <span className="font-bold text-sm tracking-tight text-slate-900">Notifications</span>
                 {unreadCount > 0 && (
                   <button
                     onClick={markAllAsRead}
-                    className="text-xs text-blue-600 hover:text-blue-700 font-medium cursor-pointer"
+                    className="text-xs font-semibold tracking-tight text-slate-900 hover:text-black cursor-pointer"
                   >
                     Mark all read
                   </button>
@@ -212,7 +192,7 @@ export default function Header({
               <div className="max-h-80 overflow-y-auto divide-y divide-slate-50">
                 {notifications.length === 0 ? (
                   <div className="py-8 text-center text-slate-400 text-sm flex flex-col items-center justify-center gap-2">
-                    <Icon name="CheckCircle2" className="w-8 h-8 text-slate-350" />
+                    <Icon name="CheckCircle2" className="w-8 h-8 text-slate-300" />
                     <p>all quiet, no new alerts</p>
                   </div>
                 ) : (
@@ -220,17 +200,17 @@ export default function Header({
                     <div
                       key={notif.id}
                       className={`p-4 flex gap-3 hover:bg-slate-50/70 transition-colors relative ${
-                        notif.unread ? 'bg-blue-50/15' : ''
+                        notif.unread ? 'bg-slate-50' : ''
                       }`}
                     >
                       {notif.type === 'success' && (
-                        <Icon name="CheckCircle2" className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
+                        <Icon name="CheckCircle2" className="w-5 h-5 text-slate-900 shrink-0 mt-0.5" />
                       )}
                       {notif.type === 'info' && (
-                        <Icon name="CheckCircle2" className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
+                        <Icon name="CheckCircle2" className="w-5 h-5 text-slate-900 shrink-0 mt-0.5" />
                       )}
                       {notif.type === 'warning' && (
-                        <Icon name="AlertCircle" className="w-5 h-5 text-yellow-500 shrink-0 mt-0.5" />
+                        <Icon name="AlertCircle" className="w-5 h-5 text-slate-900 shrink-0 mt-0.5" />
                       )}
 
                       <div className="flex-1 min-w-0">
@@ -259,7 +239,7 @@ export default function Header({
                 <div className="p-2 border-t border-slate-50 text-center">
                   <button
                     onClick={() => setNotifications([])}
-                    className="text-xs font-semibold text-rose-500 hover:text-rose-600 py-1.5 w-full rounded-lg hover:bg-rose-50 transition-all cursor-pointer"
+                    className="text-xs font-semibold text-slate-900 hover:text-black py-1.5 w-full rounded-lg hover:bg-slate-100 transition-all cursor-pointer"
                   >
                     Clear All Alerts
                   </button>
@@ -273,13 +253,13 @@ export default function Header({
           <button
             id="profile-dropdown-trigger"
             onClick={() => setProfileOpen(!profileOpen)}
-            className="flex items-center gap-2 p-1 pl-1.5 pr-2 hover:bg-slate-50 rounded-xl transition-all border border-slate-50 cursor-pointer"
+            className="flex items-center gap-2 p-1 pl-1.5 pr-2 hover:bg-slate-50 rounded-xl transition-all border border-slate-200 cursor-pointer"
           >
             <div className="relative">
               <img
                 src={currentUser.avatar}
                 alt={currentUser.name}
-                className="w-8 h-8 rounded-lg object-cover ring-2 ring-blue-50"
+                className="w-8 h-8 rounded-lg object-cover ring-2 ring-slate-100"
                 referrerPolicy="no-referrer"
               />
               <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white" />
@@ -298,9 +278,9 @@ export default function Header({
           {profileOpen && (
             <div
               id="profile-dropdown-card"
-              className="absolute right-0 mt-3 w-72 bg-white border border-slate-100 rounded-2xl shadow-xl z-50 overflow-hidden py-1 transform origin-top-right transition-all duration-200"
+              className="absolute right-0 mt-3 w-72 rounded-2xl border border-slate-200 bg-white/95 shadow-[0_18px_45px_rgba(15,23,42,0.16)] backdrop-blur-sm z-50 overflow-hidden py-1 transform origin-top-right transition-all duration-200"
             >
-              <div className="p-4 bg-slate-50/50 border-b border-slate-50">
+              <div className="p-4 bg-slate-50/60 border-b border-slate-100">
                 <div className="flex gap-3">
                   <img
                     src={currentUser.avatar}
@@ -318,9 +298,9 @@ export default function Header({
                   </div>
                 </div>
 
-                <div className="mt-3.5 bg-white border border-slate-100 rounded-xl p-2.5">
+                <div className="mt-3.5 rounded-xl border border-slate-200 bg-white p-2.5">
                   <div className="flex items-center justify-between text-[11px]">
-                    <span className="font-semibold text-slate-500">Your Storage</span>
+                    <span className="font-semibold tracking-tight text-slate-500">Your Storage</span>
                     <span className="font-bold text-slate-800">{storageLabel}</span>
                   </div>
                 </div>
@@ -332,24 +312,10 @@ export default function Header({
                     setProfileOpen(false);
                     onSettingsClick();
                   }}
-                  className="w-full text-slate-600 hover:text-slate-900 flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold hover:bg-slate-50 transition-all text-left cursor-pointer"
+                  className="group w-full text-slate-700 hover:text-white flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold tracking-tight transition-all text-left cursor-pointer hover:bg-slate-900"
                 >
-                  <Icon name="User" className="w-4 h-4 text-slate-400" />
+                  <Icon name="User" className="w-4 h-4 text-slate-400 transition-colors group-hover:text-white" />
                   <span>My Profile Details</span>
-                </button>
-                <button
-                  onClick={() => alert('Billing settings are not connected yet.')}
-                  className="w-full text-slate-600 hover:text-slate-900 flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold hover:bg-slate-50 transition-all text-left cursor-pointer"
-                >
-                  <Icon name="CreditCard" className="w-4 h-4 text-slate-400" />
-                  <span>Billing & Subscription</span>
-                </button>
-                <button
-                  onClick={() => alert('Security settings are not connected yet.')}
-                  className="w-full text-slate-600 hover:text-slate-900 flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-semibold hover:bg-slate-50 transition-all text-left cursor-pointer"
-                >
-                  <Icon name="Shield" className="w-4 h-4 text-slate-400" />
-                  <span>Security & API Keys</span>
                 </button>
               </div>
 
@@ -357,9 +323,9 @@ export default function Header({
                 <button
                   id="sign-out-btn"
                   onClick={() => alert('Sign out is not connected yet.')}
-                  className="w-full text-rose-500 hover:text-rose-600 flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-bold hover:bg-rose-50 transition-all text-left cursor-pointer"
+                  className="group w-full text-slate-900 hover:text-white flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-bold tracking-tight transition-all text-left cursor-pointer hover:bg-slate-900"
                 >
-                  <Icon name="LogOut" className="w-4 h-4" />
+                  <Icon name="LogOut" className="w-4 h-4 transition-colors group-hover:text-white" />
                   <span>Sign Out Account</span>
                 </button>
               </div>
@@ -370,25 +336,7 @@ export default function Header({
 
       {/* Mobile Controls */}
       <div className="flex items-center justify-end gap-2 md:hidden">
-        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-slate-100 bg-slate-50 px-2.5 py-1.5">
-          <Icon name="Filter" className="w-4 h-4 text-slate-400 shrink-0" />
-          <div className="flex min-w-0 flex-1 flex-col leading-none">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Client shift</span>
-            <select
-              id="client-shift-select"
-              value={clientShiftFilter}
-              onChange={(e) => setClientShiftFilter(e.target.value)}
-              className="w-full min-w-0 bg-transparent text-xs font-bold text-slate-700 outline-none cursor-pointer"
-            >
-              <option value={DEFAULT_RAILWAY_CLIENT}>{DEFAULT_RAILWAY_CLIENT}</option>
-              {RAILWAY_CLIENTS.filter((client) => client !== DEFAULT_RAILWAY_CLIENT).map((client) => (
-                <option key={client} value={client}>
-                  {client}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+
 
         <button
           id="theme-settings-toggle-btn-mobile"
@@ -407,7 +355,7 @@ export default function Header({
           >
             <Icon name="Bell" className="w-5.5 h-5.5" />
             {unreadCount > 0 && (
-              <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full ring-2 ring-white animate-bounce" />
+              <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-slate-900 rounded-full ring-2 ring-white animate-bounce" />
             )}
           </button>
         </div>
@@ -422,7 +370,7 @@ export default function Header({
               <img
                 src={currentUser.avatar}
                 alt={currentUser.name}
-                className="w-8 h-8 rounded-lg object-cover ring-2 ring-blue-50"
+                className="w-8 h-8 rounded-lg object-cover ring-2 ring-slate-100"
                 referrerPolicy="no-referrer"
               />
               <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white" />

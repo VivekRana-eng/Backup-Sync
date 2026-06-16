@@ -106,7 +106,8 @@ export function createUploadedFile(
   upload: UploadingFile,
   user: User,
 ): CloudFile {
-  const folderDestination = getFolderDestination(upload.category);
+  const destinationCategory = upload.folderCategory ?? upload.category;
+  const folderDestination = getFolderDestination(destinationCategory);
   const previewUrl = upload.sourceFile ? URL.createObjectURL(upload.sourceFile) : undefined;
 
   return {
@@ -117,7 +118,7 @@ export function createUploadedFile(
     sourceFile: upload.sourceFile,
     name: upload.name.substring(0, upload.name.lastIndexOf('.')) || upload.name,
     extension: upload.extension,
-    category: upload.category,
+    category: destinationCategory,
     clientShift: upload.clientShift,
     size: upload.size,
     sizeBytes: upload.sizeBytes,
@@ -175,6 +176,7 @@ export function buildUploadQueue(files: FileList | File[], clientShift: RailwayC
       name: file.name,
       extension,
       category,
+      folderCategory: category,
       clientShift,
       size: formatUploadSize(file.size),
       sizeBytes: file.size || 1_500_000,

@@ -24,7 +24,7 @@ export default function StorageCards({
       name: 'Documents',
       count: getFilesCount('document', filesStats.document.count),
       usedBytes: filesStats.document.totalSizeBytes,
-      bgColorClass: 'bg-yellow-50 text-yellow-600',
+      bgColorClass: 'bg-slate-100 text-slate-900',
       icon: 'FileText'
     },
     {
@@ -32,7 +32,7 @@ export default function StorageCards({
       name: 'Images',
       count: getFilesCount('image', filesStats.image.count),
       usedBytes: filesStats.image.totalSizeBytes,
-      bgColorClass: 'bg-blue-50 text-blue-600',
+      bgColorClass: 'bg-slate-100 text-slate-900',
       icon: 'FileImage'
     },
     {
@@ -40,7 +40,7 @@ export default function StorageCards({
       name: 'Videos',
       count: getFilesCount('video', filesStats.video.count),
       usedBytes: filesStats.video.totalSizeBytes,
-      bgColorClass: 'bg-red-50 text-red-600',
+      bgColorClass: 'bg-slate-100 text-slate-900',
       icon: 'FileVideo'
     },
     {
@@ -48,7 +48,7 @@ export default function StorageCards({
       name: 'Audio',
       count: getFilesCount('audio', filesStats.audio.count),
       usedBytes: filesStats.audio.totalSizeBytes,
-      bgColorClass: 'bg-emerald-50 text-emerald-600',
+      bgColorClass: 'bg-slate-100 text-slate-900',
       icon: 'FileAudio'
     },
     {
@@ -56,8 +56,8 @@ export default function StorageCards({
       name: 'Others',
       count: getFilesCount('other', filesStats.other.count),
       usedBytes: filesStats.other.totalSizeBytes,
-      bgColorClass: 'bg-slate-100 text-slate-600',
-      icon: 'FolderMinus'
+      bgColorClass: 'bg-slate-100 text-slate-900',
+      icon: 'Folder'
     }
   ];
 
@@ -79,16 +79,14 @@ export default function StorageCards({
             key={card.category}
             id={`storage-card-${card.category}`}
             onClick={() => handleCardClick(card.category)}
-            className={`bg-white rounded-2xl p-5 border cursor-pointer hover:shadow-md transition-all relative overflow-hidden group ${
+            className={`bg-white rounded-2xl p-5 border cursor-pointer hover:shadow-lg transition-all relative overflow-hidden group ${
               isSelected
-                ? 'border-blue-600 ring-2 ring-blue-600/5 shadow-md shadow-blue-500/5 scale-[1.02]'
+                ? 'border-slate-900 ring-2 ring-slate-900/5 shadow-md shadow-black/5 scale-[1.02]'
                 : 'border-slate-100 hover:border-slate-200'
             }`}
           >
             {/* Quick Filter Selection Indicator Glow */}
-            {isSelected && (
-              <div className="absolute top-0 left-0 w-full h-1 bg-blue-600" />
-            )}
+            {isSelected && <div className="absolute top-0 left-0 w-full h-1 bg-slate-900" />}
 
             <div className="flex items-start justify-between">
               {/* Category Icon Cylinder */}
@@ -97,24 +95,24 @@ export default function StorageCards({
               </div>
 
               {/* Little stats overlay */}
-              <span className="text-[10px] bg-slate-50/80 px-2 py-0.5 rounded-md font-semibold text-slate-550 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                Filter <Icon name="ArrowUpRight" className="w-2.5 h-2.5" />
-              </span>
-            </div>
+                <span className="text-[10px] bg-slate-50/80 px-2 py-0.5 rounded-md font-semibold text-slate-600 flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                  Filter <Icon name="ArrowUpRight" className="w-2.5 h-2.5" />
+                </span>
+              </div>
 
             {/* Metrics */}
             <div className="mt-4">
-              <h3 className="text-sm font-bold text-slate-800 leading-none">
+              <h3 className="text-sm font-bold text-slate-900 leading-none">
                 {card.name}
               </h3>
-              <p className="text-[11px] text-slate-400 mt-1 font-medium">
+              <p className="text-[11px] text-slate-500 mt-1 font-medium">
                 {card.count.toLocaleString()} files
               </p>
             </div>
 
             {/* Storage Usage Area */}
             <div className="mt-4 pt-1">
-              <div className="flex items-center justify-between text-xs font-semibold text-slate-500">
+              <div className="flex items-center justify-between text-xs font-semibold text-slate-600">
                 <span>Storage used</span>
                 <span>{formatBytes(card.usedBytes)}</span>
               </div>

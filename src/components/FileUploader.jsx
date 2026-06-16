@@ -46,8 +46,8 @@ export default function FileUploader({ onFilesSelected }) {
       onClick={onUploaderClick}
       className={`relative h-64 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center p-6 text-center transition-all cursor-pointer group select-none ${
         isDragActive
-          ? 'border-blue-600 bg-blue-50/60 shadow-inner'
-          : 'border-slate-200 bg-white hover:border-blue-400 hover:bg-slate-50/40'
+        ? 'border-slate-900 bg-slate-50 shadow-inner'
+        : 'border-slate-200 bg-white hover:border-slate-900 hover:bg-slate-50/40'
       }`}
     >
       {/* Hidden file input */}
@@ -62,7 +62,7 @@ export default function FileUploader({ onFilesSelected }) {
 
       {/* Decorative concentric circle backdrop */}
       <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-colors mb-4 ${
-        isDragActive ? 'bg-blue-100 text-blue-600' : 'bg-slate-50 text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-500'
+        isDragActive ? 'bg-slate-200 text-slate-900' : 'bg-slate-50 text-slate-400 group-hover:bg-slate-100 group-hover:text-slate-700'
       }`}>
         <Icon name="CloudUpload" className={`w-8 h-8 transition-transform group-hover:scale-110 ${
           isDragActive ? 'animate-bounce' : ''
@@ -71,7 +71,7 @@ export default function FileUploader({ onFilesSelected }) {
 
       <div className="max-w-md mx-auto">
         <p className="text-sm font-bold text-slate-700 tracking-tight">
-          Drop files here or <span className="text-blue-600 hover:text-blue-700 group-hover:underline font-semibold leading-relaxed">click to browse</span>
+          Drop files here or <span className="text-slate-900 hover:text-black group-hover:underline font-semibold leading-relaxed">click to browse</span>
         </p>
         <p className="text-[11px] text-slate-400 font-medium mt-1.5 leading-normal">
           Supports PDFs, spreadsheets, images, videos, zip files, presentations, and audio up to 2GB.
@@ -80,8 +80,8 @@ export default function FileUploader({ onFilesSelected }) {
 
       {/* Drag Over Banner */}
       {isDragActive && (
-        <div className="absolute inset-0 bg-blue-600/5 rounded-2xl flex items-center justify-center backdrop-blur-[1px] pointer-events-none">
-          <span className="bg-blue-600 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-md flex items-center gap-1.5 transform scale-110">
+        <div className="absolute inset-0 bg-slate-950/5 rounded-2xl flex items-center justify-center backdrop-blur-[1px] pointer-events-none">
+          <span className="bg-slate-900 text-white font-bold text-xs px-4 py-2 rounded-xl shadow-md flex items-center gap-1.5 transform scale-110">
             Drop your files now!
           </span>
         </div>

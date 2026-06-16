@@ -1,4 +1,8 @@
 import React from 'react';
+import { CiFolderOn } from 'react-icons/ci';
+import { IoDocumentsOutline } from 'react-icons/io5';
+import { MdOutlineAudiotrack } from 'react-icons/md';
+import { PiFilePdfDuotone, PiFileZipDuotone, PiImagesLight, PiVideoLight } from 'react-icons/pi';
 import documentIcon from '../assets/icons/ic-document.svg';
 import audioIcon from '../assets/icons/ic-audio.svg';
 import aiIcon from '../assets/icons/ic-ai.svg';
@@ -15,24 +19,24 @@ import txtIcon from '../assets/icons/ic-txt.svg';
 import ptsIcon from '../assets/icons/ic-pts.svg';
 
 const FILE_ICONS = {
-  FileText: documentIcon,
+  FileText: IoDocumentsOutline,
+  FilePdf: PiFilePdfDuotone,
+  FileZip: PiFileZipDuotone,
+  FileImage: PiImagesLight,
+  FileVideo: PiVideoLight,
+  FileAudio: MdOutlineAudiotrack,
+  FolderMinus: CiFolderOn,
+  FolderOpen: CiFolderOn,
+  Folder: CiFolderOn,
   File: fileIcon,
   FileCode: fileIcon,
   FileSpreadsheet: excelIcon,
-  FileVideo: videoIcon,
-  FileImage: imageIcon,
-  FileAudio: audioIcon,
-  FileArchive: zipIcon,
-  FilePdf: pdfIcon,
   FileWord: wordIcon,
   FilePowerPoint: pptIcon,
   FilePpt: ptsIcon,
-  Image: imageIcon,
-  Video: videoIcon,
-  Music: audioIcon,
-  FolderMinus: folderIcon,
-  FolderOpen: folderIcon,
-  Folder: folderIcon,
+  Image: PiImagesLight,
+  Video: PiVideoLight,
+  Music: MdOutlineAudiotrack,
 };
 
 const strokeProps = {
@@ -429,19 +433,19 @@ function FileSpreadsheetIcon(props) {
 }
 
 function FileImageIcon(props) {
-  return <img src={imageIcon} alt="" className={props.className} aria-hidden="true" />;
+  return <PiImagesLight className={props.className} aria-hidden="true" />;
 }
 
 function FileVideoIcon(props) {
-  return <img src={videoIcon} alt="" className={props.className} aria-hidden="true" />;
+  return <PiVideoLight className={props.className} aria-hidden="true" />;
 }
 
 function FileAudioIcon(props) {
-  return <img src={audioIcon} alt="" className={props.className} aria-hidden="true" />;
+  return <MdOutlineAudiotrack className={props.className} aria-hidden="true" />;
 }
 
 function FileArchiveIcon(props) {
-  return <img src={zipIcon} alt="" className={props.className} aria-hidden="true" />;
+  return <PiFileZipDuotone className={props.className} aria-hidden="true" />;
 }
 
 function FileCodeIcon(props) {
@@ -449,7 +453,15 @@ function FileCodeIcon(props) {
 }
 
 function FileTextIcon(props) {
-  return <img src={documentIcon} alt="" className={props.className} aria-hidden="true" />;
+  return <IoDocumentsOutline className={props.className} aria-hidden="true" />;
+}
+
+function FilePdfIcon(props) {
+  return <PiFilePdfDuotone className={props.className} aria-hidden="true" />;
+}
+
+function FolderOnIcon(props) {
+  return <CiFolderOn className={props.className} aria-hidden="true" />;
 }
 
 function ActivityIconLine(props) {
@@ -536,8 +548,8 @@ const ICONS = {
   UserPlus: UserPlusIcon,
   ExternalLink: ExternalLinkIcon,
   LayoutDashboard: LayoutDashboardIcon,
-  FolderOpen: folderIcon,
-  Folder: folderIcon,
+  FolderOpen: FolderOnIcon,
+  Folder: FolderOnIcon,
   CloudUpload: CloudUploadIcon,
   FileSpreadsheet: FileSpreadsheetIcon,
   FileVideo: FileVideoIcon,
@@ -545,6 +557,8 @@ const ICONS = {
   FileText: FileTextIcon,
   FileAudio: FileAudioIcon,
   FileArchive: FileArchiveIcon,
+  FilePdf: FilePdfIcon,
+  FileZip: FileArchiveIcon,
   FileCode: FileCodeIcon,
   File: FileCodeIcon,
 };
