@@ -52,6 +52,14 @@ export default function StorageCards({
       icon: 'FileAudio'
     },
     {
+      category: 'ebook',
+      name: 'E Books',
+      count: getFilesCount('ebook', filesStats.ebook.count),
+      usedBytes: filesStats.ebook.totalSizeBytes,
+      bgColorClass: 'bg-slate-100 text-slate-900',
+      icon: 'FileText'
+    },
+    {
       category: 'other',
       name: 'Others',
       count: getFilesCount('other', filesStats.other.count),
@@ -70,7 +78,7 @@ export default function StorageCards({
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
       {cardsData.map((card) => {
         const isSelected = activeFilter === card.category;
 

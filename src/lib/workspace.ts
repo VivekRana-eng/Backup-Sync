@@ -13,6 +13,7 @@ const CATEGORY_FOLDERS: Record<FileCategory, { folder: string; chain: string[] }
   image: { folder: 'Images > Uploads', chain: ['Images', 'Uploads'] },
   video: { folder: 'Videos > Uploads', chain: ['Videos', 'Uploads'] },
   audio: { folder: 'Audio > Uploads', chain: ['Audio', 'Uploads'] },
+  ebook: { folder: 'E Books > Uploads', chain: ['E Books', 'Uploads'] },
   other: { folder: 'Others > Uploads', chain: ['Others', 'Uploads'] },
 };
 
@@ -48,6 +49,10 @@ export function getFileCategory(extension: string): FileCategory {
     return 'audio';
   }
 
+  if (['epub', 'mobi', 'azw', 'azw3', 'fb2', 'lit'].includes(normalizedExtension)) {
+    return 'ebook';
+  }
+
   return 'other';
 }
 
@@ -81,6 +86,12 @@ export function formatLocalTimestamp(date = new Date()) {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
+export function formatLocalDate(date = new Date()) {
+  const pad = (value: number) => String(value).padStart(2, '0');
+
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
 export function getFolderDestination(category: FileCategory) {
   return CATEGORY_FOLDERS[category] ?? CATEGORY_FOLDERS.other;
 }
@@ -109,6 +120,7 @@ export function createUploadedFile(
   const destinationCategory = upload.folderCategory ?? upload.category;
   const folderDestination = getFolderDestination(destinationCategory);
   const previewUrl = upload.sourceFile ? URL.createObjectURL(upload.sourceFile) : undefined;
+  const uploadedAt = upload.uploadDate ? `${upload.uploadDate} 00:00` : formatLocalTimestamp();
 
   return {
     id: `file-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
@@ -126,7 +138,7 @@ export function createUploadedFile(
     folderChain: folderDestination.chain,
     owner: user,
     members: [],
-    lastModified: formatLocalTimestamp(),
+    lastModified: uploadedAt,
     isStarred: false,
     isArchived: false,
     isShared: false,
@@ -167,6 +179,8 @@ export function createFolderPlaceholder(
 }
 
 export function buildUploadQueue(files: FileList | File[], clientShift: RailwayClient) {
+  const defaultUploadDate = formatLocalDate();
+
   return Array.from(files).map((file, index) => {
     const extension = file.name.split('.').pop() || 'dat';
     const category = getFileCategory(extension);
@@ -183,6 +197,7 @@ export function buildUploadQueue(files: FileList | File[], clientShift: RailwayC
       progress: 0,
       status: 'uploading' as const,
       sourceFile: file,
+      uploadDate: defaultUploadDate,
     };
   });
 }
@@ -193,6 +208,7 @@ export function computeStats(files: CloudFile[]) {
     image: { count: 0, totalSizeBytes: 0 },
     video: { count: 0, totalSizeBytes: 0 },
     audio: { count: 0, totalSizeBytes: 0 },
+    ebook: { count: 0, totalSizeBytes: 0 },
     other: { count: 0, totalSizeBytes: 0 },
   };
 
