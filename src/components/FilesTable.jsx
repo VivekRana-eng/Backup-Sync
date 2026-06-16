@@ -223,58 +223,56 @@ export default function FilesTable({
             <Icon name="ChevronDown" className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
           </div>
 
-          <div className="relative">
-            <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 space-y-2">
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-500 whitespace-nowrap">
-                  Date
-                </span>
-                <div className="relative">
-                  <select
-                    value={dateFilterMode}
-                    onChange={(e) => setDateFilterMode(e.target.value)}
-                    className="appearance-none rounded-xl border border-slate-300 bg-white px-3 py-2 pr-9 text-xs font-semibold tracking-tight text-slate-900 outline-none transition hover:border-slate-400 hover:bg-slate-50 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 cursor-pointer"
-                  >
-                    <option value="all">All time</option>
-                    <option value="month">This month</option>
-                    <option value="week">This week</option>
-                    <option value="custom">Custom range</option>
-                  </select>
-                  <Icon name="ChevronDown" className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
-                </div>
-                {(dateFilterMode !== 'all' || customDateFrom || customDateTo) && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setDateFilterMode('all');
-                      setCustomDateFrom('');
-                      setCustomDateTo('');
-                    }}
-                    className="text-[10px] font-bold text-slate-500 hover:text-slate-900 cursor-pointer"
-                  >
-                    Clear
-                  </button>
-                )}
+          <div className="flex flex-col gap-2 rounded-xl border border-slate-300 bg-white px-3 py-2">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-700 whitespace-nowrap">
+                Date
+              </span>
+              <div className="relative">
+                <select
+                  value={dateFilterMode}
+                  onChange={(e) => setDateFilterMode(e.target.value)}
+                  className="appearance-none rounded-xl bg-white pr-2 text-xs font-semibold tracking-tight text-slate-900 outline-none transition hover:border-slate-400 hover:bg-slate-50 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 cursor-pointer"
+                >
+                  <option value="all">All time</option>
+                  <option value="month">This month</option>
+                  <option value="week">This week</option>
+                  <option value="custom">Custom range</option>
+                </select>
+                <Icon name="ChevronDown" className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
               </div>
-
-              {dateFilterMode === 'custom' && (
-                <div className="flex items-center gap-2">
-                  <input
-                    type="date"
-                    value={customDateFrom}
-                    onChange={(e) => setCustomDateFrom(e.target.value)}
-                    className="w-[132px] rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold tracking-tight text-slate-900 outline-none transition hover:border-slate-400 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 cursor-pointer [color-scheme:light]"
-                  />
-                  <span className="text-[10px] font-semibold text-slate-400">to</span>
-                  <input
-                    type="date"
-                    value={customDateTo}
-                    onChange={(e) => setCustomDateTo(e.target.value)}
-                    className="w-[132px] rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold tracking-tight text-slate-900 outline-none transition hover:border-slate-400 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 cursor-pointer [color-scheme:light]"
-                  />
-                </div>
+              {(dateFilterMode !== 'all' || customDateFrom || customDateTo) && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDateFilterMode('all');
+                    setCustomDateFrom('');
+                    setCustomDateTo('');
+                  }}
+                  className="text-[10px] font-bold text-slate-500 hover:text-slate-900 cursor-pointer"
+                >
+                  Clear
+                </button>
               )}
             </div>
+
+            {dateFilterMode === 'custom' && (
+              <div className="flex items-center gap-2">
+                <input
+                  type="date"
+                  value={customDateFrom}
+                  onChange={(e) => setCustomDateFrom(e.target.value)}
+                  className="w-[132px] rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold tracking-tight text-slate-900 outline-none transition hover:border-slate-400 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 cursor-pointer [color-scheme:light]"
+                />
+                <span className="text-[10px] font-semibold text-slate-400">to</span>
+                <input
+                  type="date"
+                  value={customDateTo}
+                  onChange={(e) => setCustomDateTo(e.target.value)}
+                  className="w-[132px] rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold tracking-tight text-slate-900 outline-none transition hover:border-slate-400 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 cursor-pointer [color-scheme:light]"
+                />
+              </div>
+            )}
           </div>
 
           <div className="flex items-center border border-slate-200 rounded-lg p-0.5 bg-slate-50">
