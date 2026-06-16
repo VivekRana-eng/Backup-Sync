@@ -392,7 +392,7 @@ export default function FilesTable({
                       <div className="flex items-center gap-2">
                         <img src={file.owner.avatar} alt={file.owner.name} className="w-5.5 h-5.5 rounded-full object-cover border border-slate-100" referrerPolicy="no-referrer" />
                         <span className="text-xs font-semibold text-slate-600 truncate max-w-[100px]" title={file.owner.name}>
-                          {file.owner.name === CURRENT_USER.name ? 'Me' : file.owner.name}
+                          {file.owner.name === CURRENT_USER.name ? 'admin' : file.owner.name}
                         </span>
                       </div>
                     </td>
@@ -660,7 +660,7 @@ export default function FilesTable({
                       referrerPolicy="no-referrer"
                     />
                     <span className="text-[10px] text-slate-400 font-semibold truncate max-w-[70px]">
-                      {file.owner.name === CURRENT_USER.name ? 'Me' : file.owner.name.split(' ')[0]}
+                      {file.owner.name === CURRENT_USER.name ? 'admin' : file.owner.name.split(' ')[0]}
                     </span>
                   </div>
 

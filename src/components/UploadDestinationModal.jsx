@@ -97,15 +97,15 @@ export default function UploadDestinationModal({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 14 }}
         transition={{ type: 'spring', stiffness: 300, damping: 26 }}
-        className="relative z-10 w-full max-w-6xl overflow-hidden rounded-[32px] border border-slate-200 bg-white shadow-[0_30px_100px_rgba(15,23,42,0.35)]"
+        className="relative z-10 flex w-[calc(100vw-0.75rem)] max-w-[72rem] flex-col overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-[0_30px_100px_rgba(15,23,42,0.35)] sm:w-[calc(100vw-2rem)] sm:rounded-[28px]"
       >
-        <div className="flex items-start justify-between gap-4 border-b border-slate-100 bg-slate-50 px-6 py-5">
+        <div className="flex items-start justify-between gap-3 border-b border-slate-100 bg-slate-50 px-4 py-4 sm:gap-4 sm:px-6 sm:py-5">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-slate-500">Before upload</p>
-            <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-900">
+            <h2 className="mt-2 max-w-[16ch] text-[1.35rem] font-extrabold leading-tight tracking-tight text-slate-900 sm:max-w-[18ch] sm:text-[2rem] sm:leading-[1.05]">
               Choose where these files will be added
             </h2>
-            <p className="mt-2 text-sm text-slate-500">
+            <p className="mt-2 max-w-lg text-sm text-slate-500">
               Preview the file, choose the destination, then add it to the queue.
             </p>
           </div>
@@ -120,7 +120,7 @@ export default function UploadDestinationModal({
           </button>
         </div>
 
-        <div className="max-h-[60vh] overflow-y-auto px-6 py-5">
+        <div className="max-h-[calc(100dvh-10rem)] overflow-y-auto px-3 py-3 sm:px-6 sm:py-5">
           <div className="space-y-3">
             {files.map((file) => {
               const destination = getFolderLabel(file.folderCategory ?? file.category);
@@ -128,53 +128,53 @@ export default function UploadDestinationModal({
               return (
                 <div
                   key={file.id}
-                  className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm"
+                  className="overflow-hidden rounded-[22px] border border-slate-200 bg-white shadow-sm"
                 >
-                  <div className="grid gap-0 md:grid-cols-[minmax(0,1fr)_340px]">
-                    <div className="bg-[#101010] px-5 py-5 text-white sm:px-6">
+                  <div className="grid grid-cols-1 gap-0 lg:grid-cols-[minmax(0,1fr)_320px]">
+                    <div className="bg-[#101010] px-4 py-4 text-white sm:px-5 sm:py-5">
                       <div className="mb-4 flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <h3 className="truncate text-xl font-extrabold tracking-tight text-white">
+                          <h3 className="truncate text-[1.05rem] font-extrabold tracking-tight text-white sm:text-xl">
                             {file.name}
                           </h3>
-                          <p className="mt-1 text-sm font-medium text-white/55">
+                          <p className="mt-1 truncate text-xs font-medium text-white/55 sm:text-sm">
                             {getFolderLabel(file.folderCategory ?? file.category)}
                           </p>
                         </div>
                       </div>
 
-                      <div className="rounded-[26px] border border-white/10 bg-[#171717] p-4">
-                        <div className="overflow-hidden rounded-[22px] bg-black">
-                          <div className="aspect-[16/10]">
+                      <div className="rounded-[20px] border border-white/10 bg-[#171717] p-3 sm:p-4">
+                        <div className="overflow-hidden rounded-[18px] bg-black">
+                          <div className="aspect-[4/3] sm:aspect-[16/10] lg:aspect-[16/10]">
                             <FilePreviewThumb file={file} />
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="bg-white px-5 py-5 sm:px-6">
-                      <div className="flex h-full flex-col justify-between gap-5">
+                    <div className="bg-white px-4 py-4 sm:px-5 sm:py-5">
+                      <div className="flex h-full min-w-0 flex-col gap-4 sm:gap-5">
                         <div>
                           <p className="text-[10px] font-bold uppercase tracking-[0.26em] text-slate-400">File Inspector</p>
-                          <h4 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-900">Details</h4>
+                          <h4 className="mt-2 text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">Details</h4>
                         </div>
 
-                        <div className="space-y-5">
+                        <div className="grid gap-4 sm:gap-5">
                           <div>
                             <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">File type</p>
-                            <p className="mt-2 text-base font-bold text-slate-900">
+                            <p className="mt-2 break-words text-base font-bold text-slate-900">
                               {file.category.charAt(0).toUpperCase() + file.category.slice(1)}
                             </p>
                           </div>
 
                           <div>
                             <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">Size</p>
-                            <p className="mt-2 text-base font-bold text-slate-900">{file.size}</p>
+                            <p className="mt-2 break-words text-base font-bold text-slate-900">{file.size}</p>
                           </div>
 
                           <div>
                             <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-400">Current destination</p>
-                            <p className="mt-2 text-base font-bold text-slate-900">{destination}</p>
+                            <p className="mt-2 break-words text-base font-bold text-slate-900">{destination}</p>
                           </div>
 
                           <div>
@@ -183,7 +183,7 @@ export default function UploadDestinationModal({
                               <select
                                 value={file.folderCategory ?? file.category}
                                 onChange={(e) => onUpdateDestination(file.id, e.target.value)}
-                                className="w-full appearance-none rounded-2xl border border-slate-300 bg-white px-4 py-3 pr-10 text-sm font-semibold tracking-tight text-slate-900 outline-none transition hover:border-slate-400 hover:bg-slate-50 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 cursor-pointer"
+                                className="w-full min-w-0 appearance-none rounded-2xl border border-slate-300 bg-white px-4 py-3 pr-10 text-sm font-semibold tracking-tight text-slate-900 outline-none transition hover:border-slate-400 hover:bg-slate-50 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 cursor-pointer"
                               >
                                 {FOLDER_OPTIONS.map((option) => (
                                   <option key={option.value} value={option.value}>
@@ -224,7 +224,7 @@ export default function UploadDestinationModal({
           </div>
         </div>
 
-        <div className="border-t border-slate-100 bg-slate-50 px-6 py-4">
+        <div className="border-t border-slate-100 bg-slate-50 px-4 py-3 sm:px-6 sm:py-4">
           <p className="text-xs font-medium text-slate-500">
             {files.length} file(s) ready to be added.
           </p>
