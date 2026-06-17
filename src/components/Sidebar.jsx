@@ -18,6 +18,7 @@ export default function Sidebar({
 
   const navItems = [
     { id: 'Dashboard', label: 'Dashboard', icon: 'LayoutDashboard' },
+    { id: 'Clients', label: 'Clients', icon: 'Users' },
     { id: 'My Files', label: 'My Files', icon: 'FileCode' },
     { id: 'Archived', label: 'Archived', icon: 'Archive', badge: archivedCount > 0 ? archivedCount : undefined, badgeColor: 'bg-gray-100 text-gray-700' },
     { id: 'Activity Log', label: 'Activity Log', icon: 'Activity' },

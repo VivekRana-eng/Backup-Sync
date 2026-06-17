@@ -75,6 +75,7 @@ export interface Activity {
 
 export type SidebarTab =
   | 'Dashboard'
+  | 'Clients'
   | 'My Files'
   | 'Archived'
   | 'Activity Log'
