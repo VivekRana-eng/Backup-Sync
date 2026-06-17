@@ -274,7 +274,7 @@ export default function FilePreviewModal({ file, onClose, onDownload, canDownloa
                 {canDownload && (
                   <button
                     onClick={() => onDownload(file)}
-                    className="flex-1 rounded-2xl bg-slate-900 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-black/15 transition hover:bg-black"
+                    className="flex-1 rounded-2xl bg-red-900 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-black/15 transition hover:bg-red-950"
                   >
                     Download
                   </button>

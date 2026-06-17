@@ -130,7 +130,7 @@ export default function AddClientModal({ isOpen, onClose, onCreateClient }) {
             <button
               type="submit"
               disabled={isSaving}
-              className="rounded-xl bg-slate-900 px-4 py-2 text-xs font-bold text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-xl bg-red-900 px-4 py-2 text-xs font-bold text-white transition hover:bg-red-950 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSaving ? 'Saving...' : 'Add client'}
             </button>

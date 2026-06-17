@@ -369,7 +369,7 @@ export default function FilesTable({
                               className="text-xs font-semibold text-slate-900 bg-white border border-slate-300 rounded-lg px-2 py-1 outline-none focus:ring-1 focus:ring-slate-400"
                               autoFocus
                             />
-                            <button type="button" onClick={() => saveRename(file.id)} className="bg-slate-900 hover:bg-black text-white font-bold text-[10px] py-1 px-2 rounded-lg cursor-pointer">Save</button>
+                            <button type="button" onClick={() => saveRename(file.id)} className="bg-red-900 hover:bg-red-950 text-white font-bold text-[10px] py-1 px-2 rounded-lg cursor-pointer">Save</button>
                             <button type="button" onClick={() => setRenamingId(null)} className="bg-slate-100 hover:bg-slate-200 text-slate-600 text-[10px] py-1 px-2 rounded-lg cursor-pointer">Cancel</button>
                           </div>
                         ) : (
@@ -439,7 +439,7 @@ export default function FilesTable({
                           <button
                             type="button"
                             onClick={() => onTriggerDownload(file)}
-                            className="px-3.5 py-1.5 bg-black hover:bg-neutral-900 text-white font-bold text-xs rounded-lg transition-all cursor-pointer inline-flex items-center gap-1 shadow-sm"
+                            className="px-3.5 py-1.5 bg-red-900 hover:bg-red-950 text-white font-bold text-xs rounded-lg transition-all cursor-pointer inline-flex items-center gap-1 shadow-sm"
                           >
                             <Icon name="Download" className="w-3.5 h-3.5" />
                             <span>Download</span>
@@ -572,7 +572,7 @@ export default function FilesTable({
                         <button
                           type="button"
                           onClick={() => onTriggerDownload(file)}
-                          className="px-3 py-1.5 text-[11px] font-semibold text-white bg-black hover:bg-neutral-900 rounded-lg cursor-pointer"
+                          className="px-3 py-1.5 text-[11px] font-semibold text-white bg-red-900 hover:bg-red-950 rounded-lg cursor-pointer"
                         >
                           Download
                         </button>
@@ -596,7 +596,7 @@ export default function FilesTable({
                         autoFocus
                       />
                       <div className="flex gap-1 justify-end">
-                        <button type="button" onClick={() => saveRename(file.id)} className="bg-slate-900 font-bold text-[9px] text-white py-0.5 px-2 rounded-md">
+                        <button type="button" onClick={() => saveRename(file.id)} className="bg-red-900 hover:bg-red-950 font-bold text-[9px] text-white py-0.5 px-2 rounded-md cursor-pointer">
                           Save
                         </button>
                         <button type="button" onClick={() => setRenamingId(null)} className="bg-slate-100 font-bold text-[9px] text-slate-500 py-0.5 px-2 rounded-md">
@@ -632,7 +632,7 @@ export default function FilesTable({
                           <button
                             type="button"
                             onClick={() => onTriggerDownload(file)}
-                            className="px-3 py-1.5 text-[11px] font-semibold text-white bg-black hover:bg-neutral-900 rounded-lg cursor-pointer"
+                            className="px-3 py-1.5 text-[11px] font-semibold text-white bg-red-900 hover:bg-red-950 rounded-lg cursor-pointer"
                           >
                             Download
                           </button>

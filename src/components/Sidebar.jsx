@@ -86,7 +86,7 @@ export default function Sidebar({
             <button
               id="add-client-btn"
               onClick={onAddClientClick}
-              className="group relative w-full h-11 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-red-900 text-sm font-semibold text-white shadow-[0_18px_35px_rgba(0,0,0,0.18)] transition-all hover:bg-black hover:shadow-[0_22px_40px_rgba(0,0,0,0.22)] active:scale-[0.98]"
+              className="group relative w-full h-11 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-red-900 text-sm font-semibold text-white shadow-[0_18px_35px_rgba(0,0,0,0.18)] transition-all hover:bg-red-950 hover:shadow-[0_22px_40px_rgba(0,0,0,0.22)] active:scale-[0.98]"
             >
               <Icon name="Plus" className="w-4 h-4" />
               <span>Add client</span>
