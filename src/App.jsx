@@ -225,6 +225,8 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
           currentUser={currentUser}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
+          searchableFiles={visibleFiles}
+          onFileSelect={handleOpenPreview}
           onSettingsClick={() => setIsSettingsOpen(true)}
           onProfileClick={() => setIsProfileOpen(true)}
           openSideMenu={() => setIsSidebarMobileOpen(true)}
