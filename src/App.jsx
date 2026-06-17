@@ -213,7 +213,7 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
         archivedCount={archivedFilesCount}
         isMobileOpen={isSidebarMobileOpen}
         setIsMobileOpen={setIsSidebarMobileOpen}
-      onAddClientClick={() => setIsAddClientOpen(true)}
+      onAddFolderClick={() => setIsFolderModalOpen(true)}
       clientShiftFilter={clientShiftFilter}
       setClientShiftFilter={setClientShiftFilter}
       clientShiftOptions={clientShiftOptions}

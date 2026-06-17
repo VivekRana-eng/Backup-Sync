@@ -7,7 +7,7 @@ export default function Sidebar({
   archivedCount,
   isMobileOpen,
   setIsMobileOpen,
-  onAddClientClick,
+  onAddFolderClick,
   clientShiftFilter,
   setClientShiftFilter,
   clientShiftOptions = [],
@@ -84,12 +84,12 @@ export default function Sidebar({
         {userRole === 'admin' && (
           <div className="px-5 pt-5 pb-3">
             <button
-              id="add-client-btn"
-              onClick={onAddClientClick}
+              id="add-folder-btn"
+              onClick={onAddFolderClick}
               className="group relative w-full h-11 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-red-900 text-sm font-semibold text-white shadow-[0_18px_35px_rgba(0,0,0,0.18)] transition-all hover:bg-red-950 hover:shadow-[0_22px_40px_rgba(0,0,0,0.22)] active:scale-[0.98]"
             >
               <Icon name="Plus" className="w-4 h-4" />
-              <span>Add client</span>
+              <span>Add folder</span>
             </button>
           </div>
         )}

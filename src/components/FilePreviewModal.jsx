@@ -189,10 +189,10 @@ export default function FilePreviewModal({ file, onClose, onDownload, canDownloa
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 18 }}
         transition={{ type: 'spring', stiffness: 320, damping: 28 }}
-        className="relative z-10 flex flex-col md:flex-row w-[calc(100vw-1rem)] sm:w-[calc(100vw-2rem)] lg:w-full max-w-6xl h-auto max-h-[calc(100dvh-1rem)] sm:max-h-[calc(100dvh-2rem)] md:h-[calc(100dvh-2rem)] lg:h-auto lg:max-h-[calc(100dvh-2rem)] overflow-y-auto md:overflow-hidden bg-[#f8f8f7] shadow-[0_30px_100px_rgba(15,23,42,0.35)] border border-white/60 rounded-2xl sm:rounded-3xl lg:rounded-[28px]"
+        className="relative z-10 flex w-[calc(100vw-1rem)] max-w-6xl max-h-[calc(100dvh-2rem)] flex-col overflow-hidden bg-[#f8f8f7] shadow-[0_30px_100px_rgba(15,23,42,0.35)] border border-white/60 rounded-2xl sm:w-[calc(100vw-2rem)] sm:max-h-[calc(100dvh-3rem)] sm:rounded-3xl lg:rounded-[28px]"
       >
-        <div className="grid min-w-0 grid-cols-1 md:grid-cols-[1fr_300px] lg:grid-cols-[1fr_360px] md:min-h-0 md:flex-1">
-          <div className="flex min-w-0 flex-col bg-[#111111] p-4 sm:p-7 rounded-t-2xl sm:rounded-t-3xl md:rounded-none md:min-h-0 md:flex-1 md:h-full">
+        <div className="grid min-h-0 min-w-0 grid-cols-1 md:grid-cols-[1fr_300px] lg:grid-cols-[1fr_360px] md:flex-1">
+          <div className="flex min-h-0 min-w-0 flex-col bg-[#111111] p-4 sm:p-7 rounded-t-2xl sm:rounded-t-3xl md:rounded-none md:flex-1 md:h-full">
             <div className="mb-5 flex items-start justify-between gap-4">
               <div className="min-w-0">
                 <h2 className="truncate text-xl font-extrabold tracking-tight text-white sm:text-2xl">
@@ -209,11 +209,13 @@ export default function FilePreviewModal({ file, onClose, onDownload, canDownloa
               </button>
             </div>
 
-            {renderPreview()}
+            <div className="min-h-0 flex-1">
+              {renderPreview()}
+            </div>
           </div>
 
-          <aside className="min-w-0 bg-white p-4 sm:p-7 rounded-b-2xl sm:rounded-b-3xl md:rounded-none h-auto md:h-full">
-            <div className="flex flex-col justify-between gap-6 h-auto md:h-full md:min-h-0 md:overflow-y-auto">
+          <aside className="min-h-0 min-w-0 bg-white p-4 sm:p-7 rounded-b-2xl sm:rounded-b-3xl md:rounded-none h-auto md:h-full">
+            <div className="flex min-h-0 flex-col justify-between gap-6 h-auto md:h-full md:overflow-y-auto">
               <div>
                 <div className="mb-6 flex items-center justify-between">
                   <div>
