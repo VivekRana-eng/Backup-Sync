@@ -18,6 +18,7 @@ export default function Sidebar({
 
   const navItems = [
     { id: 'Dashboard', label: 'Dashboard', icon: 'LayoutDashboard' },
+    { id: 'Clients', label: 'Clients', icon: 'Users' },
     { id: 'My Files', label: 'My Files', icon: 'FileCode' },
     { id: 'Archived', label: 'Archived', icon: 'Archive', badge: archivedCount > 0 ? archivedCount : undefined, badgeColor: 'bg-gray-100 text-gray-700' },
     { id: 'Activity Log', label: 'Activity Log', icon: 'Activity' },
@@ -63,12 +64,13 @@ export default function Sidebar({
       >
         <div className="h-16 flex items-center justify-between px-6 border-b border-slate-50">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-red-900 flex items-center justify-center text-white shadow-md shadow-black/20">
-              <Icon name="Cloud" className="w-5 h-5 animate-pulse" />
-            </div>
+            <img
+              src="/logo.png"
+              alt="Degree 360"
+              className="w-10 h-10 object-contain shrink-0"
+            />
             <div>
-              <span className="font-bold text-lg text-slate-800 tracking-tight">Backup & Sync</span>
-              <span className="text-[10px] block font-medium text-slate-500 -mt-1 tracking-wider uppercase">Personal</span>
+              <span className="font-bold text-lg text-slate-800 tracking-tight">Degree 360 CMS</span>
             </div>
           </div>
           <button
@@ -84,11 +86,11 @@ export default function Sidebar({
           <div className="px-5 pt-5 pb-3">
             <button
               id="add-client-btn"
-              onClick={onAddClientClick}
-              className="group relative w-full h-11 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-red-900 text-sm font-semibold text-white shadow-[0_18px_35px_rgba(0,0,0,0.18)] transition-all hover:bg-black hover:shadow-[0_22px_40px_rgba(0,0,0,0.22)] active:scale-[0.98]"
+              
+              className="group relative w-full h-11 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-red-900 text-sm font-semibold text-white shadow-[0_18px_35px_rgba(0,0,0,0.18)] transition-all hover:bg-red-950 hover:shadow-[0_22px_40px_rgba(0,0,0,0.22)] active:scale-[0.98]"
             >
               <Icon name="Plus" className="w-4 h-4" />
-              <span>Add client</span>
+              <span>Add folder</span>
             </button>
           </div>
         )}

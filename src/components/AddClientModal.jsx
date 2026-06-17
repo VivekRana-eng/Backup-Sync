@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Icon from './Icon';
 
-const DEPARTMENT_OPTIONS = ['IT', 'Service', 'Railway', 'AI', 'Tech', 'Sales'];
-
 export default function AddClientModal({ isOpen, onClose, onCreateClient }) {
   const [name, setName] = useState('');
   const [org, setOrg] = useState('');
-  const [department, setDepartment] = useState('IT');
   const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
@@ -14,7 +11,6 @@ export default function AddClientModal({ isOpen, onClose, onCreateClient }) {
     if (!isOpen) {
       setName('');
       setOrg('');
-      setDepartment('IT');
       setError('');
       setIsSaving(false);
     }
@@ -30,7 +26,6 @@ export default function AddClientModal({ isOpen, onClose, onCreateClient }) {
     const result = await onCreateClient({
       name: name.trim(),
       org: org.trim(),
-      department: department.trim(),
     });
 
     setIsSaving(false);
@@ -102,23 +97,6 @@ export default function AddClientModal({ isOpen, onClose, onCreateClient }) {
             </div>
           </div>
 
-          <div>
-            <label className="mb-2 block text-[10px] font-bold uppercase tracking-wider text-slate-400">
-              Department
-            </label>
-            <select
-              value={department}
-              onChange={(e) => setDepartment(e.target.value)}
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm font-semibold text-slate-900 outline-none transition focus:border-slate-400 focus:bg-white"
-            >
-              {DEPARTMENT_OPTIONS.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </div>
-
           <div className="flex items-center justify-end gap-2 pt-2">
             <button
               type="button"
@@ -130,7 +108,7 @@ export default function AddClientModal({ isOpen, onClose, onCreateClient }) {
             <button
               type="submit"
               disabled={isSaving}
-              className="rounded-xl bg-slate-900 px-4 py-2 text-xs font-bold text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-xl bg-red-900 px-4 py-2 text-xs font-bold text-white transition hover:bg-red-950 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isSaving ? 'Saving...' : 'Add client'}
             </button>

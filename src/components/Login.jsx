@@ -36,12 +36,13 @@ export default function Login({ users, onLoginSuccess }) {
     <div className="min-h-screen w-full flex items-center justify-center bg-[#f3f4f6] text-slate-700 font-sans p-4">
       <div className="w-full max-w-sm bg-white border border-gray-200 rounded-2xl p-8">
         <div className="flex items-center gap-3 mb-5">
-          <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center text-white shrink-0">
-            <Icon name="Cloud" className="w-5 h-5" />
-          </div>
+          <img
+            src="/logo.png"
+            alt="Degree 360"
+            className="w-12 h-12 object-contain shrink-0"
+          />
           <div>
-            <div className="text-base font-bold text-black leading-tight">Backup & Sync</div>
-            <div className="text-[10px] font-bold tracking-wider text-gray-400 uppercase leading-none mt-0.5">PERSONAL PLAN</div>
+            <div className="text-base font-bold text-black leading-tight">Degree 360 CMS</div>
           </div>
         </div>
 
@@ -106,7 +107,7 @@ export default function Login({ users, onLoginSuccess }) {
             id="login-submit-btn"
             type="submit"
             disabled={isLoading}
-            className="w-full py-3 bg-black hover:bg-neutral-800 text-white text-xs font-bold rounded-lg tracking-wider transition-colors flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
+            className="w-full py-3 bg-red-900 hover:bg-red-950 text-white text-xs font-bold rounded-lg tracking-wider transition-colors flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
           >
             {isLoading ? (
               <span>Connecting...</span>
@@ -118,7 +119,7 @@ export default function Login({ users, onLoginSuccess }) {
 
         <div className="mt-6 flex items-center justify-center gap-1.5 text-xs text-gray-400 font-medium">
           <Icon name="Shield" className="w-3.5 h-3.5 text-gray-400" />
-          <span>Protected by Backup & Sync</span>
+          <span>Protected by Degree 360 CMS</span>
         </div>
       </div>
     </div>

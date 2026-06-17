@@ -14,6 +14,7 @@ import UploadDestinationModal from './components/UploadDestinationModal';
 import AddMemberModal from './components/AddMemberModal';
 import AddClientModal from './components/AddClientModal';
 import ProfileModal from './components/ProfileModal';
+import ClientsView from './components/ClientsView';
 
 import { CURRENT_USER } from './data/mockFiles';
 import { useWorkspace } from './hooks/useWorkspace';
@@ -51,6 +52,7 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
   const {
     activeTab,
     setActiveTab,
+    files,
     visibleFiles,
     visibleUploadingFiles,
     activities,
@@ -143,16 +145,15 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
     handleDeleteFile(id);
   };
 
-  const handleCreateClient = async ({ name, org, department }) => {
+  const handleCreateClient = async ({ name, org }) => {
     const trimmedName = name.trim();
     const trimmedOrg = org.trim();
-    const trimmedDepartment = department.trim();
 
-    if (!trimmedName || !trimmedOrg || !trimmedDepartment) {
-      return { ok: false, message: 'Please fill in name, ORG, and department.' };
+    if (!trimmedName || !trimmedOrg) {
+      return { ok: false, message: 'Please fill in name and ORG.' };
     }
 
-    const clientLabel = `${trimmedName} ${trimmedDepartment.toLowerCase()}`;
+    const clientLabel = trimmedName;
     const duplicate = clientShiftOptions.some(
       (client) => client.toLowerCase() === clientLabel.toLowerCase(),
     );
@@ -280,18 +281,27 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
               <StorageCards filesStats={computedStats} activeFilter={fileTypeFilter} setActiveFilter={setFileTypeFilter} />
 
               {userRole === 'admin' && (
-                <div className="bg-red-50 rounded-2xl border border-red-200 p-4 flex items-center justify-between gap-4">
+                <div className="bg-red-50 rounded-2xl border border-red-200 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-red-900">Admin access</p>
-                    <p className="mt-1 text-sm font-semibold text-slate-900">Manage team members from this dashboard.</p>
+                    <p className="mt-1 text-sm font-semibold text-slate-900">Manage team members and clients from this dashboard.</p>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsAddMemberOpen(true)}
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-900 transition hover:bg-slate-50"
-                  >
-                    Add member
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsAddClientOpen(true)}
+                      className="rounded-xl border border-red-200 bg-red-900 px-4 py-2 text-xs font-bold text-white transition hover:bg-red-950 cursor-pointer"
+                    >
+                      Add client
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsAddMemberOpen(true)}
+                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-900 transition hover:bg-slate-50 cursor-pointer"
+                    >
+                      Add member
+                    </button>
+                  </div>
                 </div>
               )}
 
@@ -342,6 +352,16 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
                 />
               </div>
             </div>
+          )}
+
+          {activeTab === 'Clients' && (
+            <ClientsView
+              files={files}
+              clientShiftOptions={clientShiftOptions}
+              onAddClientClick={() => setIsAddClientOpen(true)}
+              setClientShiftFilter={setClientShiftFilter}
+              setActiveTab={setActiveTab}
+            />
           )}
 
           {activeTab === 'My Files' && (
@@ -511,7 +531,7 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
                     setIsSettingsOpen(false);
                     triggerToast('Workspace settings saved', 'success');
                   }}
-                  className="px-4 py-2 text-xs font-bold bg-slate-900 hover:bg-black text-white rounded-xl shadow-md cursor-pointer"
+                  className="px-4 py-2 text-xs font-bold bg-red-900 hover:bg-red-950 text-white rounded-xl shadow-md cursor-pointer"
                 >
                   Save settings
                 </button>
@@ -582,7 +602,7 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
                   type="button"
                   onClick={handleCreateNewFolder}
                   disabled={!newFolderName.trim()}
-                  className={`px-3.5 py-1.5 text-xs font-bold rounded-xl text-white shadow-xs cursor-pointer ${newFolderName.trim() ? 'bg-slate-900 hover:bg-black' : 'bg-slate-300 pointer-events-none'}`}
+                  className={`px-3.5 py-1.5 text-xs font-bold rounded-xl text-white shadow-xs cursor-pointer ${newFolderName.trim() ? 'bg-red-900 hover:bg-red-950' : 'bg-slate-300 pointer-events-none'}`}
                 >
                   Create Folder
                 </button>
