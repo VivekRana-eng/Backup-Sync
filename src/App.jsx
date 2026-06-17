@@ -14,6 +14,7 @@ import UploadDestinationModal from './components/UploadDestinationModal';
 import AddMemberModal from './components/AddMemberModal';
 import AddClientModal from './components/AddClientModal';
 import ProfileModal from './components/ProfileModal';
+import ClientsView from './components/ClientsView';
 
 import { CURRENT_USER } from './data/mockFiles';
 import { useWorkspace } from './hooks/useWorkspace';
@@ -51,6 +52,7 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
   const {
     activeTab,
     setActiveTab,
+    files,
     visibleFiles,
     visibleUploadingFiles,
     activities,
@@ -278,18 +280,27 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
               <StorageCards filesStats={computedStats} activeFilter={fileTypeFilter} setActiveFilter={setFileTypeFilter} />
 
               {userRole === 'admin' && (
-                <div className="bg-red-50 rounded-2xl border border-red-200 p-4 flex items-center justify-between gap-4">
+                <div className="bg-red-50 rounded-2xl border border-red-200 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-red-900">Admin access</p>
-                    <p className="mt-1 text-sm font-semibold text-slate-900">Manage team members from this dashboard.</p>
+                    <p className="mt-1 text-sm font-semibold text-slate-900">Manage team members and clients from this dashboard.</p>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsAddMemberOpen(true)}
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-900 transition hover:bg-slate-50"
-                  >
-                    Add member
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsAddClientOpen(true)}
+                      className="rounded-xl border border-red-200 bg-red-900 px-4 py-2 text-xs font-bold text-white transition hover:bg-black cursor-pointer"
+                    >
+                      Add client
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsAddMemberOpen(true)}
+                      className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-bold text-slate-900 transition hover:bg-slate-50 cursor-pointer"
+                    >
+                      Add member
+                    </button>
+                  </div>
                 </div>
               )}
 
@@ -340,6 +351,16 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
                 />
               </div>
             </div>
+          )}
+
+          {activeTab === 'Clients' && (
+            <ClientsView
+              files={files}
+              clientShiftOptions={clientShiftOptions}
+              onAddClientClick={() => setIsAddClientOpen(true)}
+              setClientShiftFilter={setClientShiftFilter}
+              setActiveTab={setActiveTab}
+            />
           )}
 
           {activeTab === 'My Files' && (
