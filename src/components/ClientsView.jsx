@@ -78,7 +78,7 @@ export default function ClientsView({
         <button
           type="button"
           onClick={onAddClientClick}
-          className="self-start sm:self-auto h-10 px-4 flex items-center justify-center gap-2 rounded-2xl bg-red-900 text-xs font-bold text-white shadow-md hover:bg-black transition-all active:scale-[0.98]"
+          className="self-start sm:self-auto h-10 px-4 flex items-center justify-center gap-2 rounded-2xl bg-red-900 text-xs font-bold text-white shadow-md hover:bg-red-950 transition-all active:scale-[0.98]"
         >
           <Icon name="Plus" className="w-4 h-4" />
           <span>Add Client</span>

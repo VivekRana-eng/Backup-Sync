@@ -1,4 +1,4 @@
-# Backup & Sync
+# Degree 360 CMS
 
 Run the app locally:
 

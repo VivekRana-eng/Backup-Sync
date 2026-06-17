@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Icon from './Icon';
 import { formatStorageSize } from '../lib/workspace';
 
@@ -97,7 +97,7 @@ export default function Header({
           {activeTab === 'Dashboard' ? (
             <div>
               <h1 className="text-lg font-bold text-slate-900 tracking-tight leading-none">
-                Backup & Sync
+                Degree 360 CMS
               </h1>
               <p className="text-xs text-slate-500 mt-1">
                 Keep your files, uploads, and folders in one place

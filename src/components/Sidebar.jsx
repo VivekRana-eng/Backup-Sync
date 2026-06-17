@@ -64,11 +64,13 @@ export default function Sidebar({
       >
         <div className="h-16 flex items-center justify-between px-6 border-b border-slate-50">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-red-900 flex items-center justify-center text-white shadow-md shadow-black/20">
-              <Icon name="Cloud" className="w-5 h-5 animate-pulse" />
-            </div>
+            <img
+              src="/logo.png"
+              alt="Degree 360"
+              className="w-10 h-10 object-contain shrink-0"
+            />
             <div>
-              <span className="font-bold text-lg text-slate-800 tracking-tight">Backup & Sync</span>
+              <span className="font-bold text-lg text-slate-800 tracking-tight">Degree 360 CMS</span>
               <span className="text-[10px] block font-medium text-slate-500 -mt-1 tracking-wider uppercase">Personal</span>
             </div>
           </div>
@@ -86,7 +88,7 @@ export default function Sidebar({
             <button
               id="add-client-btn"
               
-              className="group relative w-full h-11 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-red-900 text-sm font-semibold text-white shadow-[0_18px_35px_rgba(0,0,0,0.18)] transition-all hover:bg-black hover:shadow-[0_22px_40px_rgba(0,0,0,0.22)] active:scale-[0.98]"
+              className="group relative w-full h-11 flex items-center justify-center gap-2 overflow-hidden rounded-2xl bg-red-900 text-sm font-semibold text-white shadow-[0_18px_35px_rgba(0,0,0,0.18)] transition-all hover:bg-red-950 hover:shadow-[0_22px_40px_rgba(0,0,0,0.22)] active:scale-[0.98]"
             >
               <Icon name="Plus" className="w-4 h-4" />
               <span>Add folder</span>

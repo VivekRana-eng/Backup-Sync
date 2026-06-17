@@ -145,16 +145,15 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
     handleDeleteFile(id);
   };
 
-  const handleCreateClient = async ({ name, org, department }) => {
+  const handleCreateClient = async ({ name, org }) => {
     const trimmedName = name.trim();
     const trimmedOrg = org.trim();
-    const trimmedDepartment = department.trim();
 
-    if (!trimmedName || !trimmedOrg || !trimmedDepartment) {
-      return { ok: false, message: 'Please fill in name, ORG, and department.' };
+    if (!trimmedName || !trimmedOrg) {
+      return { ok: false, message: 'Please fill in name and ORG.' };
     }
 
-    const clientLabel = `${trimmedName} ${trimmedDepartment.toLowerCase()}`;
+    const clientLabel = trimmedName;
     const duplicate = clientShiftOptions.some(
       (client) => client.toLowerCase() === clientLabel.toLowerCase(),
     );
@@ -289,7 +288,7 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
                     <button
                       type="button"
                       onClick={() => setIsAddClientOpen(true)}
-                      className="rounded-xl border border-red-200 bg-red-900 px-4 py-2 text-xs font-bold text-white transition hover:bg-black cursor-pointer"
+                      className="rounded-xl border border-red-200 bg-red-900 px-4 py-2 text-xs font-bold text-white transition hover:bg-red-950 cursor-pointer"
                     >
                       Add client
                     </button>
@@ -530,7 +529,7 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
                     setIsSettingsOpen(false);
                     triggerToast('Workspace settings saved', 'success');
                   }}
-                  className="px-4 py-2 text-xs font-bold bg-slate-900 hover:bg-black text-white rounded-xl shadow-md cursor-pointer"
+                  className="px-4 py-2 text-xs font-bold bg-red-900 hover:bg-red-950 text-white rounded-xl shadow-md cursor-pointer"
                 >
                   Save settings
                 </button>
@@ -601,7 +600,7 @@ function WorkspaceScreen({ currentUser, onLogout, users, setUsers, clientShiftOp
                   type="button"
                   onClick={handleCreateNewFolder}
                   disabled={!newFolderName.trim()}
-                  className={`px-3.5 py-1.5 text-xs font-bold rounded-xl text-white shadow-xs cursor-pointer ${newFolderName.trim() ? 'bg-slate-900 hover:bg-black' : 'bg-slate-300 pointer-events-none'}`}
+                  className={`px-3.5 py-1.5 text-xs font-bold rounded-xl text-white shadow-xs cursor-pointer ${newFolderName.trim() ? 'bg-red-900 hover:bg-red-950' : 'bg-slate-300 pointer-events-none'}`}
                 >
                   Create Folder
                 </button>
