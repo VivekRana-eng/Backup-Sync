@@ -71,7 +71,6 @@ export default function Sidebar({
             />
             <div>
               <span className="font-bold text-lg text-slate-800 tracking-tight">Degree 360 CMS</span>
-              <span className="text-[10px] block font-medium text-slate-500 -mt-1 tracking-wider uppercase">Personal</span>
             </div>
           </div>
           <button

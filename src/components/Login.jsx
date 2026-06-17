@@ -43,7 +43,6 @@ export default function Login({ users, onLoginSuccess }) {
           />
           <div>
             <div className="text-base font-bold text-black leading-tight">Degree 360 CMS</div>
-            <div className="text-[10px] font-bold tracking-wider text-gray-400 uppercase leading-none mt-0.5">PERSONAL PLAN</div>
           </div>
         </div>
 
